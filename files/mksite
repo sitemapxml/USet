@@ -1,0 +1,239 @@
+#!/bin/bash
+
+# Definicije boja
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+
+# Reset boja - No Color
+NC='\033[0m'
+
+# Unos neophodnih podataka
+echo -e ${YELLOW}'Korak (1/6)'${NC}
+while true; do
+    read -p 'Unesite naziv domena bez protokola (bez http://): ' hostname
+	hostname=${hostname:-default}
+    read -p 'Unesite ponovo da bi ste potvrdili: ' hostname2
+    [ "$hostname" = "$hostname2" ] && break
+    echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+done
+
+echo -e ${YELLOW}'Korak (2/6)'${NC}
+echo -e ${YELLOW}'Dodavanje Email adrese - koristi se pri instalaciji SSL sertifikata.'${NC}
+while true; do
+    read -p 'Unesite vašu Email adresu: ' email
+    read -p 'Unesite ponovo da bi ste potvrdili: ' email2
+    [ "$email" = "$email2" ] && email=${email:-webmaster@example.com} && break
+    echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+	echo
+done
+
+# Kreiranje novog korisnika na sistemu
+while true
+	do
+	echo -e ${YELLOW}'Korak (3/6)'${NC}
+	read -p 'Da li želite da kreirate novog UNIX korisnika? (Da/Ne): ' add_user
+		case $add_user in
+		[dD][aA]|[dD])
+
+		# Unos korisničkog imena
+		while true; do
+			read -p 'Unesite korisničko ime UNIX korisnika: ' unixuser
+			unixuser=${unixuser:-default}
+			read -p 'Unesite ponovo da bi ste potvrdili: ' unixuser2
+			[ "$unixuser" = "$unixuser2" ] && break
+			echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+		done
+
+		# Unos lozinke
+		while true; do
+			read -s -p 'Unesite lozinku UNIX korisnika: ' unixpass
+			unixpass=${unixpass:-default}
+			echo
+			read -s -p 'Unesite ponovo da bi ste potvrdili: ' unixpass2
+			echo
+			[ "$unixpass" = "$unixpass2" ] && break
+			echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+			echo
+		done
+
+			# Dodavanje UNIX korisnika
+			echo -e ${YELLOW}'Dodavanje UNIX korisnika...'${NC}
+			sleep 1s
+			adduser $unixuser --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
+			echo -e "$unixuser:$unixpass" | chpasswd
+			echo "$unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
+			echo -e ${GREEN}"Korisnik $unixuser je kreiran."${NC}
+			echo -e ${GREEN}'Novi korisnik je dodat!'${NC}
+		break
+		;;
+		[nN][eE]|[nN])
+		unixuser="default"
+	break
+	;;
+	*)
+		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
+done
+
+# Kreiranje virtual host-a
+echo -e ${YELLOW}'Dodavanje veb sajta...'${NC}
+sleep 1s
+mkdir /var/www/$hostname
+cp files/vhost.conf /etc/apache2/sites-available/$hostname.conf
+sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
+sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
+a2ensite $hostname
+systemctl restart apache2
+echo -e ${GREEN}'Domen je dodat, podešen je novi document root!'${NC}
+
+# Instalacija SSL sertifikata
+while true
+	do
+	echo -e ${YELLOW}'Korak (1/3)'${NC}
+	read -p 'Da li želite da instalirate SSL sertifikat? (Da/Ne): ' ssl_install
+		case $ssl_install in
+		[dD][aA]|[dD])
+			echo 'Instalira se SSL...'
+			sleep 1s
+
+			# Instalacija Let's encrypt SSL sertifikata
+			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
+
+			# Putanje do instaliranih SSL sertifikata
+			site_name=$( echo $hostname | sed 's/\./_/g' )
+			echo -e '\nPodaci o SSL sertifikatima:' >> .podaci/ssl-info_$site_name.txt
+			certbot certificates >> .podaci/ssl-info_$site_name.txt
+			chmod 0000 .podaci/ssl-info_$site_name.txt
+			echo -e ${GREEN}'SSL za domen '"$hostname"' je instaliran!'${NC}
+		break
+		;;
+		[nN][eE]|[nN])
+	break
+	;;
+	*)
+		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
+done
+
+# Određivanje protokola
+case $ssl_install in
+	[dD][aA]|[dD])
+		https='true'
+	;;
+	[nN][eE]|[nN])
+		https='false'
+	;;
+esac
+
+if [ -f "$CERTFILE" ] && [ -f "$KEYFILE" ] && [ "$https" == "true" ]; then
+    protocol='https://'
+    ssl_installed='true'
+else
+    protocol='http://'
+    ssl_installed='false'
+fi
+
+url="$protocol$hostname"
+
+# Provera verzije mysql servera
+mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
+
+# Instalacija Wordpress-a
+while true
+	do
+	echo -e ${YELLOW}'Korak (2/3)'${NC}
+	read -p 'Da li želite da podesite još jedan Wordpress sajt? (Da/Ne): ' wp_install
+		case $wp_install in
+		[dD][aA]|[dD])
+			# Instaliranje faljova
+			wget https://sr.wordpress.org/latest-sr_RS.tar.gz
+			tar -xzvf latest-sr_RS.tar.gz
+			mv wordpress /var/www/$hostname/html
+			chown www-data:www-data -R /var/www/$hostname/html
+
+			# Brisanje nepotrebnih fajlova
+			rm latest-sr_RS.tar.gz
+
+			# Kreiranje baze podataka
+			echo 'Kreiranje baze podataka...'
+			sleep 1s
+			database_password=$( date +%s | sha256sum | base64 | head -c 32 )
+			db_name=$( echo $hostname | sed 's/\./_/g' )
+
+      if [ "$mysqld_version" -ge "8" ]; then
+        mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+      else
+        mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER $unixuser@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to $unixuser@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
+      fi
+
+			echo '==================================================================' > .podaci/db-info_$db_name.txt
+			echo '============= Pristupni parametri za bazu podataka ===============' >> .podaci/db-info_$db_name.txt
+			echo '==================================================================' >> .podaci/db-info_$db_name.txt
+			echo -e '\n\n''Naziv baze podataka:' $db_name'\nKorisničko ime:' $unixuser'\nLozinka:' $database_password'\n' >> .podaci/db-info_$db_name.txt
+
+			# Konfigurisanje Wordpress Multisite instalacije
+				while true
+					do
+					read -p 'Da li želite da omogućite Wordpress Multisite? (Da/Ne): ' wp_install_multisite
+						case $wp_install_multisite in
+						[dD][aA]|[dD])
+							# Instaliranje faljova
+							echo 'Konfiguriše se Multisite...'
+							sed -i "81i define( 'WP_ALLOW_MULTISITE', true );" /var/www/$hostname/html/wp-config-sample.php
+							echo -e ${GREEN}'Multisite je podešen!'${NC}
+						break
+						;;
+					[nN][eE]|[nN])
+						break
+						;;
+						*)
+							echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+						;;
+					esac
+				done
+			echo -e ${GREEN}'Wordpress je instaliran!'${NC}
+		break
+		;;
+		[nN][eE]|[nN])
+			# Iskopiraj index.html u webroot
+			mkdir /var/www/$hostname/html
+			cp files/index.html /var/www/$hostname/html/index.html
+			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
+			sed -i "s/s_title/Domen $hostname je uspešno podešen\!/g" /var/www/$hostname/html/index.html
+      sed -i "s/webmin_hostname/$hostname/g" /var/www/$hostname/html/index.html
+			echo 'Podešeni su index.html i phpinfo fajl.'
+		break
+		;;
+	*)
+		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
+done
+
+# 6g zaštitni zid
+while true
+	do
+	echo -e ${YELLOW}'Korak (3/3)'${NC}
+	read -p 'Da li želite da omogućite Apache 6G zaštitni zid? (Da/Ne): ' apache_firewall
+		case $apache_firewall in
+		[dD][aA]|[dD])
+			cp files/6g.conf /etc/apache2/6g.conf
+			sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
+			systemctl restart apache2
+			echo -e ${GREEN}'Zaštitni zid je omogućen!'${NC}
+		break
+		;;
+		[nN][eE]|[nN])
+	break
+	;;
+	*)
+		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
+done
+
+echo -e ${GREEN}'Instalacija je završena!'${NC}
+echo -e ${GREEN}'Domen '"$hostname"' je dodat!'${NC}
