@@ -195,7 +195,7 @@ echo -e ${YELLOW}'Konfigurisanje Apache servera...'${NC}
 sleep 1s
 rm -rf /var/www/html
 mkdir /var/www/$hostname
-cp files/resources/vhost.conf /etc/apache2/sites-available/$hostname.conf
+cp files/resources/apache.conf /etc/apache2/sites-available/$hostname.conf
 sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 a2dissite 000-default
@@ -230,7 +230,7 @@ while true
 		case $ssl_install in
 		[dD][aA]|[dD])
 
-    # Preusmeravanje ha https
+    # Preusmeravanje na https
 		while true
 			do
 			read -p 'Da li želite da omogućite preusmeravanje na https? (Da/Ne)' ssl_redirect
