@@ -229,13 +229,33 @@ while true
 	read -p 'Da li želite da instalirate SSL sertifikat? (Da/Ne): ' ssl_install
 		case $ssl_install in
 		[dD][aA]|[dD])
+
+    # Preusmeravanje ha https
+		while true
+			do
+			read -p 'Da li želite da omogućite preusmeravanje na https? (Da/Ne)' ssl_redirect
+				case $apache_firewall in
+				[dD][aA]|[dD])
+					ssl_redirect="--redirect"
+				break
+				;;
+				[nN][eE]|[nN])
+					ssl_redirect="--no-redirect"
+			break
+			;;
+			*)
+				echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+			;;
+			esac
+		done
+
 			echo 'Instalira se SSL...'
 			sleep 1s
 			# Certbot instalacija
 			apt-get install python3-certbot-apache -y
 
 			# Instalacija Let's encrypt SSL sertifikata
-			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
+			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email $ssl_redirect
 
       CERTFILE="/etc/letsencrypt/live/$hostname/fullchain.pem"
       KEYFILE="/etc/letsencrypt/live/$hostname/privkey.pem"
@@ -365,6 +385,31 @@ while true
       sed -i "s/webmin_hostname/$hostname/g" /var/www/$hostname/html/index.html
 
 			echo 'Podešeni su index.html i phpinfo fajl.'
+
+    # Kreiranje baze podataka
+		while true
+			do
+			read -p 'Da li želite sada da kreirate batu podataka? (Da/Ne)' db_make
+				case $db_make in
+				[dD][aA]|[dD])
+          if [ "$mysqld_version" -ge "8" ]; then
+            mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+          else
+            mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER $unixuser@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to $unixuser@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
+          fi
+				break
+				;;
+				[nN][eE]|[nN])
+					echo "Preskače se kreiranje baze podataka..."
+          sleep 1s
+			break
+			;;
+			*)
+				echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+			;;
+			esac
+		done
+
 		break
 		;;
 	*)
