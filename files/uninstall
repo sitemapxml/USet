@@ -69,8 +69,8 @@ while true
 			echo 'Deinstalacija je u toku...'
 			# Uklanjanje php-a
 			apt-get purge 'php*' -y
-			apt-get autoremove
-			apt-get autoclean
+			apt-get autoremove -y
+			apt-get autoclean -y
 			echo -e ${GREEN}'PHP je deinstaliran!'${NC}
 		break
 		;;
@@ -102,7 +102,7 @@ while true
 
 			# Brisanje mysql istorije
 			rm ~/.mysql_history
-			
+
 			# Brisanje istorije svih mysql korisnika na sistemu
 			awk -F : '{ print($6 "/.mysql_history"); }' /etc/passwd | xargs -r -d '\n' -- sudo rm -f --
 
@@ -127,7 +127,7 @@ while true
 		case $uninstall_ufw in
 		[dD][aA]|[dD])
 			echo 'Deinstalacija je u toku...'
-			
+
 			# Onemogući UFW
 			ufw --force disable
 			echo -e ${GREEN}'Zaštitni zid je onemogućen!'${NC}
