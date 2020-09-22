@@ -131,6 +131,19 @@ while true; do
 	echo
 done
 
+# Odabir http servera
+echo -e ${YELLOW}'Da li želite da instalirate Apache ili Nginx?'${NC}
+echo 'Unesite:'
+echo -e "${WHITE}1${NC} za Apache"
+echo -e "${WHITE}2${NC} za Nginx"
+read -p ": " web_server
+
+if [ $web_server = 1 ]; then
+  server_flag="apache"
+else
+  server_flag="nginx"
+fi
+
 # Početak instalacije
 echo
 echo -e ${YELLOW}'Neophodne informacije su prikupljene. Instalacija može da počne.'${NC}
@@ -152,30 +165,55 @@ apt-get update
 # Instalacija software-properties-common za slučaj da nije instalirano
 apt-get install software-properties-common apt-transport-https -y
 
-# Instalacija php i mysql, php ekstenzije, sitni pomoćni programi zip, unzip i tree
-echo -e ${YELLOW}'Instalira se apache2, php i mysql'${NC}
-sleep 1s
-apt-get install apache2 php mysql-server -y
+if [ $web_server = "1" ]; then
+  echo -e ${YELLOW}'Instalira se apache2, php'${NC}
+  sleep 1s
+  apt-get install apache2 php -y
+  systemctl enable apache2
+else
+  echo -e ${YELLOW}'Instalira se Nginx, php-fpm'${NC}
+  sleep 1s
+  apt-get install nginx php-fpm -y
+
+  # Provera verzije php-a
+  php_version_nginx=$( php -r 'echo phpversion();' | head -c 3 )
+  fpm_version="php$php_version-fpm"
+
+  systemctl enable nginx $fpm_version
+fi
+
+# MySQL instalacija
+apt-get install mysql-server
+systemctl enable mysql
+
+# Instalacija php ekstenzija
 echo -e ${YELLOW}'Instaliranje php ekstenzija...'${NC}
 sleep 1s
 apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y
-systemctl enable mysql apache2
+
+# sitni pomoćni programi zip, unzip i tree
 apt-get install zip unzip tree locate net-tools -y
 
 # Uveri se da je instaliran awk
-apt-get gawk mawk -y
+# apt-get gawk mawk -y
 
 # Provera verzije php-a
 php_version=$( php -r 'echo phpversion();' | head -c 3 )
 
 # Osnovna podešavanja php-a, ServerTokens
-echo -e ${YELLOW}'Konfigurisanje php-a...'${NC}
-sleep 1s
-sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/$php_version/apache2/php.ini
-sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/$php_version/apache2/php.ini
-sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/$php_version/apache2/php.ini
-sed -i 's/ServerTokens OS/ServerTokens Prod/g' /etc/apache2/conf-available/security.conf
-systemctl restart apache2
+if [ $web_server = "1" ]; then
+  sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/$php_version/apache2/php.ini
+  sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/$php_version/apache2/php.ini
+  sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/$php_version/apache2/php.ini
+  sed -i 's/ServerTokens OS/ServerTokens Prod/g' /etc/apache2/conf-available/security.conf
+  systemctl restart apache2
+else
+  sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/$php_version_nginx/fpm/php.ini
+  sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/$php_version_nginx/fpm/php.ini
+  sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/$php_version_nginx/fpm/php.ini
+  sed -i 's/# server_tokens off;/server_tokens off;/g' /etc/nginx/nginx.conf
+  systemctl restart nginx $fpm_version
+fi
 
 # Podešavanje hostname-a prema unetom domenu
 hostnamectl set-hostname $hostname
@@ -190,19 +228,32 @@ apt-get --yes install webmin
 sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
 /etc/init.d/webmin restart
 
-# Podešavanje veb servera
-echo -e ${YELLOW}'Konfigurisanje Apache servera...'${NC}
-sleep 1s
 rm -rf /var/www/html
 mkdir /var/www/$hostname
-cp files/resources/apache.conf /etc/apache2/sites-available/$hostname.conf
-sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
-sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
-a2dissite 000-default
-rm /etc/apache2/sites-available/000-default.conf
-a2ensite $hostname
-a2enmod rewrite
-systemctl restart apache2
+
+# Apache
+if [ $web_server = "1" ]; then
+  echo -e ${YELLOW}'Konfigurisanje Apache servera...'${NC}
+  sleep 1s
+  cp files/resources/apache.conf /etc/apache2/sites-available/$hostname.conf
+  sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
+  sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
+  a2dissite 000-default
+  rm /etc/apache2/sites-available/000-default.conf
+  a2ensite $hostname
+  a2enmod rewrite
+  systemctl restart apache2
+else
+  echo -e ${YELLOW}'Konfigurisanje Nginx servera...'${NC}
+  sleep 1s
+  cp files/resources/nginx.conf /etc/nginx/sites-available/$hostname.conf
+  sed -i "s/sn_default/$hostname/g" /etc/nginx/sites-available/$hostname.conf
+  sed -i "s/dir_default/$hostname/g" /etc/nginx/sites-available/$hostname.conf
+  ln /etc/nginx/sites-available/$hostname.conf /etc/nginx/sites-enabled/$hostname.conf
+  rm /etc/nginx/sites-available/default
+  rm /etc/nginx/sites-enabled/default
+  systemctl restart nginx
+fi
 
 # Dodavanje UNIX korisnika
 echo -e ${YELLOW}'Dodavanje UNIX korisnika...'${NC}
@@ -234,13 +285,13 @@ while true
 		while true
 			do
 			read -p 'Da li želite da omogućite preusmeravanje na https? (Da/Ne)' ssl_redirect
-				case $apache_firewall in
+				case $ssl_redirect in
 				[dD][aA]|[dD])
-					https_redirect="--redirect"
+					https_redirect="redirect"
 				break
 				;;
 				[nN][eE]|[nN])
-					https_redirect="--no-redirect"
+					https_redirect="no-redirect"
 			break
 			;;
 			*)
@@ -252,10 +303,14 @@ while true
 			echo 'Instalira se SSL...'
 			sleep 1s
 			# Certbot instalacija
-			apt-get install python3-certbot-apache -y
+      if [ $web_server = "1" ]; then
+  			apt-get install python3-certbot-apache -y
+      else
+  			apt-get install python3-certbot-nginx -y
+      fi
 
 			# Instalacija Let's encrypt SSL sertifikata
-			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email $https_redirect
+			certbot --$server_flag --non-interactive --agree-tos --domains $hostname --email $email --$https_redirect
 
       CERTFILE="/etc/letsencrypt/live/$hostname/fullchain.pem"
       KEYFILE="/etc/letsencrypt/live/$hostname/privkey.pem"
@@ -330,7 +385,12 @@ while true
 
 			# Instaliranje dodatnih php ekstenzija
 			apt-get install php-xmlrpc php-exif -y
-			systemctl restart apache2
+
+      if [ $web_server = "1" ]; then
+  			systemctl restart apache2
+      else
+  			systemctl restart nginx $fpm_version
+      fi
 
 			# Brisanje nepotrebnih fajlova
 			rm latest-sr_RS.tar.gz
@@ -449,8 +509,14 @@ while true
 		[dD][aA]|[dD])
 			ufw --force enable
 			ufw allow 'OpenSSH'
-			ufw allow 'Apache Full'
 			ufw allow '3000/tcp'
+
+      if [ $web_server = "1" ]; then
+        ufw allow 'Apache Full'
+      else
+        ufw allow 'Nginx Full'
+      fi
+
 			ufw reload
 			echo -e ${GREEN}'Zaštita portova je omogućena!'${NC}
 		break
@@ -522,10 +588,11 @@ echo
 if [ "$ssl_error" = "1" ]; then
   echo -e ${RED}'Konfigurisanje SSL sertifikata nije uspelo.'${NC}
   echo 'Proverite DNS podešavanja i pokušajte da instalirate SSL komandom:'
-  echo -e ${WHITE}'certbot --apache'${NC}
+  echo -e ${WHITE}"certbot --$server_flag"${NC}
 fi
 
 echo -e "Vaš sajt je podešen na adresi: ${GREEN}$url"${NC}
+echo "Instalirani web server je: ${GREEN}$server_flag"${NC}
 
 case $wp_install in
 	[dD][aA]|[dD])
