@@ -133,16 +133,24 @@ done
 
 # Odabir http servera
 echo -e ${YELLOW}'Da li želite da instalirate Apache ili Nginx?'${NC}
-echo 'Unesite:'
-echo -e "${WHITE}1${NC} za Apache"
-echo -e "${WHITE}2${NC} za Nginx"
-read -p ": " web_server
-
-if [ $web_server = 1 ]; then
-  server_flag="apache"
-else
-  server_flag="nginx"
-fi
+PS3='Molimo vas da odaberete jedno od ponuđenog: '
+options=("apache" "nginx")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "apache")
+        web_server="apache"
+            echo "Odabrali ste instalaciju Apache servera"
+            break
+            ;;
+        "nginx")
+        web_server="nginx"
+            echo "Odabrali ste instalaciju Nginx servera"
+            break
+            ;;
+        *) echo "neispravna opcija $REPLY";;
+    esac
+done
 
 # Početak instalacije
 echo
@@ -165,7 +173,7 @@ apt-get update
 # Instalacija software-properties-common za slučaj da nije instalirano
 apt-get install software-properties-common apt-transport-https -y
 
-if [ $web_server = "1" ]; then
+if [ "$web_server" = "apache" ]; then
   echo -e ${YELLOW}'Instalira se apache2, php'${NC}
   sleep 1s
   apt-get install apache2 php -y
@@ -201,7 +209,7 @@ apt-get install zip unzip tree locate net-tools -y
 php_version=$( php -r 'echo phpversion();' | head -c 3 )
 
 # Osnovna podešavanja php-a, ServerTokens
-if [ $web_server = "1" ]; then
+if [ "$web_server" = "apache" ]; then
   sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/$php_version/apache2/php.ini
   sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/$php_version/apache2/php.ini
   sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/$php_version/apache2/php.ini
@@ -232,7 +240,7 @@ rm -rf /var/www/html
 mkdir /var/www/$hostname
 
 # Apache
-if [ $web_server = "1" ]; then
+if [ "$web_server" = "apache" ]; then
   echo -e ${YELLOW}'Konfigurisanje Apache servera...'${NC}
   sleep 1s
   cp files/resources/apache.conf /etc/apache2/sites-available/$hostname.conf
@@ -303,14 +311,14 @@ while true
 			echo 'Instalira se SSL...'
 			sleep 1s
 			# Certbot instalacija
-      if [ $web_server = "1" ]; then
+      if [ "$web_server" = "apache" ]; then
   			apt-get install python3-certbot-apache -y
       else
   			apt-get install python3-certbot-nginx -y
       fi
 
 			# Instalacija Let's encrypt SSL sertifikata
-			certbot --$server_flag --non-interactive --agree-tos --domains $hostname --email $email --$https_redirect
+			certbot --$web_server --non-interactive --agree-tos --domains $hostname --email $email --$https_redirect
 
       CERTFILE="/etc/letsencrypt/live/$hostname/fullchain.pem"
       KEYFILE="/etc/letsencrypt/live/$hostname/privkey.pem"
@@ -386,7 +394,7 @@ while true
 			# Instaliranje dodatnih php ekstenzija
 			apt-get install php-xmlrpc php-exif -y
 
-      if [ $web_server = "1" ]; then
+      if [ "$web_server" = "apache" ]; then
   			systemctl restart apache2
       else
   			systemctl restart nginx $fpm_version
@@ -511,7 +519,7 @@ while true
 			ufw allow 'OpenSSH'
 			ufw allow '3000/tcp'
 
-      if [ $web_server = "1" ]; then
+      if [ "$web_server" = "apache" ]; then
         ufw allow 'Apache Full'
       else
         ufw allow 'Nginx Full'
