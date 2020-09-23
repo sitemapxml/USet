@@ -136,16 +136,14 @@ echo -e ${YELLOW}'Korak (7/7)'${NC}
 echo -e ${YELLOW}'Da li želite da instalirate Apache ili Nginx?'${NC}
 PS3='Molimo vas da odaberete jedno od ponuđenog: '
 options=("apache" "nginx")
-select opt in "${options[@]}"
+select web_server in "${options[@]}"
 do
-    case $opt in
+    case $web_server in
         "apache")
-        web_server="apache"
             echo "Odabrali ste instalaciju Apache servera"
             break
             ;;
         "nginx")
-        web_server="nginx"
             echo "Odabrali ste instalaciju Nginx servera"
             break
             ;;
