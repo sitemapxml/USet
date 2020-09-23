@@ -6,7 +6,7 @@
 #         https://github.com/sitemapxml     #
 # License: MIT                              #
 # Publish date: Aug 2, 2020.                #
-# Version: 1.0.0                            #
+# Version: 1.1.0                            #
 #############################################
 
 # NOTE: This script is made from two repositories: https://github.com/sitemapxml/lamp and https://github.com/sitemapxml/lemp (LAMP and LEMP)
@@ -68,7 +68,7 @@ printf "%b" "$text"
 echo -e ${YELLOW}'Molimo vas da unesete osnovne podatke o infra-strukturi: '${NC}
 echo
 
-echo -e ${YELLOW}'Korak (1/6)'${NC}
+echo -e ${YELLOW}'Korak (1/7)'${NC}
 while true; do
     read -p 'Unesite naziv domena bez protokola (bez http://): ' hostname
 	hostname=${hostname:-default}
@@ -77,7 +77,7 @@ while true; do
     echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
 done
 
-echo -e ${YELLOW}'Korak (2/6)'${NC}
+echo -e ${YELLOW}'Korak (2/7)'${NC}
 while true; do
     read -s -p 'Unesite lozinku root korisnika: ' rootpass
 	rootpass=${rootpass:-default}
@@ -90,11 +90,11 @@ while true; do
 done
 
 echo
-echo -e ${YELLOW}'Korak (3/6)'${NC}
+echo -e ${YELLOW}'Korak (3/7)'${NC}
 read -p 'Unesite korisničko ime UNIX korisnika: ' unixuser
 unixuser=${unixuser:-default}
 
-echo -e ${YELLOW}'Korak (4/6)'${NC}
+echo -e ${YELLOW}'Korak (4/7)'${NC}
 while true; do
     read -s -p 'Unesite lozinku UNIX korisnika: ' unixpass
 	unixpass=${unixpass:-default}
@@ -107,7 +107,7 @@ while true; do
 done
 
 echo
-echo -e ${YELLOW}'Korak (5/6)'${NC}
+echo -e ${YELLOW}'Korak (5/7)'${NC}
 echo -e ${YELLOW}'Podešavanje lozinke za MYSQL root korisnika'${NC}
 while true; do
     read -s -p 'Unesite lozinku za MYSQL root: ' mysqlrpass
@@ -121,7 +121,7 @@ while true; do
 done
 
 echo
-echo -e ${YELLOW}'Korak (6/6)'${NC}
+echo -e ${YELLOW}'Korak (6/7)'${NC}
 echo -e ${YELLOW}'Podešavanje Email adrese administratora'${NC}
 while true; do
     read -p 'Unesite vašu Email adresu: ' email
@@ -132,6 +132,7 @@ while true; do
 done
 
 # Odabir http servera
+echo -e ${YELLOW}'Korak (7/7)'${NC}
 echo -e ${YELLOW}'Da li želite da instalirate Apache ili Nginx?'${NC}
 PS3='Molimo vas da odaberete jedno od ponuđenog: '
 options=("apache" "nginx")
