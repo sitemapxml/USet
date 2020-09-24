@@ -4,9 +4,18 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BLACK='\e[30m'
+WHITE='\e[97m'
 
-# Reset boja - No Color
+# Reset boja teksta
 NC='\033[0m'
+
+# Boja pozadine
+BGREEN='\e[42m'
+BGRAY='\e[47m'
+
+# Reset boje pozadine
+BNC='\e[49m'
 
 # Unos neophodnih podataka
 echo -e ${YELLOW}'Korak (1/6)'${NC}
