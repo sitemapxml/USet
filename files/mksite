@@ -90,7 +90,7 @@ done
 echo -e ${YELLOW}'Dodavanje veb sajta...'${NC}
 sleep 1s
 mkdir /var/www/$hostname
-cp files/vhost.conf /etc/apache2/sites-available/$hostname.conf
+cp resources/apache.conf /etc/apache2/sites-available/$hostname.conf
 sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 a2ensite $hostname
@@ -209,7 +209,7 @@ while true
 		[nN][eE]|[nN])
 			# Iskopiraj index.html u webroot
 			mkdir /var/www/$hostname/html
-			cp files/index.html /var/www/$hostname/html/index.html
+			cp resources/index.html /var/www/$hostname/html/index.html
 			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
 			sed -i "s/s_title/Domen $hostname je uspešno podešen\!/g" /var/www/$hostname/html/index.html
       sed -i "s/webmin_hostname/$hostname/g" /var/www/$hostname/html/index.html
@@ -229,7 +229,7 @@ while true
 	read -p 'Da li želite da omogućite Apache 6G zaštitni zid? (Da/Ne): ' apache_firewall
 		case $apache_firewall in
 		[dD][aA]|[dD])
-			cp files/6g.conf /etc/apache2/6g.conf
+			cp resources/6g.conf /etc/apache2/6g.conf
 			sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
 			systemctl restart apache2
 			echo -e ${GREEN}'Zaštitni zid je omogućen!'${NC}
