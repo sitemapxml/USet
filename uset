@@ -190,7 +190,7 @@ else
 fi
 
 # MySQL instalacija
-apt-get install mysql-server
+apt-get install mysql-server -y
 systemctl enable mysql
 
 # Instalacija php ekstenzija
