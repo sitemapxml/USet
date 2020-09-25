@@ -104,17 +104,37 @@ while true
 	read -p 'Da li želite da instalirate SSL sertifikat? (Da/Ne): ' ssl_install
 		case $ssl_install in
 		[dD][aA]|[dD])
+
+    # Preusmeravanje na https
+    while true
+      do
+      read -p 'Da li želite da omogućite preusmeravanje na https? (Da/Ne)' ssl_redirect
+        case $ssl_redirect in
+        [dD][aA]|[dD])
+          https_redirect="redirect"
+        break
+        ;;
+        [nN][eE]|[nN])
+          https_redirect="no-redirect"
+      break
+      ;;
+      *)
+        echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+      ;;
+      esac
+    done
+
 			echo 'Instalira se SSL...'
 			sleep 1s
 
 			# Instalacija Let's encrypt SSL sertifikata
-			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
+			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email --$https_redirect
 
 			# Putanje do instaliranih SSL sertifikata
-			site_name=$( echo $hostname | sed 's/\./_/g' )
-			echo -e '\nPodaci o SSL sertifikatima:' >> .podaci/ssl-info_$site_name.txt
-			certbot certificates >> .podaci/ssl-info_$site_name.txt
-			chmod 0000 .podaci/ssl-info_$site_name.txt
+			# site_name=$( echo $hostname | sed 's/\./_/g' )
+			# echo -e '\nPodaci o SSL sertifikatima:' >> .podaci/ssl-info_$site_name.txt
+			# certbot certificates >> .podaci/ssl-info_$site_name.txt
+			# chmod 0000 .podaci/ssl-info_$site_name.txt
 			echo -e ${GREEN}'SSL za domen '"$hostname"' je instaliran!'${NC}
 		break
 		;;
