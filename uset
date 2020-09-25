@@ -595,11 +595,11 @@ echo
 if [ "$ssl_error" = "1" ]; then
   echo -e ${RED}'Konfigurisanje SSL sertifikata nije uspelo.'${NC}
   echo 'Proverite DNS podešavanja i pokušajte da instalirate SSL komandom:'
-  echo -e ${WHITE}"certbot --$server_flag"${NC}
+  echo -e ${WHITE}"certbot --$web_server"${NC}
 fi
 
 echo -e "Vaš sajt je podešen na adresi: ${GREEN}$url"${NC}
-echo "Instalirani web server je: ${GREEN}$server_flag"${NC}
+echo "Instalirani web server je: ${GREEN}$web_server"${NC}
 
 case $wp_install in
 	[dD][aA]|[dD])
