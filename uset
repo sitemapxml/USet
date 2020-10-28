@@ -201,6 +201,9 @@ apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xm
 # sitni pomoćni programi zip, unzip i tree
 apt-get install zip unzip tree locate net-tools -y
 
+# Instalacija imagick - Neophodno je za Webmin pregled fotografija
+apt-get install imagemagick -y
+
 # Uveri se da je instaliran awk
 # apt-get gawk mawk -y
 
@@ -412,7 +415,7 @@ while true
       if [ "$mysqld_version" -ge "8" ]; then
         mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
       else
-        mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER $unixuser@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to $unixuser@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
+        mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
       fi
 
 			echo '==================================================================' > db-info.txt
@@ -462,7 +465,7 @@ while true
           if [ "$mysqld_version" -ge "8" ]; then
             mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
           else
-            mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER $unixuser@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to $unixuser@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
+            mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
           fi
 				break
 				;;
