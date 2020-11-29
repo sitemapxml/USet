@@ -621,7 +621,7 @@ echo -e "Za pristup Webmin kontrolnoj tabli možete koristiti korisničko ime ${
 echo -e "i lozinku koju ste kreirali u toku instalacije"
 echo
 echo 'Webroot servera je:'
-echo -e '/var/www/'"${GREEN}$hostname${NC}"'/html'
+echo -e "/var/www/${GREEN}$hostname${NC}/html"
 echo
 
 case $backup_file_confirm in
