@@ -1,5 +1,5 @@
 # USet
-Server installation package
+Server installation script
 
 Note: The USet script is currently compatible only with Ubuntu server.
 
