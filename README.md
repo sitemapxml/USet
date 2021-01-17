@@ -37,4 +37,4 @@ If you don't see your IP, or you get something like this:
 ```
 Host example.com not found: 3(NXDOMAIN)
 ```
-It means that DNS propagation is not complete and you probably need to wait until it's done. Configuring the server without domain name is possible, but in that case you wan't be able to install `Let's Encrypt` SSL certificate.  
+It means that DNS propagation is not complete and you probably need to wait until it's done. Configuring the server without domain name is possible, but in that case you won't be able to install `Let's Encrypt` SSL certificate.  
