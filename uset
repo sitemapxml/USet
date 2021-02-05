@@ -6,13 +6,20 @@
 #         https://github.com/sitemapxml     #
 # License: MIT                              #
 # Publish date: Aug 2, 2020.                #
-# Version: 1.1.0                            #
+# Version: 2.0                              #
 #############################################
 
 # NOTE: This script is made from two repositories: https://github.com/sitemapxml/lamp and https://github.com/sitemapxml/lemp (LAMP and LEMP)
 # which were put into one repository called uset_alfa (https://github.com/sitemapxml/uset_alfa), from which is this project created.
 # Version 1.3.2 of LAMP script is used as beginning version of USet script, so LAMP repository is not under active development anymore, but it will
 # remain public for better understanding of USet script.
+
+# Učitaj konfiguraciju
+source uset.conf
+
+# Podešavanja jezika
+source files/languages/sr.txt
+source files/languages/welcome/en.txt
 
 # Definicije boja
 RED='\033[0;31m'
@@ -35,136 +42,110 @@ BNC='\e[49m'
 chmod +x files/mksite files/uninstall
 
 # Poruka dobrodošlice!
-text=''
-text+="${GREEN}"
-text+="┌──────────────────────────────────────────────────────┐\n"
-text+="│ Dobro došli u LAMP skriptu za instalaciju!           │\n"
-text+="│ Sledeći programi će biti instalirani:                │\n"
-text+="│    - apache2 http server                             │\n"
-text+="│    - mysql - 5.6 ili 8.0 (zavisi od verzije OS-a)    │\n"
-text+="│    - php - 7.2 ili 7.4 (zavisi od verzije OS-a)      │\n"
-text+="│ PHP ekstenzije:                                      │\n"
-text+="│    php-zip php-mysql php-mbstring php-curl           │\n"
-text+="│    php-gd php-xml php-xmlrpc php-soap php-intl       │\n"
-text+="│ Kontrolna tabla:                                     │\n"
-text+="│    Webmin - poslednja verzija                        │\n"
-text+="│ Dodatna podešavanja php-a:                           │\n"
-text+="│    post_max_size = 280M                              │\n"
-text+="│    upload_max_filesize = 256M                        │\n"
-text+="│ NAPOMENE:                                            │\n"
-text+="│    Biće napravljen virtualhost fajl sa osnovnim      │\n"
-text+="│ podešavanjima domena. U toku instalacije imaćete     │\n"
-text+="│ mogućnost da odaberete instalaciju Wordpress-a       │\n"
-text+="│ u suprotnom biće kreiran probni index.html           │\n"
-text+="│ i info.php fajl za proveru ispravnosti instalacije.  │\n"
-text+="│                                                      │\n"
-text+="│ Za više informacija posetite:                        │\n"
-text+="│ https://github.com/sitemapxml/lamp                   │\n"
-text+="└──────────────────────────────────────────────────────┘\n"
-text+="${NC}"
-printf "%b" "$text"
+whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65 || echo "$lang_welcome"
 
 # Unos neophodnih podataka
-echo -e ${YELLOW}'Molimo vas da unesete osnovne podatke o infra-strukturi: '${NC}
+echo -e ${YELLOW}"$lang_enter_information"${NC}
 echo
 
-echo -e ${YELLOW}'Korak (1/7)'${NC}
+echo -e ${YELLOW}"$lang_start_step_1"${NC}
 while true; do
-    read -p 'Unesite naziv domena bez protokola (bez http://): ' hostname
+    read -p "$lang_enter_domain_name" hostname
 	hostname=${hostname:-default}
-    read -p 'Unesite ponovo da bi ste potvrdili: ' hostname2
+    read -p "$lang_enter_again_to_confirm" hostname2
     [ "$hostname" = "$hostname2" ] && break
-    echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+    echo -e ${RED}"$lang_try_again"${NC}
 done
 
-echo -e ${YELLOW}'Korak (2/7)'${NC}
+echo -e ${YELLOW}"$lang_start_step_2"${NC}
 while true; do
-    read -s -p 'Unesite lozinku root korisnika: ' rootpass
+    read -s -p "$lang_enter_root_password" rootpass
 	rootpass=${rootpass:-default}
 	echo
-    read -s -p 'Unesite ponovo da bi ste potvrdili: ' rootpass2
+    read -s -p "$lang_enter_again_to_confirm" rootpass2
 	echo
     [ "$rootpass" = "$rootpass2" ] && break
-    echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+    echo -e ${RED}"$lang_try_again"${NC}
 	echo
 done
 
 echo
-echo -e ${YELLOW}'Korak (3/7)'${NC}
-read -p 'Unesite korisničko ime UNIX korisnika: ' unixuser
+echo -e ${YELLOW}"$lang_start_step_3"${NC}
+read -p "$lang_enter_unix_user_username" unixuser
 unixuser=${unixuser:-default}
 
-echo -e ${YELLOW}'Korak (4/7)'${NC}
+echo -e ${YELLOW}"$lang_start_step_4"${NC}
 while true; do
-    read -s -p 'Unesite lozinku UNIX korisnika: ' unixpass
+    read -s -p "$lang_enter_unix_user_password" unixpass
 	unixpass=${unixpass:-default}
 	echo
-    read -s -p 'Unesite ponovo da bi ste potvrdili: ' unixpass2
+    read -s -p "$lang_enter_again_to_confirm" unixpass2
 	echo
     [ "$unixpass" = "$unixpass2" ] && break
-    echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+    echo -e ${RED}"$lang_try_again"${NC}
 	echo
 done
 
 echo
-echo -e ${YELLOW}'Korak (5/7)'${NC}
-echo -e ${YELLOW}'Podešavanje lozinke za MYSQL root korisnika'${NC}
+echo -e ${YELLOW}"$lang_start_step_5"${NC}
+echo -e ${YELLOW}"$lang_mysql_password_set_up"${NC}
 while true; do
-    read -s -p 'Unesite lozinku za MYSQL root: ' mysqlrpass
+    read -s -p "$lang_enter_mysql_root_password" mysqlrpass
 	mysqlrpass=${mysqlrpass:-default}
 	echo
-    read -s -p 'Unesite ponovo da bi ste potvrdili: ' mysqlrpass2
+    read -s -p "$lang_enter_again_to_confirm" mysqlrpass2
 	echo
     [ "$mysqlrpass" = "$mysqlrpass2" ] && break
-    echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+    echo -e ${RED}"$lang_try_again"${NC}
 	echo
 done
 
 echo
-echo -e ${YELLOW}'Korak (6/7)'${NC}
-echo -e ${YELLOW}'Podešavanje Email adrese administratora'${NC}
+echo -e ${YELLOW}"$lang_start_step_6"${NC}
+echo -e ${YELLOW}"$lang_setting_up_email"${NC}
 while true; do
-    read -p 'Unesite vašu Email adresu: ' email
-    read -p 'Unesite ponovo da bi ste potvrdili: ' email2
+    read -p "$lang_enter_your_email" email
+    read -p "$lang_enter_again_to_confirm" email2
     [ "$email" = "$email2" ] && email=${email:-webmaster@example.com} && break
-    echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+    echo -e ${RED}"$lang_try_again"${NC}
 	echo
 done
 
 # Odabir http servera
-echo -e ${YELLOW}'Korak (7/7)'${NC}
-echo -e ${YELLOW}'Da li želite da instalirate Apache ili Nginx?'${NC}
-PS3='Molimo vas da odaberete jedno od ponuđenog: '
+echo -e ${YELLOW}"$lang_start_step_7"${NC}
+echo -e ${YELLOW}"$lang_install_apache_or_nginx"${NC}
+PS3="$lang_choose_one_of_the_folowing"
 options=("apache" "nginx")
 select web_server in "${options[@]}"
 do
     case $web_server in
         "apache")
-            echo "Odabrali ste instalaciju Apache servera"
+            echo -e "$lang_you_have_chosen_apache"
             break
             ;;
         "nginx")
-            echo "Odabrali ste instalaciju Nginx servera"
+            echo -e "$lang_you_have_chosen_nginx"
             break
             ;;
-        *) echo "neispravna opcija $REPLY";;
+        *) echo -e "$lang_invalid_option $REPLY"
+        ;;
     esac
 done
 
 # Početak instalacije
 echo
-echo -e ${YELLOW}'Neophodne informacije su prikupljene. Instalacija može da počne.'${NC}
-read -p $'\033[1;33mPritisnite [Enter] da bi ste nastavili...\033[0m'
-echo 'Krećemo...'
+echo -e ${YELLOW}"$lang_necessary_information_is_collected"${NC}
+read -p "$lang_press_enter_to_continue"
+echo -e "$lang_beginning"
 sleep 1s
 
 # Ažuriranje liste repozitorija, nadogradnja se preporučuje na kraju
-echo -e ${YELLOW}'Ažuriranje liste repozitorija...'${NC}
+echo -e ${YELLOW}"$lang_updating_package_lists"${NC}
 sleep 1s
 apt-get update
 
 # Dodavanje main repozitorije za slučaj da nije dodata, dodavanje universe repozitorije
-echo -e ${YELLOW}'Dodavanje repozitorija...'${NC}
+echo -e ${YELLOW}"$lang_adding_repositories"${NC}
 add-apt-repository main
 # add-apt-repository universe
 apt-get update
@@ -173,17 +154,17 @@ apt-get update
 apt-get install software-properties-common apt-transport-https -y
 
 if [ "$web_server" = "apache" ]; then
-  echo -e ${YELLOW}'Instalira se apache2, php'${NC}
+  echo -e ${YELLOW}"$lang_installing_apache2_php"${NC}
   sleep 1s
   apt-get install apache2 php -y
   systemctl enable apache2
 else
-  echo -e ${YELLOW}'Instalira se Nginx, php-fpm'${NC}
+  echo -e ${YELLOW}"$lang_installing_nginx_php_fpm"${NC}
   sleep 1s
   apt-get install nginx php-fpm -y
 
   # Provera verzije php-a
-  php_version_nginx=$( php -r 'echo phpversion();' | head -c 3 )
+  php_version=$( php -r 'echo phpversion();' | head -c 3 )
   fpm_version="php$php_version-fpm"
 
   systemctl enable nginx $fpm_version
@@ -194,7 +175,7 @@ apt-get install mysql-server -y
 systemctl enable mysql
 
 # Instalacija php ekstenzija
-echo -e ${YELLOW}'Instaliranje php ekstenzija...'${NC}
+echo -e ${YELLOW}"$lang_installing_php_extensions"${NC}
 sleep 1s
 apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y
 
@@ -204,32 +185,29 @@ apt-get install zip unzip tree locate net-tools -y
 # Instalacija imagick - Neophodno je za Webmin pregled fotografija
 apt-get install imagemagick -y
 
-# Uveri se da je instaliran awk
-# apt-get gawk mawk -y
-
 # Provera verzije php-a
 php_version=$( php -r 'echo phpversion();' | head -c 3 )
 
 # Osnovna podešavanja php-a, ServerTokens
 if [ "$web_server" = "apache" ]; then
-  sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/$php_version/apache2/php.ini
-  sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/$php_version/apache2/php.ini
-  sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/$php_version/apache2/php.ini
+  sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/"$php_version"/apache2/php.ini
+  sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/"$php_version"/apache2/php.ini
+  sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/"$php_version"/apache2/php.ini
   sed -i 's/ServerTokens OS/ServerTokens Prod/g' /etc/apache2/conf-available/security.conf
   systemctl restart apache2
 else
-  sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/$php_version_nginx/fpm/php.ini
-  sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/$php_version_nginx/fpm/php.ini
-  sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/$php_version_nginx/fpm/php.ini
+  sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/"$php_version"/fpm/php.ini
+  sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/"$php_version"/fpm/php.ini
+  sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/"$php_version"/fpm/php.ini
   sed -i 's/# server_tokens off;/server_tokens off;/g' /etc/nginx/nginx.conf
-  systemctl restart nginx $fpm_version
+  systemctl restart nginx "$fpm_version"
 fi
 
 # Podešavanje hostname-a prema unetom domenu
-hostnamectl set-hostname $hostname
+hostnamectl set-hostname "$hostname"
 
 # Webmin instalacija
-echo -e ${YELLOW}'Instaliranje Webmin kontrolne table...'${NC}
+echo -e ${YELLOW}"$lang_installing_webmin"${NC}
 sleep 1s
 echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
 apt-key add files/resources/jcameron-key.asc
@@ -239,78 +217,78 @@ sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
 /etc/init.d/webmin restart
 
 rm -rf /var/www/html
-mkdir /var/www/$hostname
+mkdir /var/www/"$hostname"
 
 # Apache
 if [ "$web_server" = "apache" ]; then
-  echo -e ${YELLOW}'Konfigurisanje Apache servera...'${NC}
+  echo -e ${YELLOW}"$lang_configuring_apache"${NC}
   sleep 1s
-  cp files/resources/apache.conf /etc/apache2/sites-available/$hostname.conf
-  sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
-  sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
+  cp files/resources/apache.conf /etc/apache2/sites-available/"$hostname".conf
+  sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
+  sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
   a2dissite 000-default
   rm /etc/apache2/sites-available/000-default.conf
-  a2ensite $hostname
+  a2ensite "$hostname"
   a2enmod rewrite
   systemctl restart apache2
 else
-  echo -e ${YELLOW}'Konfigurisanje Nginx servera...'${NC}
+  echo -e ${YELLOW}"$lang_configuring_nginx"${NC}
   sleep 1s
-  cp files/resources/nginx.conf /etc/nginx/sites-available/$hostname.conf
-  sed -i "s/sn_default/$hostname/g" /etc/nginx/sites-available/$hostname.conf
-  sed -i "s/dir_default/$hostname/g" /etc/nginx/sites-available/$hostname.conf
-  ln /etc/nginx/sites-available/$hostname.conf /etc/nginx/sites-enabled/$hostname.conf
+  cp files/resources/nginx.conf /etc/nginx/sites-available/"$hostname".conf
+  sed -i "s/sn_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
+  sed -i "s/dir_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
+  ln /etc/nginx/sites-available/"$hostname".conf /etc/nginx/sites-enabled/"$hostname".conf
   rm /etc/nginx/sites-available/default
   rm /etc/nginx/sites-enabled/default
   systemctl restart nginx
 fi
 
 # Dodavanje UNIX korisnika
-echo -e ${YELLOW}'Dodavanje UNIX korisnika...'${NC}
+echo -e ${YELLOW}"$lang_adding_unix_user"${NC}
 sleep 1s
-adduser $unixuser --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
+adduser "$unixuser" --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
 echo -e "$unixuser:$unixpass" | chpasswd
-echo "$unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
-echo -e ${GREEN}"Korisnik $unixuser je kreiran."${NC}
+echo -e "$unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
+echo -e ${GREEN}"$lang_user_user $unixuser $lang_is_created"${NC}
 
 # Postavljanje nove root lozinke
-echo -e ${YELLOW}'Postavljanje nove lozinke za root...'${NC}
+echo -e ${YELLOW}"$lang_setting_up_root_password"${NC}
 sleep 1s
 echo -e "root:$rootpass" | chpasswd
-echo -e ${GREEN}'Lozinka je ažurirana!'${NC}
+echo -e ${GREEN}"$lang_password_is_updated"${NC}
 
 # Kreiranje direktorijuma za skladištenje lozinki
-mkdir .podaci
-chmod 0000 -R .podaci
+mkdir .data
+chmod 0000 -R .data
 
 # Instalacija SSL sertifikata
 while true
 	do
-	echo -e ${YELLOW}'Korak (1/5)'${NC}
-	read -p 'Da li želite da instalirate SSL sertifikat? (Da/Ne): ' ssl_install
+	echo -e ${YELLOW}"$lang_install_step_1"${NC}
+	read -p "$lang_do_you_want_to_install_ssl $lang_yes_no_colon" ssl_install
 		case $ssl_install in
-		[dD][aA]|[dD])
+		[Yy][Ee][Ss]|[Yy])
 
     # Preusmeravanje na https
 		while true
 			do
-			read -p 'Da li želite da omogućite preusmeravanje na https? (Da/Ne)' ssl_redirect
+			read -p "$lang_do_you_want_to_enable_redirect_to_https $lang_yes_no" ssl_redirect
 				case $ssl_redirect in
-				[dD][aA]|[dD])
+				[Yy][Ee][Ss]|[Yy])
 					https_redirect="redirect"
 				break
 				;;
-				[nN][eE]|[nN])
+				[Nn][Oo]|[Nn])
 					https_redirect="no-redirect"
 			break
 			;;
 			*)
-				echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+				echo -e ${RED}"$lang_answer_yes_no"${NC}
 			;;
 			esac
 		done
 
-			echo 'Instalira se SSL...'
+			echo -e "$lang_installing_ssl_certificate"
 			sleep 1s
 			# Certbot instalacija
       if [ "$web_server" = "apache" ]; then
@@ -320,49 +298,49 @@ while true
       fi
 
 			# Instalacija Let's encrypt SSL sertifikata
-			certbot --$web_server --non-interactive --agree-tos --domains $hostname --email $email --$https_redirect
+			certbot --"$web_server" --non-interactive --agree-tos --domains "$hostname" --email "$email" --"$https_redirect"
 
       CERTFILE="/etc/letsencrypt/live/$hostname/fullchain.pem"
       KEYFILE="/etc/letsencrypt/live/$hostname/privkey.pem"
       if [ -f "$CERTFILE" ] && [ -f "$KEYFILE" ]; then
         # Podesavanje SSL-a za Webmin
-        echo -e ${YELLOW}'Podesavanje SSL-a za Webmin...'${NC}
+        echo -e ${YELLOW}"$lang_setting_up_ssl_for_webmin"${NC}
         sed -i '/keyfile/d' /etc/webmin/miniserv.conf
         echo -e 'keyfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''privkey.pem' >> /etc/webmin/miniserv.conf
         echo -e 'certfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''fullchain.pem' >> /etc/webmin/miniserv.conf
         /etc/init.d/webmin restart
 
         # Putanje do instaliranih SSL sertifikata
-        echo -e '\nPodaci o SSL sertifikatima:' > .podaci/ssl-info.txt
-        certbot certificates >> .podaci/ssl-info.txt
-        chmod 0000 .podaci/ssl-info.txt
-        echo -e ${GREEN}'SSL je instaliran!'${NC}
+        echo -e "$lang_ssl_certificate_data" > .data/ssl-info.txt
+        certbot certificates >> .data/ssl-info.txt
+        chmod 0000 .data/ssl-info.txt
+        echo -e ${GREEN}"$lang_ssl_installed"${NC}
       else
-        echo -e ${RED}'SSL sertifikat nije ispravno instaliran! Proverite greške i pokušajte ponovo.'${NC}
+        echo -e ${RED}"$lang_ssl_install_error"${NC}
         ssl_error='1'
         sleep 1s
-        echo '==================================================================' >> .podaci/ssl-info.txt
-        echo '============ SSL sertifikat nije ispravno instaliran! ============' >> .podaci/ssl-info.txt
-        echo '============== Proverite greške i pokušajte ponovo. ==============' >> .podaci/ssl-info.txt
-        echo '==================================================================' >> .podaci/ssl-info.txt
+        echo '******************************************************************' >> .data/ssl-info.txt
+        echo -е "$lang_ssl_certificate_not_installed"  >> .data/ssl-info.txt
+        echo -e "$lang_check_for_errors_and_try_again" >> .data/ssl-info.txt
+        echo '******************************************************************' >> .data/ssl-info.txt
       fi
 		break
 		;;
-		[nN][eE]|[nN])
+		[Nn][Oo]|[Nn])
 	break
 	;;
 	*)
-		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+		echo -e ${RED}"$lang_answer_yes_no"${NC}
 	;;
 	esac
 done
 
 # Određivanje protokola
 case $ssl_install in
-	[dD][aA]|[dD])
+	[Yy][Ee][Ss]|[Yy])
 		https='true'
 	;;
-	[nN][eE]|[nN])
+	[Nn][Oo]|[Nn])
 		https='false'
 	;;
 esac
@@ -380,18 +358,22 @@ url="$protocol$hostname"
 # Provera verzije mysql servera
 mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
 
+# Priprema neophodnih podataka za kreiranje baze podataka 
+database_password=$( date +%s | sha256sum | base64 | head -c 32 )
+db_name=$( echo $hostname | sed 's/\./_/g' )
+
 # Instalacija Wordpress-a
 while true
 	do
-	echo -e ${YELLOW}'Korak (2/5)'${NC}
-	read -p 'Da li želite da instalirate Wordpress? (Da/Ne): ' wp_install
+	echo -e ${YELLOW}"$lang_install_step_2"${NC}
+	read -p "$lang_do_you_want_to_install_wordpress $lang_yes_no_colon" wp_install
 		case $wp_install in
-		[dD][aA]|[dD])
+		[Yy][Ee][Ss]|[Yy])
 			# Instaliranje faljova
-			wget https://sr.wordpress.org/latest-sr_RS.tar.gz
-			tar -xzvf latest-sr_RS.tar.gz
-			mv wordpress /var/www/$hostname/html
-			chown www-data:www-data -R /var/www/$hostname/html
+			wget https://wordpress.org/latest.tar.gz
+			tar -xzvf latest.tar.gz
+			mv wordpress /var/www/"$hostname"/html
+			chown www-data:www-data -R /var/www/"$hostname"/html
 
 			# Instaliranje dodatnih php ekstenzija
 			apt-get install php-xmlrpc php-exif -y
@@ -399,18 +381,15 @@ while true
       if [ "$web_server" = "apache" ]; then
   			systemctl restart apache2
       else
-  			systemctl restart nginx $fpm_version
+  			systemctl restart nginx "$fpm_version"
       fi
 
 			# Brisanje nepotrebnih fajlova
-			rm latest-sr_RS.tar.gz
+			rm latest.tar.gz
 
 			# Kreiranje baze podataka
-			echo 'Kreiranje baze podataka...'
+			echo -e "$lang_creating_database"
 			sleep 1s
-
-      database_password=$( date +%s | sha256sum | base64 | head -c 32 )
-			db_name=$( echo $hostname | sed 's/\./_/g' )
 
       if [ "$mysqld_version" -ge "8" ]; then
         mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
@@ -418,64 +397,70 @@ while true
         mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
       fi
 
-			echo '==================================================================' > db-info.txt
-			echo '============= Pristupni parametri za bazu podataka ===============' >> db-info.txt
-			echo '==================================================================' >> db-info.txt
-			echo -e '\n\n''Naziv baze podataka:' $db_name'\nKorisničko ime:' $unixuser'\nLozinka:' $database_password'\n' >> db-info.txt
+			echo '******************************************************************' > db-info.txt
+			echo -e "$lang_database_access_parameters" >> db-info.txt
+			echo '******************************************************************' >> db-info.txt
+			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> db-info.txt
 
 			# Konfigurisanje Wordpress Multisite instalacije
 				while true
 					do
-					read -p 'Da li želite da omogućite Wordpress Multisite? (Da/Ne): ' wp_install_multisite
+					read -p "$lang_do_you_want_to_enable_wordpress_multisite $lang_yes_no_colon" wp_install_multisite
 						case $wp_install_multisite in
-						[dD][aA]|[dD])
+						[Yy][Ee][Ss]|[Yy])
 							# Instaliranje faljova
-							echo 'Konfiguriše se Multisite...'
-							sed -i "81i define( 'WP_ALLOW_MULTISITE', true );" /var/www/$hostname/html/wp-config-sample.php
-							echo -e ${GREEN}'Multisite je podešen!'${NC}
+							echo -e "$lang_configuring_wp_multisite"
+							sed -i "81i define( 'WP_ALLOW_MULTISITE', true );" /var/www/"$hostname"/html/wp-config-sample.php
+							echo -e ${GREEN}"$lang_multisite_is_configured"${NC}
 						break
 						;;
-					[nN][eE]|[nN])
+					[Nn][Oo]|[Nn])
 						break
 						;;
 						*)
-							echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+							echo -e ${RED}"$lang_answer_yes_no"${NC}
 						;;
 					esac
 				done
-			echo -e ${GREEN}'Wordpress je instaliran!'${NC}
+			echo -e ${GREEN}"$lang_wordpress_is_installed"${NC}
 		break
 		;;
-		[nN][eE]|[nN])
+		[Nn][Oo]|[Nn])
 			# Iskopiraj index.html u webroot
-			mkdir /var/www/$hostname/html
-			cp files/resources/index.html /var/www/$hostname/html/index.html
-			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
-			sed -i "s/s_title/Domen $hostname je uspešno podešen\!/g" /var/www/$hostname/html/index.html
-      sed -i "s/webmin_hostname/$hostname/g" /var/www/$hostname/html/index.html
+			mkdir /var/www/"$hostname"/html
+			cp files/resources/index.html /var/www/"$hostname"/html/index.html
+			echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
+			sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
+      sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
 
-			echo 'Podešeni su index.html i phpinfo fajl.'
+			echo -e "$lang_index_html_phpinfo_configured"
 
     # Kreiranje baze podataka
 		while true
 			do
-			read -p 'Da li želite sada da kreirate batu podataka? (Da/Ne)' db_make
+			read -p "$lang_do_you_want_to_create_database $lang_yes_no_colon" db_make
 				case $db_make in
-				[dD][aA]|[dD])
+				[Yy][Ee][Ss]|[Yy])
           if [ "$mysqld_version" -ge "8" ]; then
             mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
           else
             mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
           fi
+
+          echo '******************************************************************' > db-info.txt
+    			echo -e "$lang_database_access_parameters" >> db-info.txt
+    			echo '******************************************************************' >> db-info.txt
+    			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> db-info.txt
+
 				break
 				;;
-				[nN][eE]|[nN])
-					echo "Preskače se kreiranje baze podataka..."
+				[Nn][Oo]|[Nn])
+					echo -e "$lang_skipping_database_creation"
           sleep 1s
 			break
 			;;
 			*)
-				echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+				echo -e ${RED}"$lang_answer_yes_no"${NC}
 			;;
 			esac
 		done
@@ -483,7 +468,7 @@ while true
 		break
 		;;
 	*)
-		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+		echo -e ${RED}"$lang_answer_yes_no"${NC}
 	;;
 	esac
 done
@@ -491,21 +476,21 @@ done
 # 6g zaštitni zid
 while true
 	do
-	echo -e ${YELLOW}'Korak (3/5)'${NC}
-	read -p 'Da li želite da omogućite Apache 6G zaštitni zid? (Da/Ne): ' apache_firewall
+	echo -e ${YELLOW}"$lang_install_step_3"${NC}
+	read -p "$lang_do_you_want_to_enable_6g_firewall $lang_yes_no_colon" apache_firewall
 		case $apache_firewall in
-		[dD][aA]|[dD])
+		[Yy][Ee][Ss]|[Yy])
 			cp files/resources/6g.conf /etc/apache2/6g.conf
-			sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
+			sed -i "s/#6g //g" /etc/apache2/sites-available/"$hostname".conf
 			systemctl restart apache2
-			echo -e ${GREEN}'Zaštitni zid je omogućen!'${NC}
+			echo -e ${GREEN}"$lang_firewall_enabled"${NC}
 		break
 		;;
-		[nN][eE]|[nN])
+		[Nn][Oo]|[Nn])
 	break
 	;;
 	*)
-		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+		echo -e ${RED}"$lang_answer_yes_no"${NC}
 	;;
 	esac
 done
@@ -513,10 +498,10 @@ done
 # UFW zaštitni zid
 while true
 	do
-	echo -e ${YELLOW}'Korak (4/5)'${NC}
-	read -p 'Da li želite da omogućite zaštitu portova? (Da/Ne): ' ufw_firewall
+	echo -e ${YELLOW}"$lang_install_step_4"${NC}
+	read -p "$lang_do_you_want_to_enable_ufw_firewall $lang_yes_no_colon" ufw_firewall
 		case $ufw_firewall in
-		[dD][aA]|[dD])
+		[Yy][Ee][Ss]|[Yy])
 			ufw --force enable
 			ufw allow 'OpenSSH'
 			ufw allow '3000/tcp'
@@ -528,14 +513,14 @@ while true
       fi
 
 			ufw reload
-			echo -e ${GREEN}'Zaštita portova je omogućena!'${NC}
+			echo -e ${GREEN}"$lang_port_protection_enabled"${NC}
 		break
 		;;
-		[nN][eE]|[nN])
+		[Nn][Oo]|[Nn])
 	break
 	;;
 	*)
-		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+		echo -e ${RED}"$lang_answer_yes_no"${NC}
 	;;
 	esac
 done
@@ -543,104 +528,101 @@ done
 # Kreiranje fajla sa lozinkama
 while true
 	do
-	echo -e ${YELLOW}'Korak (5/5)'${NC}
-	read -r -p 'Da li želite da napravite rezervnu kopiju korisničkih imena i lozinki? (Da/Ne): ' backup_file
+	echo -e ${YELLOW}"$lang_install_step_5"${NC}
+	read -r -p "$lang_do_you_want_to_make_password_backup $lang_yes_no_colon" backup_file
 		case $backup_file in
-		[dD][aA]|[dD])
+		[Yy][Ee][Ss]|[Yy])
 		while true
 			do
-			echo -e ${RED}'Ova opcija nije bezbedna. Savetujemo vam da fajl iskopirate na sigurno mesto i da ga u što kraćem roku obrišete sa servera.'${NC}
-			read -p 'Da li ste sigurni da želite da nastavite? (Da/Ne): ' backup_file_confirm
+			echo -e ${RED}"$lang_warning_this_option_is_not_secure"${NC}
+			read -p "$lang_do_you_want_to_continue $lang_yes_no_colon" backup_file_confirm
 				case $backup_file_confirm in
-				[dD][aA]|[dD])
-					echo 'Kopiranje lozinki...'
+				[Yy][Ee][Ss]|[Yy])
+					echo -e "$lang_copying_passwords"
 					sleep 1s
-					echo '*************************************************************************************' > .podaci/podaci.txt
-					echo '******************************** Pristupni parametri ********************************' >> .podaci/podaci.txt
-					echo '*************************************************************************************' >> .podaci/podaci.txt
+					echo '*************************************************************************************' > .data/data.txt
+					echo -e "$lang_access_parameters" >> .data/data.txt
+					echo '*************************************************************************************' >> .data/data.txt
 
-					echo -e '\n\nHostname: '"$hostname"'\nroot lozinka: '"$rootpass"'\n\nUNIX korisnik: '"$unixuser"'\nUNIX lozinka: '"$unixpass"'\n' >> .podaci/podaci.txt
-					echo -e 'MYSQL root lozinka: '"$mysqlrpass"'\n\nE-mail: '"$email"'\n\n' >> .podaci/podaci.txt
+					echo -e '\n\n'"$lang_hostname""$hostname"'\n'"$lang_root_password""$rootpass"'\n\n'"$lang_unix_user""$unixuser"'\n'"$lang_unix_user_password""$unixpass"'\n' >> .data/data.txt
+					echo -e "$lang_mysql_root_password""$mysqlrpass"'\n\n'"$lang_email""$email"'\n\n' >> .data/data.txt
 
-					echo '*************************************************************************************' >> .podaci/podaci.txt
-					echo 'VAŽNA NAPOMENA:' >> .podaci/podaci.txt
-					echo 'U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH' >> .podaci/podaci.txt
-					echo 'APLIKACIJA NA NJEMU. PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ' >> .podaci/podaci.txt
-					echo 'FAJL OBRIŠETE ŠTO PRE. PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A".' >> .podaci/podaci.txt
-					echo '*************************************************************************************' >> .podaci/podaci.txt
-					chmod 0000 .podaci/podaci.txt
-					echo -e ${GREEN}'Lozinke su iskopirane.'${NC}
+					echo '*************************************************************************************' >> .data/data.txt
+					echo -e "$lang_password_warning" >> .data/data.txt
+					echo '*************************************************************************************' >> .data/data.txt
+					chmod 0000 .data/data.txt
+					echo -e ${GREEN}"$lang_password_data_copied"${NC}
 				break
 				;;
-				[nN][eE]|[nN])
+				[Nn][Oo]|[Nn])
 				break
 				;;
 			*)
-				echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+				echo -e ${RED}"$lang_answer_yes_no"${NC}
 			;;
 			esac
 		done
 		break
 		;;
-		[nN][eE]|[nN])
+		[Nn][Oo]|[Nn])
 		break
 		;;
 	*)
-		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+		echo -e ${RED}"$lang_answer_yes_no"${NC}
 	;;
 	esac
 done
 
 # Echo poruke
-echo -e ${BLACK}${BGREEN}'Instalacija je završena!'${NC}${BNC}
+echo -e ${BLACK}${BGREEN}"$lang_installation_is_done"${NC}${BNC}
 echo
 
 if [ "$ssl_error" = "1" ]; then
-  echo -e ${RED}'Konfigurisanje SSL sertifikata nije uspelo.'${NC}
-  echo 'Proverite DNS podešavanja i pokušajte da instalirate SSL komandom:'
-  echo -e ${WHITE}"certbot --$web_server"${NC}
+  echo -e "${RED}$lang_configuring_ssl_failed${NC}"
+  echo -e "$lang_check_dns_settings_and_try_again"
+  echo -e "${WHITE}certbot --$web_server${NC}"
 fi
 
-echo -e "Vaš sajt je podešen na adresi: ${GREEN}$url"${NC}
-echo "Instalirani web server je: ${GREEN}$web_server"${NC}
+echo -e "$lang_website_available_at_address ${GREEN}$url${NC}"
+echo -e "$lang_chosen_webserver_is ${GREEN}$web_server${NC}"
 
 case $wp_install in
-	[dD][aA]|[dD])
-    echo "Da dovršite instalaciju Wordpress-a posetite početnu stranu vašeg veb sajta"
-    echo "i iskopirajte podatke iz fajla db-info.txt u odgovarajuća polja."
-    echo -e "Fajl možete otvoriti komandom:\n${WHITE}nano db-info.txt"${NC}
+	[Yy][Ee][Ss]|[Yy])
+    echo -e "$lang_to_finish_wordpress_installation_visit_your_website"
+    echo -e "$lang_and_copy_messages_from_db_info_to_wordpress"
+    echo -e "$lang_open_file_with_command\n${WHITE}nano db-info.txt${NC}"
 	;;
-	[nN][eE]|[nN])
-		echo -e "Ispravnost php-a možete proveriti otvaranjem stranice ${GREEN}$url/info.php"${NC}
+	[Nn][Oo]|[Nn])
+		echo -e "$lang_you_can_check_if_php_working ${GREEN}$url/info.php${NC}"
 	;;
 esac
 
 echo
-echo -e "Webmin kontrolna tabla je instalirana na adresi: ${GREEN}$url:3000"${NC}
-echo -e "Za pristup Webmin kontrolnoj tabli možete koristiti korisničko ime ${GREEN}$unixuser"${NC}
-echo -e "i lozinku koju ste kreirali u toku instalacije"
+echo -e "$lang_webmin_installed_at_address ${GREEN}$url:3000${NC}"
+echo -e "$lang_to_access_webmin_you_can_use_username ${GREEN}$unixuser${NC}"
+echo -e "$lang_and_password_created_during_installation"
 echo
-echo 'Webroot servera je:'
+echo -e "$lang_server_webroot_is"
 echo -e "/var/www/${GREEN}$hostname${NC}/html"
 echo
 
 case $backup_file_confirm in
-	[dD][aA]|[dD])
-    echo -e "Za pregled podataka o instalaciji možete da iskopirate komandu:"
-    echo -e ${WHITE}"nano .podaci/podaci.txt"${NC}
+	[Yy][Ee][Ss]|[Yy])
+    echo -e "$lang_to_see_installation_data_copy_following_command"
+    echo -e "${WHITE}nano .data/data.txt${NC}"
     echo
 	;;
-	[nN][eE]|[nN])
+	[Nn][Oo]|[Nn])
 	;;
 esac
 
 case $ssl_install in
-	[dD][aA]|[dD])
-    echo -e "Za prijem obaveštenja o isteku SSL sertifikata koristiće se e-mail adresa:\n${GREEN}$email"${NC}
+	[Yy][Ee][Ss]|[Yy])
+    echo -e "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$email${NC}"
     echo
 	;;
-	[nN][eE]|[nN])
-    echo -e "Vaša e-mail adresa je ${GREEN}$email"${NC}
+	[Nn][Oo]|[Nn])
+    echo -e "$lang_your_email_address_is ${GREEN}$email${NC}"
 	;;
 esac
 

@@ -1,0 +1,140 @@
+# ################################################################ #
+# Ово је фајл са преводом интерфејса.                              #
+# Преводи се могу уређивати мењањем стрингова са десне стране.     #
+# Са леве стране се налазе варијабле и није их препоручено мењати. #
+# ################################################################ #
+
+# Кораци на почетку инсталације
+lang_start_step_1='Корак (1/7)'
+lang_start_step_2='Корак (2/7)'
+lang_start_step_3='Корак (3/7)'
+lang_start_step_4='Корак (4/7)'
+lang_start_step_5='Корак (5/7)'
+lang_start_step_6='Корак (6/7)'
+lang_start_step_7='Корак (7/7)'
+
+# Кораци у току инсталације
+lang_install_step_1='Корак (1/7)'
+lang_install_step_2='Корак (2/7)'
+lang_install_step_3='Корак (3/7)'
+lang_install_step_4='Корак (4/7)'
+lang_install_step_5='Корак (5/7)'
+lang_install_step_6='Корак (6/7)'
+lang_install_step_7='Корак (7/7)'
+
+# Често коришћене поруке
+lang_enter_again_to_confirm='Унесите поново да би сте потврдили: '
+lang_try_again='Молимо покушајте поново.'
+lang_choose_one_of_the_folowing='Молимо вас да одаберете једно од понуђеног: '
+lang_do_you_want_to_continue='Да ли сте сигурни да желите да наставите?'
+lang_answer_yes_no='Молимо вас да одговорите са Да или Не.'
+lang_yes_no='(Yes/No)'
+lang_yes_no_colon='(Yes/No): '
+
+# Текст унутар фајлова
+lang_ssl_certificate_data='\nПодаци о SSL сертификатима:'
+lang_ssl_certificate_not_installed='SSL сертификат није исправно инсталиран!'
+lang_check_for_errors_and_try_again='Проверите грешке и покушајте поново.'
+lang_database_access_parameters='Приступни параметри за базу података'
+lang_database_name='Назив базе података: '
+lang_database_user='\nКорисничко име: '
+lang_database_user_password='\nЛозинка: '
+lang_access_parameters='Приступни параметри'
+lang_hostname='Hostname:'
+lang_root_password='root lozinka: '
+lang_unix_user='UNIX korisnik: '
+lang_unix_user_password='UNIX lozinka: '
+lang_mysql_root_password='MYSQL root lozinka: '
+lang_email='E-mail: '
+lang_password_warning='ВАЖНА НАПОМЕНА:
+У ОВОМ ФАЈЛУ СЕ НАЛАЗЕ ИНФОРМАЦИЈЕ КОЈЕ КОГУ УГРОЗИТИ БЕЗБЕДНОСТ СЕРВЕРА И СВИХ
+АПЛИКАЦИЈА НА ЊЕМУ. ПРЕПОРУЧУЈЕ СЕ ДА ЛОЗИНКЕ САЧУВАТЕ НА СИГУРНОМ МЕСТУ И ДА ОВАЈ
+ФАЈЛ ОБРИШЕТЕ ШТО ПРЕ. ПРЕПОРУЧУЈЕ СЕ КОРИШЋЕЊЕ МЕНАЏЕРА ЛОЗИНКИ.'
+
+# Питања и обавештења
+lang_enter_information='Молимо вас да унесете основне податке о инфра-структури:'
+lang_enter_domain_name='Унесите назив домена без протокола (без http://): '
+lang_enter_root_password='Унесите лозинку root корисника: '
+lang_enter_unix_user_username='Унесите корисничко име UNIX корисника: '
+lang_enter_unix_user_password='Унесите лозинку UNIX корисника: '
+lang_mysql_password_set_up='Подешавање лозинке за MYSQL root корисника'
+lang_enter_mysql_root_password='Унесите лозинку за MYSQL root: '
+lang_setting_up_email='Подешавање Email адресе администратора'
+lang_enter_your_email='Унесите вашу Email адресу: '
+lang_install_apache_or_nginx='Да ли желите да инсталирате Apache или Nginx?'
+lang_you_have_chosen_apache='Одабрали сте инсталацију Apache сервера'
+lang_you_have_chosen_nginx='Одабрали сте инсталацију Nginx сервера'
+lang_invalid_option='неисправна опција'
+lang_necessary_information_is_collected='Неопходне информације су прикупљене. Инсталација може да почне.'
+lang_press_enter_to_continue='Притисните [Enter] да би сте наставили...'
+
+# Почетак инсталације
+lang_beginning='Крећемо...'
+lang_updating_package_lists='Ажурирање листе репозиторија...'
+lang_adding_repositories='Додавање репозиторија...'
+lang_installing_apache2_php='Инсталира се apache2, php'
+lang_installing_nginx_php_fpm='Инсталира се Nginx, php-fpm'
+lang_installing_php_extensions='Инсталирање php екстензија...'
+lang_installing_webmin='Инсталирање Webmin контролне табле...'
+lang_configuring_apache='Конфигурисанје Apache сервера...'
+lang_configuring_nginx='Конфигурисанје Nginx сервера...'
+lang_adding_unix_user='Додавање UNIX корисника...'
+lang_user_user='Корисник'
+lang_is_created='је креиран.'
+lang_setting_up_root_password='Постављање нове лозинке за root...'
+lang_password_is_updated='Лозинка је ажурирана!'
+
+# Инсталација SSL сертификата
+lang_do_you_want_to_install_ssl='Да ли желите да инсталирате SSL сертификат?'
+lang_do_you_want_to_enable_redirect_to_https='Да ли желите да омогућите преусмеравање на https?'
+lang_installing_ssl_certificate='Инсталира се SSL...'
+lang_setting_up_ssl_for_webmin='Подешавање SSL-а за Webmin...'
+lang_ssl_installed='SSL је инсталиран!'
+lang_ssl_install_error='SSL сертификат није исправно инсталиран! Проверите грешке и покушајте поново.'
+
+# Wordpress инсталација
+lang_do_you_want_to_install_wordpress='Да ли желите да инсталирате Wordpress?'
+lang_creating_database='Креирање базе података...'
+lang_do_you_want_to_enable_wordpress_multisite='Да ли желите да омогућите Wordpress Multisite?'
+lang_configuring_wp_multisite='Конфигурише се Multisite...'
+lang_multisite_is_configured='Multisite је подешен!'
+lang_wordpress_is_installed='Wordpress је инсталиран!'
+
+lang_domain='Domen'
+lang_is_sucessfuly_configured='је успешно подешен'
+lang_index_html_phpinfo_configured='Подешени су index.html i phpinfo фајл.'
+
+# База података и заштитни зид
+lang_do_you_want_to_create_database='Да ли желите сада да креирате базу података?'
+lang_skipping_database_creation='Прескаче се креирање базе података...'
+lang_do_you_want_to_enable_6g_firewall='Да ли желите да омогућите Apache 6G заштитни зид?'
+lang_firewall_enabled='Заштитни зид је омогућен!'
+lang_do_you_want_to_enable_ufw_firewall='Да ли желите да омогућите заштиту портова?'
+lang_port_protection_enabled='Заштита портова је омогућена!'
+lang_do_you_want_to_make_password_backup='Да ли желите да направите резервну копију корисничких имена и лозинки?'
+lang_warning_this_option_is_not_secure='Ова опција није безбедна. Саветујемо вам да фајл ископирате на сигурно место и да га у што краћем року обришете са сервера.'
+lang_copying_passwords='Копирање лозинки...'
+lang_password_data_copied='Лозинке су ископиране.'
+
+# Поруке на крају
+lang_installation_is_done='Инсталација је завршена!'
+lang_configuring_ssl_failed='Конфигурисање SSL сертификата није успело.'
+lang_check_dns_settings_and_try_again='Проверите DNS подешавања и покушајте да инсталирате SSL командом:'
+
+lang_website_available_at_address='Ваш сајт је подешен на адреси:'
+lang_chosen_webserver_is='Инсталирани веб сервер је:'
+
+lang_to_finish_wordpress_installation_visit_your_website='Да довршите инсталацију Wordpress-а посетите почетну страну вашег веб сајта'
+lang_and_copy_messages_from_db_info_to_wordpress='и ископирајте податке из фајла db-info.txt у одговарајућа поља.'
+lang_open_file_with_command='Фајл можете отворити командом:'
+lang_you_can_check_if_php_working='Исправност php-а можете проверити отварањем странице'
+
+lang_webmin_installed_at_address='Webmin контролна табла је инсталирана на адреси:'
+lang_to_access_webmin_you_can_use_username='За приступ Webmin контролној табли можете користити корисничко име'
+lang_and_password_created_during_installation='и лозинку коју сте креирали у току инсталације'
+
+lang_server_webroot_is='Webroot сервера је:'
+
+lang_to_see_installation_data_copy_following_command='За преглед података о инсталацији можете да ископирате команду:'
+lang_following_email_will_be_used_for_receiving_ssl_warnings='За пријем обавештења о истеку SSL сертификата користиће се e-mail адреса'
+lang_your_email_address_is='Ваша e-mail адреса је'

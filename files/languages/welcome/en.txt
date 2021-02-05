@@ -1,0 +1,19 @@
+lang_welcome='Welcome to the USet server configuration script. 
+This script is made in the hope that it will make someone life easier and that it will lower the amount of job that is required to have your own VPS server up and running. The name <USet> is coming from <You Set up> and its meaning is that anyone can use it without others help. Before you begin with installation, you should make sure that server can download files from other servers and if you want to have SSL installed you should make sure that you have FQDN (Fully Qualified Domain Name) pointing to your server IP. Before the beginning of installation you will be asked for a following details: 
+- domain name
+- server root password
+- UNIX user username and password
+- mysql root password, and
+- email address for SSL expiration warnings
+After you enter all the required information, you will have the choice to choose which http server you want to install. Currently, the script supports Apache and Nginx.
+According to chosen web server type all the other configuration steps that are necessary for some web application to work will be performed automatically, without the need to manually change the configuration. By its default settings, Webmin control panel will be installed.
+After the basic software packages were installed, you will have to chose some more configuration options. This options include, but are not limited to:
+- installing SSL certificate
+- Wordpress installation - if you do not want to install Wordpress demo page will be created at rot of your website
+- if you choose to install apache you will be asked if you want to enable 6g or 7g firewall from perishablepress.com
+- you will also have an option to enable port protection with UFW firewall
+After that you will be asked if you want to save passwords in a plain text. This option is not recommended, but in some cases might be useful. However, it is advisable to remove this files as soon as possible.
+After installation is done, basic information about configuration will be shown.
+If you want to know more about this project or if you want to contribute you can do so by forking project on github or submitting any errors you found.
+The project repository is located at https://github.com/sitemapxml/USet
+Good luck!'

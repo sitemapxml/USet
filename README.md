@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="files/resources/uset-logo.png">
+</p>
+
 # USet
 Server installation script
 
