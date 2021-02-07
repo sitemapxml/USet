@@ -1,0 +1,30 @@
+# Language setting
+conf_language='en'
+
+# File and folder names
+conf_data_folder_name='.data'
+conf_data_file_name='data.txt'
+conf_ssl_info_file_name='ssl-info.txt'
+conf_db_info_file_name='db-info.txt'
+
+# Apperiance
+conf_disable_colors='false'
+
+# Welcome message
+conf_skip_welcome_screen='false'
+
+# Installation settings
+conf_php_extension_list='php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl'
+conf_helper_program_list='zip unzip tree locate net-tools'
+conf_add_apt_repository_universe='false'
+
+# Webmin settings
+conf_webmin_install='true'
+conf_webmin_port='3000'
+conf_webmin_ssl_mode='true'
+conf_install_imagemagick='true'
+
+# Wordpress settings
+conf_wp_wget_locale='https://wordpress.org/latest.tar.gz'
+conf_wp_wget_filename='latest.tar.gz'
+conf_wp_aditional_php_extensions='php-xmlrpc php-exif'

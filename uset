@@ -15,34 +15,58 @@
 # remain public for better understanding of USet script.
 
 # Učitaj konfiguraciju
-source uset.conf
+source config.txt
 
 # Podešavanja jezika
-source files/languages/sr.txt
-source files/languages/welcome/en.txt
+if [ -f "files/languages/$conf_language.txt" ]; then
+  source files/languages/$conf_language.txt
+else
+  source files/languages/en.txt
+fi
+if [ -f "files/languages/welcome/$conf_language.txt" ]; then
+  source files/languages/welcome/$conf_language.txt
+else
+  source files/languages/welcome/en.txt
+fi
 
-# Definicije boja
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLACK='\e[30m'
-WHITE='\e[97m'
+if [ "$conf_disable_colors" = "true" ]; then
+  RED=''
+  GREEN=''
+  YELLOW=''
+  BLACK=''
+  WHITE=''
+  NC=''
+  BGREEN=''
+  BGRAY=''
+  BNC=''
+else
+  # Definicije boja
+  RED='\033[0;31m'
+  GREEN='\033[0;32m'
+  YELLOW='\033[1;33m'
+  BLACK='\e[30m'
+  WHITE='\e[97m'
 
-# Reset boja teksta
-NC='\033[0m'
+  # Reset boja teksta
+  NC='\033[0m'
 
-# Boja pozadine
-BGREEN='\e[42m'
-BGRAY='\e[47m'
+  # Boja pozadine
+  BGREEN='\e[42m'
+  BGRAY='\e[47m'
 
-# Reset boje pozadine
-BNC='\e[49m'
+  # Reset boje pozadine
+  BNC='\e[49m'
+fi
 
 # Davanje privilegija za pokretanje ostalim skriptama
 chmod +x files/mksite files/uninstall
 
-# Poruka dobrodošlice!
-whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65 || echo "$lang_welcome"
+if [ "$conf_skip_welcome_screen" = "true" ]; then
+  echo
+else
+  # Poruka dobrodošlice!
+  whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65 || echo "$lang_welcome"
+fi
 
 # Unos neophodnih podataka
 echo -e ${YELLOW}"$lang_enter_information"${NC}
@@ -147,7 +171,11 @@ apt-get update
 # Dodavanje main repozitorije za slučaj da nije dodata, dodavanje universe repozitorije
 echo -e ${YELLOW}"$lang_adding_repositories"${NC}
 add-apt-repository main
-# add-apt-repository universe
+
+if [ "$conf_add_apt_repository_universe" = "true" ]; then
+    add-apt-repository universe
+fi
+
 apt-get update
 
 # Instalacija software-properties-common za slučaj da nije instalirano
@@ -177,13 +205,17 @@ systemctl enable mysql
 # Instalacija php ekstenzija
 echo -e ${YELLOW}"$lang_installing_php_extensions"${NC}
 sleep 1s
-apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y
+apt-get install $conf_php_extension_list -y
 
 # sitni pomoćni programi zip, unzip i tree
-apt-get install zip unzip tree locate net-tools -y
+apt-get install $conf_helper_program_list -y
 
 # Instalacija imagick - Neophodno je za Webmin pregled fotografija
-apt-get install imagemagick -y
+if [ "$conf_install_imagemagick" = "true" ]; then
+  apt-get install imagemagick -y
+else
+  echo -e "$lang_skipping_imagemagick"
+fi
 
 # Provera verzije php-a
 php_version=$( php -r 'echo phpversion();' | head -c 3 )
@@ -206,15 +238,19 @@ fi
 # Podešavanje hostname-a prema unetom domenu
 hostnamectl set-hostname "$hostname"
 
-# Webmin instalacija
-echo -e ${YELLOW}"$lang_installing_webmin"${NC}
-sleep 1s
-echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
-apt-key add files/resources/jcameron-key.asc
-apt-get update
-apt-get --yes install webmin
-sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
-/etc/init.d/webmin restart
+if [ "$conf_webmin_install" = "false" ]; then
+  echo -e "$lang_skipping_webmin"
+else
+  # Webmin instalacija
+  echo -e ${YELLOW}"$lang_installing_webmin"${NC}
+  sleep 1s
+  echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
+  apt-key add files/resources/jcameron-key.asc
+  apt-get update
+  apt-get --yes install webmin
+  sed -i "s/port=10000/port=$conf_webmin_port/g" /etc/webmin/miniserv.conf
+  /etc/init.d/webmin restart
+fi
 
 rm -rf /var/www/html
 mkdir /var/www/"$hostname"
@@ -258,8 +294,8 @@ echo -e "root:$rootpass" | chpasswd
 echo -e ${GREEN}"$lang_password_is_updated"${NC}
 
 # Kreiranje direktorijuma za skladištenje lozinki
-mkdir .data
-chmod 0000 -R .data
+mkdir $conf_data_folder_name
+chmod 0000 -R $conf_data_folder_name
 
 # Instalacija SSL sertifikata
 while true
@@ -311,18 +347,18 @@ while true
         /etc/init.d/webmin restart
 
         # Putanje do instaliranih SSL sertifikata
-        echo -e "$lang_ssl_certificate_data" > .data/ssl-info.txt
-        certbot certificates >> .data/ssl-info.txt
-        chmod 0000 .data/ssl-info.txt
+        echo -e "$lang_ssl_certificate_data" > $conf_data_folder_name/$conf_ssl_info_file_name
+        certbot certificates >> $conf_data_folder_name/$conf_ssl_info_file_name
+        chmod 0000 $conf_data_folder_name/$conf_ssl_info_file_name
         echo -e ${GREEN}"$lang_ssl_installed"${NC}
       else
         echo -e ${RED}"$lang_ssl_install_error"${NC}
         ssl_error='1'
         sleep 1s
-        echo '******************************************************************' >> .data/ssl-info.txt
-        echo -е "$lang_ssl_certificate_not_installed"  >> .data/ssl-info.txt
-        echo -e "$lang_check_for_errors_and_try_again" >> .data/ssl-info.txt
-        echo '******************************************************************' >> .data/ssl-info.txt
+        echo '******************************************************************' >> $conf_data_folder_name/$conf_ssl_info_file_name
+        echo -е "$lang_ssl_certificate_not_installed"  >> $conf_data_folder_name/$conf_ssl_info_file_name
+        echo -e "$lang_check_for_errors_and_try_again" >> $conf_data_folder_name/$conf_ssl_info_file_name
+        echo '******************************************************************' >> $conf_data_folder_name/$conf_ssl_info_file_name
       fi
 		break
 		;;
@@ -370,13 +406,13 @@ while true
 		case $wp_install in
 		[Yy][Ee][Ss]|[Yy])
 			# Instaliranje faljova
-			wget https://wordpress.org/latest.tar.gz
-			tar -xzvf latest.tar.gz
+			wget "$conf_wp_wget_locale"
+			tar -xzvf "$conf_wp_wget_filename"
 			mv wordpress /var/www/"$hostname"/html
 			chown www-data:www-data -R /var/www/"$hostname"/html
 
 			# Instaliranje dodatnih php ekstenzija
-			apt-get install php-xmlrpc php-exif -y
+			apt-get install $conf_wp_aditional_php_extensions -y
 
       if [ "$web_server" = "apache" ]; then
   			systemctl restart apache2
@@ -385,7 +421,7 @@ while true
       fi
 
 			# Brisanje nepotrebnih fajlova
-			rm latest.tar.gz
+			rm "$conf_wp_wget_filename"
 
 			# Kreiranje baze podataka
 			echo -e "$lang_creating_database"
@@ -397,10 +433,10 @@ while true
         mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
       fi
 
-			echo '******************************************************************' > db-info.txt
-			echo -e "$lang_database_access_parameters" >> db-info.txt
-			echo '******************************************************************' >> db-info.txt
-			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> db-info.txt
+			echo '******************************************************************' > $conf_db_info_file_name
+			echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
+			echo '******************************************************************' >> $conf_db_info_file_name
+			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
 
 			# Konfigurisanje Wordpress Multisite instalacije
 				while true
@@ -447,10 +483,10 @@ while true
             mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
           fi
 
-          echo '******************************************************************' > db-info.txt
-    			echo -e "$lang_database_access_parameters" >> db-info.txt
-    			echo '******************************************************************' >> db-info.txt
-    			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> db-info.txt
+          echo '******************************************************************' > $conf_db_info_file_name
+    			echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
+    			echo '******************************************************************' >> $conf_db_info_file_name
+    			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
 
 				break
 				;;
@@ -504,7 +540,7 @@ while true
 		[Yy][Ee][Ss]|[Yy])
 			ufw --force enable
 			ufw allow 'OpenSSH'
-			ufw allow '3000/tcp'
+			ufw allow "$conf_webmin_port/tcp"
 
       if [ "$web_server" = "apache" ]; then
         ufw allow 'Apache Full'
@@ -540,17 +576,17 @@ while true
 				[Yy][Ee][Ss]|[Yy])
 					echo -e "$lang_copying_passwords"
 					sleep 1s
-					echo '*************************************************************************************' > .data/data.txt
-					echo -e "$lang_access_parameters" >> .data/data.txt
-					echo '*************************************************************************************' >> .data/data.txt
+					echo '*************************************************************************************' > $conf_data_folder_name/$conf_data_file_name
+					echo -e "$lang_access_parameters" >> $conf_data_folder_name/$conf_data_file_name
+					echo '*************************************************************************************' >> $conf_data_folder_name/$conf_data_file_name
 
-					echo -e '\n\n'"$lang_hostname""$hostname"'\n'"$lang_root_password""$rootpass"'\n\n'"$lang_unix_user""$unixuser"'\n'"$lang_unix_user_password""$unixpass"'\n' >> .data/data.txt
-					echo -e "$lang_mysql_root_password""$mysqlrpass"'\n\n'"$lang_email""$email"'\n\n' >> .data/data.txt
+					echo -e '\n\n'"$lang_hostname""$hostname"'\n'"$lang_root_password""$rootpass"'\n\n'"$lang_unix_user""$unixuser"'\n'"$lang_unix_user_password""$unixpass"'\n' >> $conf_data_folder_name/$conf_data_file_name
+					echo -e "$lang_mysql_root_password""$mysqlrpass"'\n\n'"$lang_email""$email"'\n\n' >> $conf_data_folder_name/$conf_data_file_name
 
-					echo '*************************************************************************************' >> .data/data.txt
-					echo -e "$lang_password_warning" >> .data/data.txt
-					echo '*************************************************************************************' >> .data/data.txt
-					chmod 0000 .data/data.txt
+					echo '*************************************************************************************' >> $conf_data_folder_name/$conf_data_file_name
+					echo -e "$lang_password_warning" >> $conf_data_folder_name/$conf_data_file_name
+					echo '*************************************************************************************' >> $conf_data_folder_name/$conf_data_file_name
+					chmod 0000 $conf_data_folder_name/$conf_data_file_name
 					echo -e ${GREEN}"$lang_password_data_copied"${NC}
 				break
 				;;
@@ -590,7 +626,7 @@ case $wp_install in
 	[Yy][Ee][Ss]|[Yy])
     echo -e "$lang_to_finish_wordpress_installation_visit_your_website"
     echo -e "$lang_and_copy_messages_from_db_info_to_wordpress"
-    echo -e "$lang_open_file_with_command\n${WHITE}nano db-info.txt${NC}"
+    echo -e $lang_open_file_with_command"\n"${WHITE}"nano" $conf_db_info_file_name${NC}
 	;;
 	[Nn][Oo]|[Nn])
 		echo -e "$lang_you_can_check_if_php_working ${GREEN}$url/info.php${NC}"
@@ -598,7 +634,7 @@ case $wp_install in
 esac
 
 echo
-echo -e "$lang_webmin_installed_at_address ${GREEN}$url:3000${NC}"
+echo -e "$lang_webmin_installed_at_address ${GREEN}$url:$conf_webmin_port${NC}"
 echo -e "$lang_to_access_webmin_you_can_use_username ${GREEN}$unixuser${NC}"
 echo -e "$lang_and_password_created_during_installation"
 echo
@@ -609,7 +645,7 @@ echo
 case $backup_file_confirm in
 	[Yy][Ee][Ss]|[Yy])
     echo -e "$lang_to_see_installation_data_copy_following_command"
-    echo -e "${WHITE}nano .data/data.txt${NC}"
+    echo -e ${WHITE}"nano" $conf_data_folder_name"/"$conf_data_file_name${NC}
     echo
 	;;
 	[Nn][Oo]|[Nn])

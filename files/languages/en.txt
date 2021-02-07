@@ -1,0 +1,142 @@
+# ################################################################ #
+# This is the main translation file.                               #
+# You can edit it by changing values from the right side.          #
+# Take care of single quotation marks.                             #
+# ################################################################ #
+
+# Steps before installation
+lang_start_step_1='Step (1/7)'
+lang_start_step_2='Step (2/7)'
+lang_start_step_3='Step (3/7)'
+lang_start_step_4='Step (4/7)'
+lang_start_step_5='Step (5/7)'
+lang_start_step_6='Step (6/7)'
+lang_start_step_7='Step (7/7)'
+
+# Installation option steps
+lang_install_step_1='Step (1/7)'
+lang_install_step_2='Step (2/7)'
+lang_install_step_3='Step (3/7)'
+lang_install_step_4='Step (4/7)'
+lang_install_step_5='Step (5/7)'
+lang_install_step_6='Step (6/7)'
+lang_install_step_7='Step (7/7)'
+
+# Often used messages
+lang_enter_again_to_confirm='Enter again to confirm: '
+lang_try_again='Please try again.'
+lang_choose_one_of_the_folowing='Please select one of the following: '
+lang_do_you_want_to_continue='Are you sure you want to continue?'
+lang_answer_yes_no='Please answer with Yes or No'
+lang_yes_no='(Yes/No)'
+lang_yes_no_colon='(Yes/No): '
+
+# Text inside created files
+lang_ssl_certificate_data='\nSSL certificate details:'
+lang_ssl_certificate_not_installed='SSL was not correctly installed!'
+lang_check_for_errors_and_try_again='Check for errors and try again.'
+lang_database_access_parameters='Database access parameters'
+lang_database_name='Database name: '
+lang_database_user='\nDatabase User name: '
+lang_database_user_password='\nDatabase User password: '
+lang_access_parameters='Access parameters'
+lang_hostname='Hostname:'
+lang_root_password='root password: '
+lang_unix_user='UNIX User: '
+lang_unix_user_password='UNIX User password: '
+lang_mysql_root_password='MYSQL root password: '
+lang_email='E-mail: '
+lang_password_warning='IMPORTANT NOTICE:
+У ОВОМ ФАЈЛУ СЕ НАЛАЗЕ ИНФОРМАЦИЈЕ КОЈЕ КОГУ УГРОЗИТИ БЕЗБЕДНОСТ СЕРВЕРА И СВИХ
+АПЛИКАЦИЈА НА ЊЕМУ. ПРЕПОРУЧУЈЕ СЕ ДА ЛОЗИНКЕ САЧУВАТЕ НА СИГУРНОМ МЕСТУ И ДА ОВАЈ
+ФАЈЛ ОБРИШЕТЕ ШТО ПРЕ. ПРЕПОРУЧУЈЕ СЕ КОРИШЋЕЊЕ МЕНАЏЕРА ЛОЗИНКИ.'
+
+# Questions and messages
+lang_enter_information='Please enter required information:'
+lang_enter_domain_name='Enter domain name without protocol (without http://): '
+lang_enter_root_password='Enter root user password: '
+lang_enter_unix_user_username='Enter UNIX user username: '
+lang_enter_unix_user_password='Enter UNIX user password: '
+lang_mysql_password_set_up='Setting for MYSQL root password'
+lang_enter_mysql_root_password='Enter password for MYSQL root: '
+lang_setting_up_email='Setting for administrator Email address'
+lang_enter_your_email='Enter your Email address: '
+lang_install_apache_or_nginx='Do you want to install Apache or Nginx?'
+lang_you_have_chosen_apache='You have chosen Apache'
+lang_you_have_chosen_nginx='You have chosen Nginx'
+lang_invalid_option='invalid option'
+lang_necessary_information_is_collected='Necessary data is collected. Installation can begin.'
+lang_press_enter_to_continue='Press [Enter] to continue...'
+
+# Installation
+lang_beginning='Hold on...'
+lang_updating_package_lists='Updating repositories list...'
+lang_adding_repositories='Adding repositories...'
+lang_installing_apache2_php='Installing apache2, php'
+lang_installing_nginx_php_fpm='Installing Nginx, php-fpm'
+lang_skipping_imagemagick='Skipping imagemagick installation...'
+lang_installing_php_extensions='Installing php extensions...'
+lang_skipping_webmin='Skipping Webmin installation'
+lang_installing_webmin='Installing Webmin control panel...'
+lang_configuring_apache='Configuring Apache server...'
+lang_configuring_nginx='Configuring Nginx сервера...'
+lang_adding_unix_user='Adding UNIX user...'
+lang_user_user='User'
+lang_is_created='is created.'
+lang_setting_up_root_password='Setting up root password...'
+lang_password_is_updated='Password is updated!'
+
+# SSL certificate
+lang_do_you_want_to_install_ssl='Do you want to install SSL certificate?'
+lang_do_you_want_to_enable_redirect_to_https='Do you want to redirect website to https?'
+lang_installing_ssl_certificate='Installing SSL...'
+lang_setting_up_ssl_for_webmin='Configuring SSL-а for Webmin...'
+lang_ssl_installed='SSL is installed!'
+lang_ssl_install_error='SSL certificate not correctly installed! Check for errors and try again.'
+
+# Wordpress installation
+lang_do_you_want_to_install_wordpress='Do you want to install Wordpress?'
+lang_creating_database='Creating database...'
+lang_do_you_want_to_enable_wordpress_multisite='Do you want to enable Wordpress Multisite?'
+lang_configuring_wp_multisite='Configuring Multisite...'
+lang_multisite_is_configured='Wordpress Multisite configured!'
+lang_wordpress_is_installed='Wordpress is installed!'
+
+lang_domain='Domain'
+lang_is_sucessfuly_configured='is successfully configured'
+lang_index_html_phpinfo_configured='index.html and info.php file was created.'
+
+# Database and firewall
+lang_do_you_want_to_create_database='Do you want to create MYSQL database?'
+lang_skipping_database_creation='Skipping database creation...'
+lang_do_you_want_to_enable_6g_firewall='Do you want to enable Apache 6G firewall?'
+lang_firewall_enabled='Firewall enabled!'
+lang_do_you_want_to_enable_ufw_firewall='Do you want to enable port protection?'
+lang_port_protection_enabled='Port protection enabled!'
+lang_do_you_want_to_make_password_backup='Do you want to make backup with existing user names and passwords?'
+lang_warning_this_option_is_not_secure='This option is not secure. Passwords will be saved in plain text.'
+lang_copying_passwords='Copying passwords...'
+lang_password_data_copied='Passwords were copied.'
+
+# Messages at the end
+lang_installation_is_done='Installation is complete!'
+lang_configuring_ssl_failed='SSL was not successfully configured.'
+lang_check_dns_settings_and_try_again='Check your DNS settings and run following command to install SSL:'
+
+lang_website_available_at_address='Your website is available at address:'
+lang_chosen_webserver_is='Installed web server:'
+
+lang_to_finish_wordpress_installation_visit_your_website='To complete Wordpress installation visit your website homepage'
+lang_and_copy_messages_from_db_info_to_wordpress='and copy data from db-info.txt to corresponding fields.'
+lang_open_file_with_command='To open file you can copy following command:'
+lang_you_can_check_if_php_working='You can check if php is installed correctly by visiting following page:'
+
+lang_webmin_installed_at_address='Webmin is available at address:'
+lang_to_access_webmin_you_can_use_username='To access Webmin you can use following user name'
+lang_and_password_created_during_installation='and password provided while installing.'
+
+lang_server_webroot_is='Server web root path:'
+
+lang_to_see_installation_data_copy_following_command='To check installation data you can run following command:'
+lang_following_email_will_be_used_for_receiving_ssl_warnings='For notices about SSL expiration, following e-mail address will be used:'
+lang_your_email_address_is='Provided E-mail address is:'
