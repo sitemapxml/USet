@@ -19,8 +19,6 @@ cd uset
 chmod +x uset
 ./uset
 ```
-[![asciicast](https://asciinema.org/a/399414.svg)](https://asciinema.org/a/399414)
-
 After running the script, you should see welcome screen like this:
 <p align="center">
   <img src="files/resources/images/screenshot-welcome.jpg">
