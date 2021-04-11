@@ -19,7 +19,7 @@ cd uset
 chmod +x uset
 ./uset
 ```
-<script id="asciicast-399414" src="https://asciinema.org/a/399414.js" async></script>
+[![asciicast](https://asciinema.org/a/399414.svg)](https://asciinema.org/a/399414)
 
 After running the script, you should see welcome screen like this:
 <p align="center">
