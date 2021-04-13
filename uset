@@ -297,6 +297,9 @@ sleep 1s
 echo -e "root:$rootpass" | chpasswd
 echo -e ${GREEN}"$lang_password_is_updated"${NC}
 
+# Setting up password for mysql root
+mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mysqlrpass';"
+
 # Creating directory for saving output files
 mkdir $conf_data_folder_name
 chmod 0000 -R $conf_data_folder_name
