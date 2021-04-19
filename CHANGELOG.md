@@ -14,6 +14,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - saving passwords in secure file
 - customise (`Yes/No`) prompt input key according to a language
 
+---
+
+## [2.1.0] - 2021. April, 19.
+
+### Added
+- `config.txt` - you can now configure additional options using config file 
+- automatically set mysql root password
+- added language files and welcome screen screenshot
+- `.editorconfig` for better portability between editors
+- Downloaded Wordpress archive filename `wp_wget_filename` is now automatically calculated using `basename` 
+
+### Removed
+- removed `conf_wp_wget_filename` from `config.txt`
+
+### Changed
+- database creation string in Wordpress section - mysql "CREATE DATABASE" directive is the same for mysql version 5 and 8, so it is moved outside the condition
+- renamed `conf_wp_wget_filename` -> `wp_wget_filename`
+
+---
+
 ## [2.0.0] - 2021. February, 7
 
 ### Added

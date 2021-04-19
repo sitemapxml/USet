@@ -6,7 +6,7 @@
 #         https://github.com/sitemapxml     #
 # License: MIT                              #
 # Publish date: Aug 2, 2020.                #
-# Version: 2.0                              #
+# Version: 2.1.0                            #
 #############################################
 
 # NOTE: This script is made from two repositories: https://github.com/sitemapxml/lamp and https://github.com/sitemapxml/lemp (LAMP and LEMP)
@@ -414,7 +414,8 @@ while true
 		[Yy][Ee][Ss]|[Yy])
 			# Downloading files
 			wget "$conf_wp_wget_locale"
-			tar -xzvf "$conf_wp_wget_filename"
+      wp_wget_filename=$( basename "$conf_wp_wget_locale" )
+			tar -xzvf "$wp_wget_filename"
 			mv wordpress /var/www/"$hostname"/html
 			chown www-data:www-data -R /var/www/"$hostname"/html
 
@@ -428,16 +429,18 @@ while true
       fi
 
 			# Remove unnecessary files
-			rm "$conf_wp_wget_filename"
+			rm "$wp_wget_filename"
 
 			# Creating database
 			echo -e "$lang_creating_database"
 			sleep 1s
 
+      mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;" 
+
       if [ "$mysqld_version" -ge "8" ]; then
-        mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+        mysql -u root -e "CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON $db_name.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
       else
-        mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
+        mysql -u root -e "CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
       fi
 
 			echo '******************************************************************' > $conf_db_info_file_name
