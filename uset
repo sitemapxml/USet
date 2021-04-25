@@ -6,7 +6,7 @@
 #         https://github.com/sitemapxml     #
 # License: MIT                              #
 # Publish date: Aug 2, 2020.                #
-# Version: 2.1.0                            #
+# Version: 2.2.0                            #
 #############################################
 
 # NOTE: This script is made from two repositories: https://github.com/sitemapxml/lamp and https://github.com/sitemapxml/lemp (LAMP and LEMP)
@@ -401,7 +401,7 @@ url="$protocol$hostname"
 # Check mysql server version
 mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
 
-# Preparing database user name and password 
+# Preparing database user name and password
 database_password=$( date +%s | sha256sum | base64 | head -c 32 )
 db_name=$( echo $hostname | sed 's/\./_/g' )
 
@@ -435,7 +435,7 @@ while true
 			echo -e "$lang_creating_database"
 			sleep 1s
 
-      mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;" 
+      mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
 
       if [ "$mysqld_version" -ge "8" ]; then
         mysql -u root -e "CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON $db_name.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
@@ -519,27 +519,57 @@ while true
 	esac
 done
 
-# 6g firewall from perishablepress.com
-while true
-	do
-	echo -e ${YELLOW}"$lang_install_step_3"${NC}
-	read -p "$lang_do_you_want_to_enable_6g_firewall $lang_yes_no_colon" apache_firewall
-		case $apache_firewall in
-		[Yy][Ee][Ss]|[Yy])
-			cp files/resources/6g.conf /etc/apache2/6g.conf
-			sed -i "s/#6g //g" /etc/apache2/sites-available/"$hostname".conf
-			systemctl restart apache2
-			echo -e ${GREEN}"$lang_firewall_enabled"${NC}
-		break
-		;;
-		[Nn][Oo]|[Nn])
-	break
-	;;
-	*)
-		echo -e ${RED}"$lang_answer_yes_no"${NC}
-	;;
-	esac
-done
+if [ "$web_server" = "apache" ]; then
+  # 6g firewall from perishablepress.com
+  while true
+  	do
+  	echo -e ${YELLOW}"$lang_install_step_3"${NC}
+  	read -p "$lang_do_you_want_to_enable_apache_firewall $lang_yes_no_colon" apache_firewall
+  		case $apache_firewall in
+  		[Yy][Ee][Ss]|[Yy])
+      echo -e ${YELLOW}"$lang_choose_apache_firewall_version"${NC}
+      PS3="$lang_choose_one_of_the_folowing"
+      options=("6g" "7g")
+      select apache_firewall_version in "${options[@]}"
+      do
+          case $apache_firewall_version in
+              "6g")
+                  echo -e "$lang_you_have_chosen_6g"
+                  sleep 1s
+
+                  cp files/resources/6g.conf /etc/apache2/6g.conf
+            			sed -i "s/#6g //g" /etc/apache2/sites-available/"$hostname".conf
+            			systemctl restart apache2
+            			echo -e ${GREEN}"$lang_firewall_enabled"${NC}
+                  break
+                  ;;
+              "7g")
+                  echo -e "$lang_you_have_chosen_7g"
+                  sleep 1s
+
+                  cp files/resources/7g.conf /etc/apache2/7g.conf
+            			sed -i "s/#7g //g" /etc/apache2/sites-available/"$hostname".conf
+            			systemctl restart apache2
+            			echo -e ${GREEN}"$lang_firewall_enabled"${NC}
+                  break
+                  ;;
+              *) echo -e "$lang_invalid_option $REPLY"
+              ;;
+          esac
+      done
+  		break
+  		;;
+  		[Nn][Oo]|[Nn])
+  	break
+  	;;
+  	*)
+  		echo -e ${RED}"$lang_answer_yes_no"${NC}
+  	;;
+  	esac
+  done
+else
+  echo
+fi
 
 # UFW firewall
 while true

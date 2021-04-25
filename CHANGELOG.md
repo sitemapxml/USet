@@ -16,6 +16,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [2.2.0] - 2021. April, 25.
+
+### Added
+ - apache firewall installation is now conditional, depending on web server type installed. Nginx support will be added in next release.
+ - added option to install 7G firewall. Support for 6G still remains.
+ - added translation variable `lang_choose_apache_firewall_version` to translation files
+
+### Changed
+ - variable `lang_do_you_want_to_enable_6g_firewall` is renamed to `lang_do_you_want_to_enable_apache_firewall`
+---
+
 ## [2.1.0] - 2021. April, 19.
 
 ### Added
