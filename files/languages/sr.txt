@@ -109,6 +109,12 @@ lang_index_html_phpinfo_configured='Подешени су index.html i phpinfo �
 # База података и заштитни зид
 lang_do_you_want_to_create_database='Да ли желите сада да креирате базу података?'
 lang_skipping_database_creation='Прескаче се креирање базе података...'
+
+lang_do_you_want_to_install_adminer='Да ли желите да инсталирате Админер као ваш ДБМС (Database Management System)?'
+lang_installing_adminer='Инсталира се Админер...'
+lang_adminer_installed_successfully='Админер је успешно инсталиран!'
+lang_skipping_adminer='Прескаче се инсталација Админер-а...'
+
 lang_do_you_want_to_enable_apache_firewall='Да ли желите да омогућите Apache 6G заштитни зид?'
 lang_choose_apache_firewall_version='Коју верзију Apache заштитног зида желите да инсталирате?'
 lang_firewall_enabled='Заштитни зид је омогућен!'

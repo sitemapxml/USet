@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-- option to install database management system `phpmyadmin` or `adminer`
+- option to install database management system `phpmyadmin` or ~~adminer~~
 - option to install server log analizer `Webalyzer`, `GoAccess` or `Netdata`
 - option to enable security headers in web server configuration
 - option to enable http/2
@@ -13,6 +13,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - adding configuration file to `mksite` and `uninstall`
 - saving passwords in secure file
 - customise (`Yes/No`) prompt input key according to a language
+
+---
+## [2.3.0] - 2021. Jul, 1.
+
+### Added
+- added option to install `Adminer`
+
+### Changed
+- updated configuration variables
+- update language translations
 
 ---
 

@@ -27,3 +27,11 @@ conf_install_imagemagick='true'
 # Wordpress settings
 conf_wp_wget_locale='https://wordpress.org/latest.tar.gz'
 conf_wp_aditional_php_extensions='php-xmlrpc php-exif'
+
+# Adminer build version
+# Possible values:
+#   -en
+#   -mysql
+#   -mysql-en
+# If no value is set, full version will be installed.
+conf_adminer_build=""

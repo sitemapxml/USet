@@ -6,7 +6,7 @@
 #         https://github.com/sitemapxml     #
 # License: MIT                              #
 # Publish date: Aug 2, 2020.                #
-# Version: 2.2.0                            #
+# Version: 2.3.0                            #
 #############################################
 
 # NOTE: This script is made from two repositories: https://github.com/sitemapxml/lamp and https://github.com/sitemapxml/lemp (LAMP and LEMP)
@@ -517,6 +517,33 @@ while true
 		echo -e ${RED}"$lang_answer_yes_no"${NC}
 	;;
 	esac
+done
+
+# Installing Adminer
+while true
+  do
+  read -p "$lang_do_you_want_to_install_adminer" install_adminer
+    case $install_adminer in
+    [Yy][Ee][Ss]|[Yy])
+
+    echo "$lang_installing_adminer"
+    sleep 1s
+    wget "https://www.adminer.org/latest${conf_adminer_build}.php"
+    cp "latest${conf_adminer_build}.php" /var/www/"$hostname"/html/adminer.php
+
+    echo ${GREEN}"$lang_adminer_installed_successfully"${NC}
+
+    break
+    ;;
+    [Nn][Oo]|[Nn])
+      echo -e "$lang_skipping_adminer"
+      sleep 1s
+  break
+  ;;
+  *)
+    echo -e ${RED}"$lang_answer_yes_no"${NC}
+  ;;
+  esac
 done
 
 if [ "$web_server" = "apache" ]; then
