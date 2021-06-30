@@ -76,6 +76,8 @@ The passwords are saved in plain text, so this is not recommended but sometimes 
 ### Language settings
 USet supports localization, so if you want to localize it to your own language, you can copy english translation inside `files/languages/en.txt` and name it according to your preferences.
 
+If you want to contribute to the project by making translations, then filename of the translation file should be two letter language code following [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+
 ### Uninstall options
 To uninstall installed software you can run `uninstall` file inside `files` directory.
 
