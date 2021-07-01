@@ -17,6 +17,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ---
 ## [2.3.0] - 2021. Jul, 1.
 
+## Bugfix
+ - added path to `7g.conf` in `apache.conf` 
+
+---
+## [2.3.0] - 2021. Jul, 1.
+
 ### Added
 - added option to install `Adminer`
 
