@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - customise (`Yes/No`) prompt input key according to a language
 
 ---
-## [2.3.0] - 2021. Jul, 1.
+## [2.3.1] - 2021. Jul, 1.
 
 ## Bugfix
  - added path to `7g.conf` in `apache.conf` 

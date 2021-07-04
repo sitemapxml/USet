@@ -6,7 +6,7 @@
 ![Maintaner](https://img.shields.io/badge/maintainer-sitemapxml-blue)
 [![GitHub issues](https://img.shields.io/github/issues/sitemapxml/USet)](https://github.com/sitemapxml/USet/issues)
 [![GitHub release](https://img.shields.io/github/v/release/sitemapxml/uset?sort=semver)](https://github.com/sitemapxml/uset/releases/tag/2.2.0)
-![GitHub commits since tagged version](https://img.shields.io/github/commits-since/sitemapxml/uset/2.2.0/master)
+![GitHub commits since tagged version](https://img.shields.io/github/commits-since/sitemapxml/uset/2.3.1/master)
 [![made-with-bash](https://img.shields.io/badge/Made%20with-Bash-1f425f.svg)](https://www.gnu.org/software/bash/)
 [![GitHub license](https://img.shields.io/github/license/sitemapxml/USet)](https://github.com/sitemapxml/uset/blob/master/LICENSE)
 
@@ -86,5 +86,7 @@ To uninstall installed software you can run `uninstall` file inside `files` dire
 ### Contributions and License
 
 If you experience any bug or you have some idea for improvement, feel free to open up new issue, or if you are familiar with bash you can fork the repository and open up a pull request.
+
+Before submitting new changes, please read [Contributing guidelines](./CONTRIBUTING.md)
 
 License is MIT, so you are free to use it in both personal and commercial purposes according to the terms of the [License](./LICENSE).
