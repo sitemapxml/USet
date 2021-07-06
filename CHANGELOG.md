@@ -15,9 +15,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - customise (`Yes/No`) prompt input key according to a language
 
 ---
+## [2.4.0] - 2021. Jul, 6.
+
+### Added
+- Added option to configure if you want to create index.html and info.php file.
+
+##### Changed files
+- main script (USet)
+- `config.txt`: added options `conf_create_index_html` and `conf_create_info_php`
+- language files - added folowing translation strings:
+  - lang_index_html_configured
+  - lang_skipping_creation_of_index_html
+  - lang_info_php_configured
+  - lang_skipping_creation_of_info_php
+
+---
 ## [2.3.1] - 2021. Jul, 1.
 
-## Bugfix
+### Bugfix
  - added path to `7g.conf` in `apache.conf` 
 
 ---

@@ -28,6 +28,10 @@ conf_install_imagemagick='true'
 conf_wp_wget_locale='https://wordpress.org/latest.tar.gz'
 conf_wp_aditional_php_extensions='php-xmlrpc php-exif'
 
+# Create sample page index.html and info.php
+conf_create_index_html='true'
+conf_create_info_php='true'
+
 # Adminer build variant
 # Possible values:
 #   -en

@@ -104,7 +104,10 @@ lang_wordpress_is_installed='Wordpress is installed!'
 
 lang_domain='Domain'
 lang_is_sucessfuly_configured='is successfully configured'
-lang_index_html_phpinfo_configured='index.html and info.php file was created.'
+lang_index_html_configured='index.html file was created.'
+lang_skipping_creation_of_index_html='Skipping creation of index.html'
+lang_info_php_configured='info.php file was created.'
+lang_skipping_creation_of_info_php='Skipping creation of info.php'
 
 # Database and firewall
 lang_do_you_want_to_create_database='Do you want to create MYSQL database?'

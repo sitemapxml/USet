@@ -6,7 +6,7 @@
 #         https://github.com/sitemapxml     #
 # License: MIT                              #
 # Publish date: Aug 2, 2020.                #
-# Version: 2.3.1                            #
+# Version: 2.4.0                            #
 #############################################
 
 # NOTE: This script is made from two repositories: https://github.com/sitemapxml/lamp and https://github.com/sitemapxml/lemp (LAMP and LEMP)
@@ -474,12 +474,24 @@ while true
 		[Nn][Oo]|[Nn])
 			# Copy index.html into the webroot
 			mkdir /var/www/"$hostname"/html
-			cp files/resources/index.html /var/www/"$hostname"/html/index.html
-			echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
-			sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
-      sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
 
-			echo -e "$lang_index_html_phpinfo_configured"
+      if [ "$conf_create_index_html" = "true" ]; then
+        cp files/resources/index.html /var/www/"$hostname"/html/index.html
+  			sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
+        sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
+
+        echo -e "$lang_index_html_configured"
+      else
+        echo "$lang_skipping_creation_of_index_html"
+      fi
+
+      # Create info.php
+      if [ "$conf_create_info_php" = 'true' ]; then
+        echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
+        echo "$lang_info_php_configured"
+      else
+        echo "$lang_skipping_creation_of_info_php"
+      fi
 
     # Creating database
 		while true
