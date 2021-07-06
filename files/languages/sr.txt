@@ -104,7 +104,10 @@ lang_wordpress_is_installed='Wordpress је инсталиран!'
 
 lang_domain='Domen'
 lang_is_sucessfuly_configured='је успешно подешен'
-lang_index_html_phpinfo_configured='Подешени су index.html i phpinfo фајл.'
+lang_index_html_configured='index.html фајл је направљен.'
+lang_skipping_creation_of_index_html='Прескаче се прављење фајла index.html'
+lang_info_php_configured='info.php фајл је направљен.'
+lang_skipping_creation_of_info_php='Прескаче се прављење фајла info.php'
 
 # База података и заштитни зид
 lang_do_you_want_to_create_database='Да ли желите сада да креирате базу података?'
