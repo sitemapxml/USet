@@ -302,7 +302,6 @@ mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_pas
 
 # Creating directory for saving output files
 mkdir $conf_data_folder_name
-chmod 0000 -R $conf_data_folder_name
 
 # SSL certificate installation option
 while true
@@ -356,7 +355,6 @@ while true
         # Installed SSL certificate pathes
         echo -e "$lang_ssl_certificate_data" > $conf_data_folder_name/$conf_ssl_info_file_name
         certbot certificates >> $conf_data_folder_name/$conf_ssl_info_file_name
-        chmod 0000 $conf_data_folder_name/$conf_ssl_info_file_name
         echo -e ${GREEN}"$lang_ssl_installed"${NC}
       else
         echo -e ${RED}"$lang_ssl_install_error"${NC}
@@ -665,7 +663,6 @@ while true
 					echo '*************************************************************************************' >> $conf_data_folder_name/$conf_data_file_name
 					echo -e "$lang_password_warning" >> $conf_data_folder_name/$conf_data_file_name
 					echo '*************************************************************************************' >> $conf_data_folder_name/$conf_data_file_name
-					chmod 0000 $conf_data_folder_name/$conf_data_file_name
 					echo -e ${GREEN}"$lang_password_data_copied"${NC}
 				break
 				;;
