@@ -25,6 +25,33 @@ else
   source ./languages/welcome/en.txt
 fi
 
+# Load functions
+if [ -f "./includes/functions.inc" ]; then
+  source ./includes/functions.inc
+else
+  printf "Fatal error: functions.inc not found. Aborting..."
+  sleep 1s
+  exit 1
+fi
+
+# Load options
+if [ -f "./includes/input.inc" ]; then
+  source ./includes/input.inc
+else
+  printf "Fatal error: input.inc not found. Aborting..."
+  sleep 1s
+  exit 1
+fi
+
+# Load infoscreen
+if [ -f "./includes/infoscreen.inc" ]; then
+  source ./includes/infoscreen.inc
+else
+  printf "Fatal error: infoscreen.inc not found. Aborting..."
+  sleep 1s
+  exit 1
+fi
+
 # Turn output text coloring On or Off
 if [ "$conf_disable_colors" = "true" ]; then
   RED=''
