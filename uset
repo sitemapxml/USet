@@ -19,15 +19,15 @@ source config.txt
 
 # Language setting
 # Load definied language and if file does not exist revert to en.txt
-if [ -f "files/languages/$conf_language.txt" ]; then
-  source files/languages/$conf_language.txt
+if [ -f "./languages/$conf_language.txt" ]; then
+  source ./languages/$conf_language.txt
 else
-  source files/languages/en.txt
+  source ./languages/en.txt
 fi
-if [ -f "files/languages/welcome/$conf_language.txt" ]; then
-  source files/languages/welcome/$conf_language.txt
+if [ -f "./languages/welcome/$conf_language.txt" ]; then
+  source ./languages/welcome/$conf_language.txt
 else
-  source files/languages/welcome/en.txt
+  source ./languages/welcome/en.txt
 fi
 
 # Turn output text coloring On or Off
@@ -249,7 +249,7 @@ else
   echo -e ${YELLOW}"$lang_installing_webmin"${NC}
   sleep 1s
   echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
-  apt-key add files/resources/jcameron-key.asc
+  apt-key add ./resources/jcameron-key.asc
   apt-get update
   apt-get --yes install webmin
   sed -i "s/port=10000/port=$conf_webmin_port/g" /etc/webmin/miniserv.conf
@@ -263,7 +263,7 @@ mkdir /var/www/"$hostname"
 if [ "$web_server" = "apache" ]; then
   echo -e ${YELLOW}"$lang_configuring_apache"${NC}
   sleep 1s
-  cp files/resources/apache.conf /etc/apache2/sites-available/"$hostname".conf
+  cp ./resources/apache.conf /etc/apache2/sites-available/"$hostname".conf
   sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
   sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
   a2dissite 000-default
@@ -274,7 +274,7 @@ if [ "$web_server" = "apache" ]; then
 else
   echo -e ${YELLOW}"$lang_configuring_nginx"${NC}
   sleep 1s
-  cp files/resources/nginx.conf /etc/nginx/sites-available/"$hostname".conf
+  cp ./resources/nginx.conf /etc/nginx/sites-available/"$hostname".conf
   sed -i "s/sn_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
   sed -i "s/dir_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
   ln /etc/nginx/sites-available/"$hostname".conf /etc/nginx/sites-enabled/"$hostname".conf
@@ -476,7 +476,7 @@ while true
 			mkdir /var/www/"$hostname"/html
 
       if [ "$conf_create_index_html" = "true" ]; then
-        cp files/resources/index.html /var/www/"$hostname"/html/index.html
+        cp ./resources/index.html /var/www/"$hostname"/html/index.html
   			sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
         sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
 
@@ -576,7 +576,7 @@ if [ "$web_server" = "apache" ]; then
                   echo -e "$lang_you_have_chosen_6g"
                   sleep 1s
 
-                  cp files/resources/6g.conf /etc/apache2/6g.conf
+                  cp ./resources/6g.conf /etc/apache2/6g.conf
             			sed -i "s/#6g //g" /etc/apache2/sites-available/"$hostname".conf
             			systemctl restart apache2
             			echo -e ${GREEN}"$lang_firewall_enabled"${NC}
@@ -586,7 +586,7 @@ if [ "$web_server" = "apache" ]; then
                   echo -e "$lang_you_have_chosen_7g"
                   sleep 1s
 
-                  cp files/resources/7g.conf /etc/apache2/7g.conf
+                  cp ./resources/7g.conf /etc/apache2/7g.conf
             			sed -i "s/#7g //g" /etc/apache2/sites-available/"$hostname".conf
             			systemctl restart apache2
             			echo -e ${GREEN}"$lang_firewall_enabled"${NC}

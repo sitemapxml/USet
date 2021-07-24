@@ -74,7 +74,7 @@ The last option is to choose if you want to save usernames and passwords in a te
 The passwords are saved in plain text, so this is not recommended but sometimes can be useful. Passwords will be saved to a file named `data.txt` inside directory `.data`
 
 ### Language settings
-USet supports localization, so if you want to localize it to your own language, you can copy english translation inside `files/languages/en.txt` and name it according to your preferences.
+USet supports localization, so if you want to localize it to your own language, you can copy english translation inside `languages/en.txt` and name it according to your preferences.
 
 If you want to contribute to the project by making translations, then filename of the translation file should be two letter language code following [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 
