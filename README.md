@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="files/resources/images/uset-logo.png">
+  <img src="./resources/images/uset-logo.png">
 </p>
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/sitemapxml/)
@@ -29,7 +29,7 @@ chmod +x uset
 ```
 After running the script, you should see welcome screen like this:
 <p align="center">
-  <img src="files/resources/images/screenshot-welcome.jpg">
+  <img src="./resources/images/screenshot-welcome.jpg">
 </p>
 
 If you want to save screen output you can do it simply by using tee command:
