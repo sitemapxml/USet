@@ -9,11 +9,6 @@
 # Version: 2.4.0                            #
 #############################################
 
-# NOTE: This script is made from two repositories: https://github.com/sitemapxml/lamp and https://github.com/sitemapxml/lemp (LAMP and LEMP)
-# which were put into one repository called uset_alfa (https://github.com/sitemapxml/uset_alfa), from which is this project created.
-# Version 1.3.2 of LAMP script is used as beginning version of USet script, so LAMP repository is not under active development anymore, but it will
-# remain public for better understanding of USet script.
-
 # Load configuration
 source config.txt
 

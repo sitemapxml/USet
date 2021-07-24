@@ -81,6 +81,11 @@ If you want to contribute to the project by making translations, then filename o
 ### Uninstall options
 To uninstall installed software you can run `uninstall` file inside `files` directory.
 
+### History
+This script is made from two repositories: [LAMP](https://github.com/sitemapxml/lamp) and [LEMP](https://github.com/sitemapxml/lemp) which were merged into one repository called [uset_alfa](https://github.com/sitemapxml/uset_alfa), from which is this project created. LAMP was first created and LEMP was created as a fork of LAMP which were adjusted to [NGINX](https://www.nginx.com/).
+Version [1.3.2](https://github.com/sitemapxml/lamp/tree/37a1456a00fb7312fb70249ead993d347a25bab8) of LAMP script is used as beginning version of USet family, so LAMP repository is not under active development anymore, but it will
+remain public for better understanding of USet script.
+
 ---
 
 ### Contributions and License
