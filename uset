@@ -11,6 +11,7 @@
 
 # Load configuration
 source config.txt
+source libraries/args.sh
 
 # Load index file
 if [ -f "index.inc" ]; then
