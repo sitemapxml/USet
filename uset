@@ -12,12 +12,8 @@
 # Load configuration
 source config.txt
 
-path_to_library='./libraries/'
-path_to_languages='./languages/'
-path_to_welcome='./languages/welcome/'
-path_to_includes='./includes/'
-
 # Load library index
+path_to_library='./libraries/'
 if [ -f "${path_to_library}index" ]; then
   source ${path_to_library}index
 else
@@ -26,7 +22,43 @@ else
   exit 1
 fi
 
+# Read arguments
+if [ "$#" = 0 ]; then
+  echo "Running script in interactive mode..."
+  sleep 1s
+else
+  skip_interaction=$(get_value "skip-interaction" "$@")
+
+  conf_language=$(get_value "language" "$@")
+  conf_disable_colors=$(get_value "disable-colors" "$@")
+  conf_skip_welcome_screen=$(get_value "skip-welcome" "$@")
+
+  conf_data_folder_name=$(get_value "data-folder-name" "$@")
+  conf_data_file_name=$(get_value "data-file-name" "$@")
+  conf_ssl_info_file_name=$(get_value "sslinfo-file-name" "$@")
+  conf_db_info_file_name=$(get_value "dbinfo-file-name" "$@")
+
+  conf_php_extension_list=$(get_value "install-php-extensions" "$@")
+  conf_helper_program_list=$(get_value "install-programs" "$@")
+  conf_add_apt_repository_universe=$(get_value "enable-apt-universe" "$@")
+
+  conf_webmin_install=$(get_value "install-webmin" "$@")
+  conf_webmin_port=$(get_value "webmin-port" "$@")
+  conf_webmin_ssl_mode=$(get_value "webmin-ssl" "$@")
+  conf_install_imagemagick=$(get_value "install-imagemagick" "$@")
+
+  conf_wp_wget_locale=$(get_value "wp-locale" "$@")
+  conf_wp_aditional_php_extensions=$(get_value "wp-php-extensions" "$@")
+
+  conf_create_index_html=$(get_value "create-demo-index" "$@")
+  conf_create_info_php=$(get_value "create-phpinfo" "$@")
+  conf_adminer_build=$(get_value "adminer-build" "$@")
+
+fi
+
 # Load definied language and if file does not exist revert to en.txt
+path_to_languages='./languages/'
+path_to_welcome='./languages/welcome/'
 if [ -f "${path_to_languages}$conf_language.txt" ]; then
   source ${path_to_languages}$conf_language.txt
 else
@@ -39,6 +71,7 @@ else
 fi
 
 # Load index file
+path_to_includes='./includes/'
 if [ -f "${path_to_includes}index" ]; then
   source ${path_to_includes}index
 else
