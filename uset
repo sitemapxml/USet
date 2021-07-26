@@ -11,13 +11,38 @@
 
 # Load configuration
 source config.txt
-source libraries/args.sh
+
+path_to_library='./libraries/'
+path_to_languages='./languages/'
+path_to_welcome='./languages/welcome/'
+path_to_includes='./includes/'
+
+# Load library index
+if [ -f "${path_to_library}index" ]; then
+  source ${path_to_library}index
+else
+  echo "Fatal error: Library index not found. Aborting..."
+  sleep 1s
+  exit 1
+fi
+
+# Load definied language and if file does not exist revert to en.txt
+if [ -f "${path_to_languages}$conf_language.txt" ]; then
+  source ${path_to_languages}$conf_language.txt
+else
+  source ${path_to_languages}en.txt
+fi
+if [ -f "${path_to_welcome}$conf_language.txt" ]; then
+  source ${path_to_welcome}$conf_language.txt
+else
+  source ${path_to_welcome}en.txt
+fi
 
 # Load index file
-if [ -f "index.inc" ]; then
-  source index.inc
+if [ -f "${path_to_includes}index" ]; then
+  source ${path_to_includes}index
 else
-  echo "Fatal error: index.inc not found. Aborting..."
+  echo "Fatal error: Index file not found. Aborting..."
   sleep 1s
   exit 1
 fi
