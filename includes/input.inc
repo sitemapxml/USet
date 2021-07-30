@@ -1,7 +1,6 @@
-fn_user_input () {
+fn_input_hostname () {
   echo -e ${YELLOW}"$lang_enter_information"${NC}
   echo
-
   echo -e ${YELLOW}"$lang_start_step_1"${NC}
   while true; do
       read -p "$lang_enter_domain_name" hostname
@@ -10,7 +9,9 @@ fn_user_input () {
       [ "$hostname" = "$hostname2" ] && break
       echo -e ${RED}"$lang_try_again"${NC}
   done
+}
 
+fn_input_rootpass () {
   echo -e ${YELLOW}"$lang_start_step_2"${NC}
   while true; do
       read -s -p "$lang_enter_root_password" rootpass
@@ -21,13 +22,17 @@ fn_user_input () {
       [ "$rootpass" = "$rootpass2" ] && break
       echo -e ${RED}"$lang_try_again"${NC}
   	echo
+    echo
   done
+}
 
-  echo
+fn_input_unixuser () {
   echo -e ${YELLOW}"$lang_start_step_3"${NC}
   read -p "$lang_enter_unix_user_username" unixuser
   unixuser=${unixuser:-default}
+}
 
+fn_input_unixpass () {
   echo -e ${YELLOW}"$lang_start_step_4"${NC}
   while true; do
       read -s -p "$lang_enter_unix_user_password" unixpass
@@ -38,9 +43,11 @@ fn_user_input () {
       [ "$unixpass" = "$unixpass2" ] && break
       echo -e ${RED}"$lang_try_again"${NC}
   	echo
+    echo
   done
+}
 
-  echo
+fn_input_mysqlrpass () {
   echo -e ${YELLOW}"$lang_start_step_5"${NC}
   echo -e ${YELLOW}"$lang_mysql_password_set_up"${NC}
   while true; do
@@ -52,9 +59,11 @@ fn_user_input () {
       [ "$mysqlrpass" = "$mysqlrpass2" ] && break
       echo -e ${RED}"$lang_try_again"${NC}
   	echo
+    echo
   done
+}
 
-  echo
+fn_input_email () {
   echo -e ${YELLOW}"$lang_start_step_6"${NC}
   echo -e ${YELLOW}"$lang_setting_up_email"${NC}
   while true; do
@@ -63,10 +72,12 @@ fn_user_input () {
       [ "$email" = "$email2" ] && email=${email:-webmaster@example.com} && break
       echo -e ${RED}"$lang_try_again"${NC}
   	echo
+    echo
   done
+}
 
-  # Choose http server
-  echo
+# Choose http server
+fn_input_server_type () {
   echo -e ${YELLOW}"$lang_start_step_7"${NC}
   echo -e ${YELLOW}"$lang_install_apache_or_nginx"${NC}
   PS3="$lang_choose_one_of_the_folowing"

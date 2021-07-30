@@ -47,6 +47,14 @@ else
   conf_create_info_php=$(get_value "create-phpinfo" "$@")
   conf_adminer_build=$(get_value "adminer-build" "$@")
 
+  hostname=$(get_value "hostname" "$@")
+  rootpass=$(get_value "rootpass" "$@")
+  unixuser=$(get_value "unixuser" "$@")
+  unixpass=$(get_value "unixpass" "$@")
+  mysqlrpass=$(get_value "mysqlrpass" "$@")
+  email=$(get_value "email" "$@")
+  web_server=$(get_value "server-type" "$@")
+
 fi
 
 # Load definied language and if file does not exist revert to en.txt
@@ -86,7 +94,53 @@ else
 fi
 
 # Input data
-fn_user_input
+if [ -n "$hostname" ]; then
+  echo "hostname already set, skipping user input..."
+  echo $hostname
+else
+  fn_input_hostname
+fi
+
+if [ -n "$rootpass" ]; then
+  echo "rootpass already set, skipping user input..."
+  echo $rootpass
+else
+  fn_input_rootpass
+fi
+
+if [ -n "$unixuser" ]; then
+  echo "unixuser already set, skipping user input..."
+  echo $unixuser
+else
+  fn_input_unixuser
+fi
+
+if [ -n "$unixpass" ]; then
+  echo "unixpass already set, skipping user input..."
+  echo $unixpass
+else
+  fn_input_unixpass
+fi
+
+if [ -n "$mysqlrpass" ]; then
+  echo "mysqlrpass already set, skipping user input..."
+else
+  fn_input_mysqlrpass
+fi
+
+if [ -n "$email" ]; then
+  echo "email already set, skipping user input..."
+  echo $email
+else
+  fn_input_email
+fi
+
+if [ -n "$web_server" ]; then
+  echo "web_server already set, skipping user input..."
+  echo $web_server
+else
+  fn_input_server_type
+fi
 
 # Main installation process
 fn_install
