@@ -12,7 +12,7 @@
 # Load configuration
 source config.txt
 
-# Load library index
+# Load libraries
 source "./libraries/args.sh"
 
 # Read arguments
@@ -63,7 +63,7 @@ else
   source ${path_to_welcome}en.txt
 fi
 
-# Load index file
+# Load functions
 source "./includes/functions.inc"
 source "./includes/input.inc"
 source "./includes/install.inc"
