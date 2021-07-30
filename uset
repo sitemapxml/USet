@@ -13,14 +13,7 @@
 source config.txt
 
 # Load library index
-path_to_library='./libraries/'
-if [ -f "${path_to_library}index" ]; then
-  source ${path_to_library}index
-else
-  echo "Fatal error: Library index not found. Aborting..."
-  sleep 1s
-  exit 1
-fi
+source "./libraries/args.sh"
 
 # Read arguments
 if [ "$#" = 0 ]; then
@@ -71,14 +64,9 @@ else
 fi
 
 # Load index file
-path_to_includes='./includes/'
-if [ -f "${path_to_includes}index" ]; then
-  source ${path_to_includes}index
-else
-  echo "Fatal error: Index file not found. Aborting..."
-  sleep 1s
-  exit 1
-fi
+source "./includes/functions.inc"
+source "./includes/input.inc"
+source "./includes/install.inc"
 
 # Turn output text coloring On or Off
 if [ "$conf_disable_colors" = "true" ]; then
