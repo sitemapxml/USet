@@ -55,6 +55,9 @@ else
   email=$(get_value "email" "$@")
   web_server=$(get_value "server-type" "$@")
 
+  ssl_install=$(get_value "ssl-install" "$@")
+  ssl_install_redirect=$(get_value "ssl-install-redirect" "$@")
+
 fi
 
 # Load definied language and if file does not exist revert to en.txt
@@ -144,6 +147,14 @@ fi
 
 # Main installation process
 fn_install
+
+# if [ -n "$ssl_install" ]; then
+#   echo "SSL će sada biti instaliran..."
+#
+# else
+#   fn_install_ssl
+# fi
+fn_install_ssl
 
 # SSL certificate installation option
 while true
