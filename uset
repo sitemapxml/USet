@@ -86,7 +86,7 @@ else
   fn_output_coloring_on
 fi
 
-# Gives execute rights to mksite and uninstall script
+# Gives execute rights to uninstall script
 chmod +x ./tools/uninstall
 
 if [ "$conf_skip_welcome_screen" = "true" ]; then
