@@ -38,9 +38,9 @@ else
 fi
 
 # Load functions
-source "./includes/functions.inc"
-source "./includes/input.inc"
-source "./includes/install.inc"
+source "./includes/functions.inc.sh"
+source "./includes/input.inc.sh"
+source "./includes/install.inc.sh"
 
 # Turn output text coloring On or Off
 if [ "$conf_disable_colors" = "true" ]; then
