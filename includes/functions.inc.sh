@@ -29,6 +29,10 @@ fn_output_coloring_on () {
   BNC='\e[49m'
 }
 
+fn_insert_line () {
+  printf '=%.0s' {1..70} && printf '\n'
+}
+
 fn_install_ssl () {
   echo -e ${YELLOW}"$lang_install_step_1"${NC}
 
@@ -89,9 +93,9 @@ fn_install_ssl () {
     echo -e ${RED}"$lang_ssl_install_error"${NC}
     ssl_error='1'
     sleep 1s
-    echo '******************************************************************' >> $conf_data_folder_name/$conf_ssl_info_file_name
+    fn_insert_line >> $conf_data_folder_name/$conf_ssl_info_file_name
     echo -е "$lang_ssl_certificate_not_installed"  >> $conf_data_folder_name/$conf_ssl_info_file_name
     echo -e "$lang_check_for_errors_and_try_again" >> $conf_data_folder_name/$conf_ssl_info_file_name
-    echo '******************************************************************' >> $conf_data_folder_name/$conf_ssl_info_file_name
+    fn_insert_line >> $conf_data_folder_name/$conf_ssl_info_file_name
   fi
 }
