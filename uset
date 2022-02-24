@@ -185,9 +185,9 @@ while true
         mysql -u root -e "CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
       fi
 
-			echo '******************************************************************' > $conf_db_info_file_name
+			fn_insert_line > $conf_db_info_file_name
 			echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
-			echo '******************************************************************' >> $conf_db_info_file_name
+			fn_insert_line >> $conf_db_info_file_name
 			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
 
 			# Configuring Wordpress Multisite
@@ -247,9 +247,9 @@ while true
             mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
           fi
 
-          echo '******************************************************************' > $conf_db_info_file_name
+          fn_insert_line > $conf_db_info_file_name
     			echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
-    			echo '******************************************************************' >> $conf_db_info_file_name
+    			fn_insert_line >> $conf_db_info_file_name
     			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
 
 				break
@@ -397,16 +397,16 @@ while true
 				[Yy][Ee][Ss]|[Yy])
 					echo -e "$lang_copying_passwords"
 					sleep 1s
-					echo '*************************************************************************************' > $conf_data_folder_name/$conf_data_file_name
+					fn_insert_line > $conf_data_folder_name/$conf_data_file_name
 					echo -e "$lang_access_parameters" >> $conf_data_folder_name/$conf_data_file_name
-					echo '*************************************************************************************' >> $conf_data_folder_name/$conf_data_file_name
+					fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
 
 					echo -e '\n\n'"$lang_hostname""$hostname"'\n'"$lang_root_password""$rootpass"'\n\n'"$lang_unix_user""$unixuser"'\n'"$lang_unix_user_password""$unixpass"'\n' >> $conf_data_folder_name/$conf_data_file_name
 					echo -e "$lang_mysql_root_password""$mysqlrpass"'\n\n'"$lang_email""$email"'\n\n' >> $conf_data_folder_name/$conf_data_file_name
 
-					echo '*************************************************************************************' >> $conf_data_folder_name/$conf_data_file_name
+					fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
 					echo -e "$lang_password_warning" >> $conf_data_folder_name/$conf_data_file_name
-					echo '*************************************************************************************' >> $conf_data_folder_name/$conf_data_file_name
+					fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
 					echo -e ${GREEN}"$lang_password_data_copied"${NC}
 				break
 				;;

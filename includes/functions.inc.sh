@@ -29,6 +29,4 @@ fn_output_coloring_on () {
   BNC='\e[49m'
 }
 
-fn_insert_line () {
-  printf '=%.0s' {1..70} && printf '\n'
-}
+fn_insert_line () { printf '=%.0s' {1..70} && printf '\n'; }
