@@ -147,131 +147,76 @@ mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
 database_password=$( date +%s | sha256sum | base64 | head -c 32 )
 db_name=$( echo $hostname | sed 's/\./_/g' )
 
-# Installing Wordpress
-while true
-	do
-	echo -e ${YELLOW}"$lang_install_step_2"${NC}
-	read -p "$lang_do_you_want_to_install_wordpress $lang_yes_no_colon" wp_install
-		case $wp_install in
-		[Yy][Ee][Ss]|[Yy])
-			# Downloading files
-			wget "$conf_wp_wget_locale"
-      wp_wget_filename=$( basename "$conf_wp_wget_locale" )
-			tar -xzvf "$wp_wget_filename"
-			mv wordpress /var/www/"$hostname"/html
-			chown www-data:www-data -R /var/www/"$hostname"/html
-
-			# Installing aditional php extensions
-			apt-get install $conf_wp_aditional_php_extensions -y
-
-      if [ "$web_server" = "apache" ]; then
-  			systemctl restart apache2
-      else
-  			systemctl restart nginx "$fpm_version"
-      fi
-
-			# Remove unnecessary files
-			rm "$wp_wget_filename"
-
-			# Creating database
-			echo -e "$lang_creating_database"
-			sleep 1s
-
-      mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-
-      if [ "$mysqld_version" -ge "8" ]; then
-        mysql -u root -e "CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON $db_name.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
-      else
-        mysql -u root -e "CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
-      fi
-
-			fn_insert_line > $conf_db_info_file_name
-			echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
-			fn_insert_line >> $conf_db_info_file_name
-			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
-
-			# Configuring Wordpress Multisite
-				while true
-					do
-					read -p "$lang_do_you_want_to_enable_wordpress_multisite $lang_yes_no_colon" wp_install_multisite
-						case $wp_install_multisite in
-						[Yy][Ee][Ss]|[Yy])
-							# Instaliranje faljova
-							echo -e "$lang_configuring_wp_multisite"
-							sed -i "81i define( 'WP_ALLOW_MULTISITE', true );" /var/www/"$hostname"/html/wp-config-sample.php
-							echo -e ${GREEN}"$lang_multisite_is_configured"${NC}
-						break
-						;;
-					[Nn][Oo]|[Nn])
-						break
-						;;
-						*)
-							echo -e ${RED}"$lang_answer_yes_no"${NC}
-						;;
-					esac
-				done
-			echo -e ${GREEN}"$lang_wordpress_is_installed"${NC}
-		break
-		;;
-		[Nn][Oo]|[Nn])
-			# Copy index.html into the webroot
-			mkdir /var/www/"$hostname"/html
-
-      if [ "$conf_create_index_html" = "true" ]; then
-        cp ./resources/index.html /var/www/"$hostname"/html/index.html
-  			sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
-        sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
-
-        echo -e "$lang_index_html_configured"
-      else
-        echo "$lang_skipping_creation_of_index_html"
-      fi
-
-      # Create info.php
-      if [ "$conf_create_info_php" = 'true' ]; then
-        echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
-        echo "$lang_info_php_configured"
-      else
-        echo "$lang_skipping_creation_of_info_php"
-      fi
-
-    # Creating database
-		while true
-			do
-			read -p "$lang_do_you_want_to_create_database $lang_yes_no_colon" db_make
-				case $db_make in
-				[Yy][Ee][Ss]|[Yy])
-          if [ "$mysqld_version" -ge "8" ]; then
-            mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
-          else
-            mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
-          fi
-
-          fn_insert_line > $conf_db_info_file_name
-    			echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
-    			fn_insert_line >> $conf_db_info_file_name
-    			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
-
-				break
-				;;
-				[Nn][Oo]|[Nn])
-					echo -e "$lang_skipping_database_creation"
-          sleep 1s
-			break
-			;;
-			*)
-				echo -e ${RED}"$lang_answer_yes_no"${NC}
-			;;
-			esac
-		done
-
-		break
-		;;
-	*)
-		echo -e ${RED}"$lang_answer_yes_no"${NC}
-	;;
-	esac
-done
+# #####################################
+# This part is currently not working
+# It will be fixed in the next commit
+# #####################################
+#
+# # Creating index file
+# while true
+# 	do
+# 	echo -e ${YELLOW}"$lang_install_step_2"${NC}
+# 	read -p "$" wp_install
+# 		case $install_index in
+# 		[Yy][Ee][Ss]|[Yy])
+# 			# Copy index.html into the webroot
+# 			mkdir /var/www/"$hostname"/html
+#
+#       if [ "$conf_create_index_html" = "true" ]; then
+#         cp ./resources/index.html /var/www/"$hostname"/html/index.html
+#   			sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
+#         sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
+#
+#         echo -e "$lang_index_html_configured"
+#       else
+#         echo "$lang_skipping_creation_of_index_html"
+#       fi
+#
+#       # Create info.php
+#       if [ "$conf_create_info_php" = 'true' ]; then
+#         echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
+#         echo "$lang_info_php_configured"
+#       else
+#         echo "$lang_skipping_creation_of_info_php"
+#       fi
+#
+#     # Creating database
+# 		while true
+# 			do
+# 			read -p "$lang_do_you_want_to_create_database $lang_yes_no_colon" db_make
+# 				case $db_make in
+# 				[Yy][Ee][Ss]|[Yy])
+#           if [ "$mysqld_version" -ge "8" ]; then
+#             mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+#           else
+#             mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
+#           fi
+#
+#           fn_insert_line > $conf_db_info_file_name
+#     			echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
+#     			fn_insert_line >> $conf_db_info_file_name
+#     			echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
+#
+# 				break
+# 				;;
+# 				[Nn][Oo]|[Nn])
+# 					echo -e "$lang_skipping_database_creation"
+#           sleep 1s
+# 			break
+# 			;;
+# 			*)
+# 				echo -e ${RED}"$lang_answer_yes_no"${NC}
+# 			;;
+# 			esac
+# 		done
+#
+# 		break
+# 		;;
+# 	*)
+# 		echo -e ${RED}"$lang_answer_yes_no"${NC}
+# 	;;
+# 	esac
+# done
 
 # Installing Adminer
 while true
@@ -441,17 +386,7 @@ fi
 
 echo -e "$lang_website_available_at_address ${GREEN}$url${NC}"
 echo -e "$lang_chosen_webserver_is ${GREEN}$web_server${NC}"
-
-case $wp_install in
-	[Yy][Ee][Ss]|[Yy])
-    echo -e "$lang_to_finish_wordpress_installation_visit_your_website"
-    echo -e "$lang_and_copy_messages_from_db_info_to_wordpress"
-    echo -e $lang_open_file_with_command"\n"${WHITE}"nano" $conf_db_info_file_name${NC}
-	;;
-	[Nn][Oo]|[Nn])
-		echo -e "$lang_you_can_check_if_php_working ${GREEN}$url/info.php${NC}"
-	;;
-esac
+echo -e "$lang_you_can_check_if_php_working ${GREEN}$url/info.php${NC}"
 
 echo
 echo -e "$lang_webmin_installed_at_address ${GREEN}$url:$conf_webmin_port${NC}"

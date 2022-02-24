@@ -13,9 +13,9 @@
 # USet
 Server configuration script
 
-> IMPORTANT NOTICE: Version 2.0 is here! 
-> There are many changes and improvements in this release, but the two biggest are ability to translate interface and configuration options for those with specific needs. 
-> You can check [Change Log](./CHANGELOG.md) to find out details. 
+> IMPORTANT NOTICE: Version 2.0 is here!
+> There are many changes and improvements in this release, but the two biggest are ability to translate interface and configuration options for those with specific needs.
+> You can check [Change Log](./CHANGELOG.md) to find out details.
 
 Minimum required Ubuntu version: 18.04
 
@@ -60,14 +60,6 @@ If you use this script often, you probably don't want to see welcome screen.
 <br>Welcome screen can be turned off by setting `conf_skip_welcome_screen` to `true` in config file.
 
 Individual options will be documented in some of the future releases.
-
-### Wordpress installation
-Wordpress installation option is included by-default, so to install wordpress only thing you need to do is choose `Yes` when the prompt show up.
-
-If Wordpress installation is chosen, database will be automatically created.
-Database credentials would be then stored in a file named according to `conf_db_info_file_name` variable. Default name is `db-info.txt`
-
-If you choose **not** to install Wordpress, then the script will create `index.html` and `info.php` file so you can immediately access website from your browser.
 
 ### Password backup file
 The last option is to choose if you want to save usernames and passwords in a text file.

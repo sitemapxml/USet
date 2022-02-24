@@ -18,9 +18,6 @@ conf_webmin_port=$(get_value "webmin-port" "$@")
 conf_webmin_ssl_mode=$(get_value "webmin-ssl" "$@")
 conf_install_imagemagick=$(get_value "install-imagemagick" "$@")
 
-conf_wp_wget_locale=$(get_value "wp-locale" "$@")
-conf_wp_aditional_php_extensions=$(get_value "wp-php-extensions" "$@")
-
 conf_create_index_html=$(get_value "create-demo-index" "$@")
 conf_create_info_php=$(get_value "create-phpinfo" "$@")
 conf_adminer_build=$(get_value "adminer-build" "$@")
