@@ -211,3 +211,38 @@ fn_install_ssl () {
     fn_insert_line >> $conf_data_folder_name/$conf_ssl_info_file_name
   fi
 }
+
+fn_make_index () {
+  mkdir /var/www/"$hostname"/html
+
+  if [ "$conf_create_index_html" = "true" ]; then
+    cp ./resources/index.html /var/www/"$hostname"/html/index.html
+  	sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
+    sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
+
+    echo -e "$lang_index_html_configured"
+  else
+    echo "$lang_skipping_creation_of_index_html"
+  fi
+
+  # Create info.php
+  if [ "$conf_create_info_php" = 'true' ]; then
+    echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
+    echo "$lang_info_php_configured"
+  else
+    echo "$lang_skipping_creation_of_info_php"
+  fi
+}
+
+fn_make_db () {
+  if [ "$mysqld_version" -ge "8" ]; then
+    mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON $db_name.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+  else
+    mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
+  fi
+
+  fn_insert_line > $conf_db_info_file_name
+  echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
+  fn_insert_line >> $conf_db_info_file_name
+  echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
+}
