@@ -60,63 +60,18 @@ else
 fi
 
 # Input data
-if [ -n "$hostname" ]; then
-  echo "hostname already set, skipping user input..."
-  echo $hostname
-else
-  fn_input_hostname
-fi
-
-if [ -n "$rootpass" ]; then
-  echo "rootpass already set, skipping user input..."
-  echo $rootpass
-else
-  fn_input_rootpass
-fi
-
-if [ -n "$unixuser" ]; then
-  echo "unixuser already set, skipping user input..."
-  echo $unixuser
-else
-  fn_input_unixuser
-fi
-
-if [ -n "$unixpass" ]; then
-  echo "unixpass already set, skipping user input..."
-  echo $unixpass
-else
-  fn_input_unixpass
-fi
-
-if [ -n "$mysqlrpass" ]; then
-  echo "mysqlrpass already set, skipping user input..."
-else
-  fn_input_mysqlrpass
-fi
-
-if [ -n "$email" ]; then
-  echo "email already set, skipping user input..."
-  echo $email
-else
-  fn_input_email
-fi
-
-if [ -n "$web_server" ]; then
-  echo "web_server already set, skipping user input..."
-  echo $web_server
-else
-  fn_input_server_type
-fi
+[ -n "$hostname" ] && printf "hostname already set to ${YELLOW}$hostname${NC}, skipping user input...\n" || fn_input_hostname
+[ -n "$rootpass" ] && printf "rootpass already set, skipping user input...\n" || fn_input_rootpass
+[ -n "$unixuser" ] && printf "unixuser already set to ${YELLOW}$unixuser${NC}, skipping user input...\n" || fn_input_unixuser
+[ -n "$unixpass" ] && printf "unixpass already set, skipping user input...\n" || fn_input_unixpass
+[ -n "$mysqlrpass" ] && printf "mysqlrpass already set, skipping user input...\n" || fn_input_mysqlrpass
+[ -n "$email" ] && printf "email already set to ${YELLOW}$email${NC}, skipping user input...\n" || fn_input_email
+[ -n "$web_server" ] && printf "web_server already set to ${YELLOW}$web_server${NC}, skipping user input...\n" || fn_input_server_type
 
 # Main installation process
 fn_install
 
-# if [ -n "$ssl_install" ]; then
-#   echo "SSL će sada biti instaliran..."
-#
-# else
-#   fn_install_ssl
-# fi
+# Install SSL Certificate
 fn_install_ssl
 
 

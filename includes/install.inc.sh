@@ -156,8 +156,7 @@ fn_install_ssl () {
       https_redirect="no-redirect"
     fi
   else
-    while true
-      do
+    while true; do
       read -p "$lang_do_you_want_to_enable_redirect_to_https $lang_yes_no" ssl_redirect
         case $ssl_redirect in
         [Yy][Ee][Ss]|[Yy])

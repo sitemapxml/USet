@@ -1,13 +1,5 @@
 fn_output_coloring_off () {
-  RED=''
-  GREEN=''
-  YELLOW=''
-  BLACK=''
-  WHITE=''
-  NC=''
-  BGREEN=''
-  BGRAY=''
-  BNC=''
+  RED=GREEN=YELLOW=BLACK=WHITE=NC=BGREEN=BGRAY=BNC=''
 }
 
 fn_output_coloring_on () {
