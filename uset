@@ -102,9 +102,19 @@ mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
 database_password=$( date +%s | sha256sum | base64 | head -c 32 )
 db_name=$( echo $hostname | sed 's/\./_/g' )
 
-############################################################
-# Ovde ide proces kreiranja index fajlova
-############################################################
+while true; do
+  read -p "Do you want to make index.html file and php.info?" make_index
+  case $make_index in
+    [Yy][Ee][Ss]|[Yy])
+    fn_make_index
+    break
+    ;;
+    [Nn][Oo]|[Nn])
+    echo
+    break
+    ;;
+  esac
+done
 
 # Installing Adminer
 while true
