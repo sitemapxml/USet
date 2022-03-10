@@ -22,3 +22,5 @@ fn_output_coloring_on () {
 }
 
 fn_insert_line () { printf '=%.0s' {1..70} && printf '\n'; }
+
+fn_write_log () { tee -a $logname; }
