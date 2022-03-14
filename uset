@@ -106,11 +106,11 @@ while true; do
   read -p "Do you want to make index.html file and php.info?" make_index
   case $make_index in
     [Yy][Ee][Ss]|[Yy])
-    fn_make_index
+      fn_make_index
     break
     ;;
     [Nn][Oo]|[Nn])
-    echo
+      echo
     break
     ;;
   esac
@@ -316,5 +316,5 @@ case $ssl_install in
 esac
 
 # Deleting bash and mysql history
-cat /dev/null > ~/.bash_history && history -c
 cat /dev/null > ~/.mysql_history
+cat /dev/null > ~/.bash_history && history -c

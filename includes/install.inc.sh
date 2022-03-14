@@ -214,22 +214,22 @@ fn_install_ssl () {
 fn_make_index () {
   mkdir /var/www/"$hostname"/html
 
-  if [ "$conf_create_index_html" = "true" ]; then
+  if [ "$conf_create_index_html" = "false" ]; then
+    echo "$lang_skipping_creation_of_index_html"
+  else
     cp ./resources/index.html /var/www/"$hostname"/html/index.html
-  	sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
+    sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
     sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
 
     echo -e "$lang_index_html_configured"
-  else
-    echo "$lang_skipping_creation_of_index_html"
   fi
 
   # Create info.php
-  if [ "$conf_create_info_php" = 'true' ]; then
+  if [ "$conf_create_info_php" = 'false' ]; then
+    echo "$lang_skipping_creation_of_info_php"
+  else
     echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
     echo "$lang_info_php_configured"
-  else
-    echo "$lang_skipping_creation_of_info_php"
   fi
 }
 
