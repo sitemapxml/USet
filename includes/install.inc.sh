@@ -124,6 +124,26 @@ fn_install () {
     systemctl restart nginx
   fi
 
+  # Make index.html and info.php
+  mkdir /var/www/"$hostname"/html
+  if [ "$conf_create_index_html" = "false" ]; then
+    echo "$lang_skipping_creation_of_index_html"
+  else
+    cp ./resources/index.html /var/www/"$hostname"/html/index.html
+    sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
+    sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
+
+    echo -e "$lang_index_html_configured"
+  fi
+
+  # Create info.php
+  if [ "$conf_create_info_php" = 'false' ]; then
+    echo "$lang_skipping_creation_of_info_php"
+  else
+    echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
+    echo "$lang_info_php_configured"
+  fi
+
   # Add UNIX user
   echo -e ${YELLOW}"$lang_adding_unix_user"${NC}
   sleep 1s
@@ -208,28 +228,6 @@ fn_install_ssl () {
     echo -е "$lang_ssl_certificate_not_installed"  >> $conf_data_folder_name/$conf_ssl_info_file_name
     echo -e "$lang_check_for_errors_and_try_again" >> $conf_data_folder_name/$conf_ssl_info_file_name
     fn_insert_line >> $conf_data_folder_name/$conf_ssl_info_file_name
-  fi
-}
-
-fn_make_index () {
-  mkdir /var/www/"$hostname"/html
-
-  if [ "$conf_create_index_html" = "false" ]; then
-    echo "$lang_skipping_creation_of_index_html"
-  else
-    cp ./resources/index.html /var/www/"$hostname"/html/index.html
-    sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
-    sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
-
-    echo -e "$lang_index_html_configured"
-  fi
-
-  # Create info.php
-  if [ "$conf_create_info_php" = 'false' ]; then
-    echo "$lang_skipping_creation_of_info_php"
-  else
-    echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
-    echo "$lang_info_php_configured"
   fi
 }
 
