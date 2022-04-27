@@ -103,82 +103,16 @@ database_password=$( date +%s | sha256sum | base64 | head -c 32 )
 db_name=$( echo $hostname | sed 's/\./_/g' )
 
 # Installing Adminer
-while true
-  do
-  read -p "$lang_do_you_want_to_install_adminer" install_adminer
-    case $install_adminer in
-    [Yy][Ee][Ss]|[Yy])
-
-    echo "$lang_installing_adminer"
-    sleep 1s
-    wget "https://www.adminer.org/latest${conf_adminer_build}.php"
-    cp "latest${conf_adminer_build}.php" /var/www/"$hostname"/html/adminer.php
-
-    echo ${GREEN}"$lang_adminer_installed_successfully"${NC}
-
-    break
-    ;;
-    [Nn][Oo]|[Nn])
-      echo -e "$lang_skipping_adminer"
-      sleep 1s
-  break
-  ;;
-  *)
-    echo -e ${RED}"$lang_answer_yes_no"${NC}
-  ;;
-  esac
-done
+fn_install_adminer
 
 if [ "$web_server" = "apache" ]; then
-  # 6g firewall from perishablepress.com
-  while true
-  	do
-  	echo -e ${YELLOW}"$lang_install_step_3"${NC}
-  	read -p "$lang_do_you_want_to_enable_apache_firewall $lang_yes_no_colon" apache_firewall
-  		case $apache_firewall in
-  		[Yy][Ee][Ss]|[Yy])
-      echo -e ${YELLOW}"$lang_choose_apache_firewall_version"${NC}
-      PS3="$lang_choose_one_of_the_folowing"
-      options=("6g" "7g")
-      select apache_firewall_version in "${options[@]}"
-      do
-          case $apache_firewall_version in
-              "6g")
-                  echo -e "$lang_you_have_chosen_6g"
-                  sleep 1s
-
-                  cp ./resources/6g.conf /etc/apache2/6g.conf
-            			sed -i "s/#6g //g" /etc/apache2/sites-available/"$hostname".conf
-            			systemctl restart apache2
-            			echo -e ${GREEN}"$lang_firewall_enabled"${NC}
-                  break
-                  ;;
-              "7g")
-                  echo -e "$lang_you_have_chosen_7g"
-                  sleep 1s
-
-                  cp ./resources/7g.conf /etc/apache2/7g.conf
-            			sed -i "s/#7g //g" /etc/apache2/sites-available/"$hostname".conf
-            			systemctl restart apache2
-            			echo -e ${GREEN}"$lang_firewall_enabled"${NC}
-                  break
-                  ;;
-              *) echo -e "$lang_invalid_option $REPLY"
-              ;;
-          esac
-      done
-  		break
-  		;;
-  		[Nn][Oo]|[Nn])
-  	break
-  	;;
-  	*)
-  		echo -e ${RED}"$lang_answer_yes_no"${NC}
-  	;;
-  	esac
-  done
-else
-  echo
+  if [ "$conf_apache_firewall" = '6g' ]; then
+    fn_install_6g
+  elif [ "$conf_apache_firewall" = '7g' ]; then
+    fn_install_7g
+  else
+    echo "Skipping .htaccess firewall rules..."
+  fi
 fi
 
 # UFW firewall

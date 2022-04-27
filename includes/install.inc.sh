@@ -231,6 +231,8 @@ fn_install_ssl () {
   fi
 }
 
+# Protocol SSL check
+
 fn_make_db () {
   if [ "$mysqld_version" -ge "8" ]; then
     mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON $db_name.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
@@ -242,4 +244,34 @@ fn_make_db () {
   echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
   fn_insert_line >> $conf_db_info_file_name
   echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
+}
+
+fn_install_adminer () {
+  if [ "$conf_install_adminer" = 'true' ]; then
+    echo "$lang_installing_adminer"
+    sleep 1s
+    wget "https://www.adminer.org/latest${conf_adminer_build}.php"
+    cp "latest${conf_adminer_build}.php" /var/www/"$hostname"/html/adminer.php
+
+    echo ${GREEN}"$lang_adminer_installed_successfully"${NC}
+    sleep 0.5s
+  fi
+}
+
+fn_install_6g () {
+  echo -e "$lang_you_have_chosen_6g"
+  sleep 1s
+  cp ./resources/6g.conf /etc/apache2/6g.conf
+  sed -i "s/#6g //g" /etc/apache2/sites-available/"$hostname".conf
+  systemctl restart apache2
+  echo -e ${GREEN}"$lang_firewall_enabled"${NC}
+}
+
+fn_install_7g () {
+  echo -e "$lang_you_have_chosen_7g"
+  sleep 1s
+  cp ./resources/7g.conf /etc/apache2/7g.conf
+  sed -i "s/#7g //g" /etc/apache2/sites-available/"$hostname".conf
+  systemctl restart apache2
+  echo -e ${GREEN}"$lang_firewall_enabled"${NC}
 }
