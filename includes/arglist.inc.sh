@@ -23,6 +23,8 @@ conf_create_info_php=$(get_value "create-phpinfo" "$@")
 conf_apache_firewall=$(get_value "apache-firewall" "$@")
 conf_install_adminer=$(get_value "install-adminer" "$@")
 conf_adminer_build=$(get_value "adminer-build" "$@")
+conf_enable_ufw=$(get_value "ufw-enable" "$@")
+conf_create_pass_backup$(get_value "password-backup" "$@")
 
 hostname=$(get_value "hostname" "$@")
 rootpass=$(get_value "rootpass" "$@")

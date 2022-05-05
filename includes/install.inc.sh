@@ -275,3 +275,34 @@ fn_install_7g () {
   systemctl restart apache2
   echo -e ${GREEN}"$lang_firewall_enabled"${NC}
 }
+
+fn_enable_ufw () {
+    ufw --force enable
+    ufw allow 'OpenSSH'
+    ufw allow "$conf_webmin_port/tcp"
+
+    if [ "$web_server" = "apache" ]; then
+      ufw allow 'Apache Full'
+    else
+      ufw allow 'Nginx Full'
+    fi
+
+    ufw reload
+    echo -e ${GREEN}"$lang_port_protection_enabled"${NC}
+}
+
+fn_create_pass_backup () {
+  echo -e "$lang_copying_passwords"
+  sleep 1s
+  fn_insert_line > $conf_data_folder_name/$conf_data_file_name
+  echo -e "$lang_access_parameters" >> $conf_data_folder_name/$conf_data_file_name
+  fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
+
+  echo -e '\n\n'"$lang_hostname""$hostname"'\n'"$lang_root_password""$rootpass"'\n\n'"$lang_unix_user""$unixuser"'\n'"$lang_unix_user_password""$unixpass"'\n' >> $conf_data_folder_name/$conf_data_file_name
+  echo -e "$lang_mysql_root_password""$mysqlrpass"'\n\n'"$lang_email""$email"'\n\n' >> $conf_data_folder_name/$conf_data_file_name
+
+  fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
+  echo -e "$lang_password_warning" >> $conf_data_folder_name/$conf_data_file_name
+  fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
+  echo -e ${GREEN}"$lang_password_data_copied"${NC}
+}
