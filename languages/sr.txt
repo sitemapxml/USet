@@ -113,7 +113,6 @@ lang_installing_adminer='Инсталира се Админер...'
 lang_adminer_installed_successfully='Админер је успешно инсталиран!'
 lang_skipping_adminer='Прескаче се инсталација Админер-а...'
 
-lang_do_you_want_to_enable_apache_firewall='Да ли желите да омогућите Apache 6G заштитни зид?'
 lang_choose_apache_firewall_version='Коју верзију Apache заштитног зида желите да инсталирате?'
 lang_firewall_enabled='Заштитни зид је омогућен!'
 lang_do_you_want_to_enable_ufw_firewall='Да ли желите да омогућите заштиту портова?'

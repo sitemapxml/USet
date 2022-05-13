@@ -9,7 +9,6 @@ After you enter all the required information, you will have the choice to choose
 According to chosen web server type all the other configuration steps that are necessary for some web application to work will be performed automatically, without the need to manually change the configuration. By its default settings, Webmin control panel will be installed.
 After the basic software packages were installed, you will have to chose some more configuration options. This options include, but are not limited to:
 - installing SSL certificate
-- if you choose to install apache you will be asked if you want to enable 6g or 7g firewall from perishablepress.com
 - you will also have an option to enable port protection with UFW firewall
 After that you will be asked if you want to save passwords in a plain text. This option is not recommended, but in some cases might be useful. However, it is advisable to remove this files as soon as possible.
 After installation is done, basic information about configuration will be shown.

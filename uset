@@ -105,16 +105,6 @@ db_name=$( echo $hostname | sed 's/\./_/g' )
 # Installing Adminer
 fn_install_adminer
 
-if [ "$web_server" = "apache" ]; then
-  if [ "$conf_apache_firewall" = '6g' ]; then
-    fn_install_6g
-  elif [ "$conf_apache_firewall" = '7g' ]; then
-    fn_install_7g
-  else
-    echo "Skipping .htaccess firewall rules..."
-  fi
-fi
-
 # UFW firewall
 [ "$conf_enable_ufw" = 'true' ] && fn_enable_ufw
 

@@ -20,7 +20,6 @@ conf_install_imagemagick=$(get_value "install-imagemagick" "$@")
 
 conf_create_index_html=$(get_value "create-index-html" "$@")
 conf_create_info_php=$(get_value "create-phpinfo" "$@")
-conf_apache_firewall=$(get_value "apache-firewall" "$@")
 conf_install_adminer=$(get_value "install-adminer" "$@")
 conf_adminer_build=$(get_value "adminer-build" "$@")
 conf_enable_ufw=$(get_value "ufw-enable" "$@")

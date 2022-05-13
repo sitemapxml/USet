@@ -258,24 +258,6 @@ fn_install_adminer () {
   fi
 }
 
-fn_install_6g () {
-  echo -e "$lang_you_have_chosen_6g"
-  sleep 1s
-  cp ./resources/6g.conf /etc/apache2/6g.conf
-  sed -i "s/#6g //g" /etc/apache2/sites-available/"$hostname".conf
-  systemctl restart apache2
-  echo -e ${GREEN}"$lang_firewall_enabled"${NC}
-}
-
-fn_install_7g () {
-  echo -e "$lang_you_have_chosen_7g"
-  sleep 1s
-  cp ./resources/7g.conf /etc/apache2/7g.conf
-  sed -i "s/#7g //g" /etc/apache2/sites-available/"$hostname".conf
-  systemctl restart apache2
-  echo -e ${GREEN}"$lang_firewall_enabled"${NC}
-}
-
 fn_enable_ufw () {
     ufw --force enable
     ufw allow 'OpenSSH'
