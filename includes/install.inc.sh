@@ -169,29 +169,10 @@ fn_install_ssl () {
   echo -e ${YELLOW}"$lang_install_step_1"${NC}
 
   # Redirect to https option
-  if  [ -n "$ssl_install_redirect" ]; then
-    if  [ "$ssl_install_redirect" = 'true' ]; then
-      https_redirect="redirect"
-    else
-      https_redirect="no-redirect"
-    fi
+  if  [ "$ssl_install_redirect" = 'true' ]; then
+    https_redirect="redirect"
   else
-    while true; do
-      read -p "$lang_do_you_want_to_enable_redirect_to_https $lang_yes_no" ssl_redirect
-        case $ssl_redirect in
-        [Yy][Ee][Ss]|[Yy])
-          https_redirect="redirect"
-        break
-        ;;
-        [Nn][Oo]|[Nn])
-          https_redirect="no-redirect"
-      break
-        ;;
-      *)
-        echo -e ${RED}"$lang_answer_yes_no"${NC}
-      ;;
-      esac
-    done
+    https_redirect="no-redirect"
   fi
 
   echo -e "$lang_installing_ssl_certificate"
@@ -247,15 +228,12 @@ fn_make_db () {
 }
 
 fn_install_adminer () {
-  if [ "$conf_install_adminer" = 'true' ]; then
     echo "$lang_installing_adminer"
     sleep 1s
     wget "https://www.adminer.org/latest${conf_adminer_build}.php"
     cp "latest${conf_adminer_build}.php" /var/www/"$hostname"/html/adminer.php
-
     echo ${GREEN}"$lang_adminer_installed_successfully"${NC}
     sleep 0.5s
-  fi
 }
 
 fn_enable_ufw () {

@@ -10,37 +10,35 @@
 #############################################
 
 # Load configuration
-source config.txt
+source 'config.txt'
 
 # Load libraries
-source "./libraries/args.sh"
+source 'libraries/args.sh'
 
 # Read arguments
 if [ "$#" = 0 ]; then
   echo "Running script in interactive mode..."
   sleep 1s
 else
-  source "./includes/arglist.inc.sh"
+  source 'includes/arglist.inc.sh'
 fi
 
 # Load definied language and if file does not exist revert to en.txt
-path_to_languages='./languages/'
-path_to_welcome='./languages/welcome/'
-if [ -f "${path_to_languages}$conf_language.txt" ]; then
-  source ${path_to_languages}$conf_language.txt
+if [ -f "languages/$conf_language.txt" ]; then
+  source "languages/$conf_language.txt"
 else
-  source ${path_to_languages}en.txt
+  source 'languages/en.txt'
 fi
-if [ -f "${path_to_welcome}$conf_language.txt" ]; then
-  source ${path_to_welcome}$conf_language.txt
+if [ -f "languages/welcome/$conf_language.txt" ]; then
+  source "languages/welcome/$conf_language.txt"
 else
-  source ${path_to_welcome}en.txt
+  source 'languages/welcome/en.txt'
 fi
 
 # Load functions
-source "./includes/functions.inc.sh"
-source "./includes/input.inc.sh"
-source "./includes/install.inc.sh"
+source 'includes/functions.inc.sh'
+source 'includes/input.inc.sh'
+source 'includes/install.inc.sh'
 
 # Turn output text coloring On or Off
 if [ "$conf_disable_colors" = "true" ]; then
@@ -50,10 +48,10 @@ else
 fi
 
 # Gives execute rights to uninstall script
-chmod +x ./tools/uninstall
+chmod +x 'tools/uninstall'
 
 if [ "$conf_skip_welcome_screen" = "true" ]; then
-  echo
+  :
 else
   # Welcome screen!
   whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65 || echo "$lang_welcome"
@@ -102,12 +100,10 @@ mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
 database_password=$( date +%s | sha256sum | base64 | head -c 32 )
 db_name=$( echo $hostname | sed 's/\./_/g' )
 
-# Installing Adminer
-fn_install_adminer
-
+# Install Adminer
+[ "$conf_install_adminer" = 'true' ] && fn_install_adminer
 # UFW firewall
 [ "$conf_enable_ufw" = 'true' ] && fn_enable_ufw
-
 # Creating password backup file
 [ "$conf_create_pass_backup" = 'true' ] && fn_create_pass_backup
 
