@@ -306,3 +306,47 @@ fn_create_pass_backup () {
   fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
   echo -e ${GREEN}"$lang_password_data_copied"${NC}
 }
+
+fn_msg_completed () {
+  echo -e ${BLACK}${BGREEN}"$lang_installation_is_done"${NC}${BNC}
+  echo
+
+  if [ "$ssl_error" = "1" ]; then
+    echo -e "${RED}$lang_configuring_ssl_failed${NC}"
+    echo -e "$lang_check_dns_settings_and_try_again"
+    echo -e "${WHITE}certbot --$web_server${NC}"
+  fi
+
+  echo -e "$lang_website_available_at_address ${GREEN}$url${NC}"
+  echo -e "$lang_chosen_webserver_is ${GREEN}$web_server${NC}"
+  echo -e "$lang_you_can_check_if_php_working ${GREEN}$url/info.php${NC}"
+
+  echo
+  echo -e "$lang_webmin_installed_at_address ${GREEN}$url:$conf_webmin_port${NC}"
+  echo -e "$lang_to_access_webmin_you_can_use_username ${GREEN}$unixuser${NC}"
+  echo -e "$lang_and_password_created_during_installation"
+  echo
+  echo -e "$lang_server_webroot_is"
+  echo -e "/var/www/${GREEN}$hostname${NC}/html"
+  echo
+
+  case $backup_file_confirm in
+  	[Yy][Ee][Ss]|[Yy])
+      echo -e "$lang_to_see_installation_data_copy_following_command"
+      echo -e ${WHITE}"nano" $conf_data_folder_name"/"$conf_data_file_name${NC}
+      echo
+  	;;
+  	[Nn][Oo]|[Nn])
+  	;;
+  esac
+
+  case $ssl_install in
+  	[Yy][Ee][Ss]|[Yy])
+      echo -e "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$email${NC}"
+      echo
+  	;;
+  	[Nn][Oo]|[Nn])
+      echo -e "$lang_your_email_address_is ${GREEN}$email${NC}"
+  	;;
+  esac
+}
