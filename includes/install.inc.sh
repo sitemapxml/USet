@@ -215,6 +215,13 @@ fn_install_ssl () {
 # Protocol SSL check
 
 fn_make_db () {
+  # Check mysql server version
+  mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
+
+  # Preparing database user name and password
+  database_password=$( date +%s | sha256sum | base64 | head -c 32 )
+  db_name=$( echo $hostname | sed 's/\./_/g' )
+  
   if [ "$mysqld_version" -ge "8" ]; then
     mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON $db_name.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
   else
