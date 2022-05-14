@@ -9,10 +9,8 @@
 # Version: 2.4.0                            #
 #############################################
 
-# Load configuration
+# Load configuration and libraries
 source 'config.txt'
-
-# Load libraries
 source 'libraries/args.sh'
 
 # Read arguments
@@ -71,34 +69,6 @@ fn_install
 
 # Install SSL Certificate
 fn_install_ssl
-
-
-# Chosen protocol
-case $ssl_install in
-	[Yy][Ee][Ss]|[Yy])
-		https='true'
-	;;
-	[Nn][Oo]|[Nn])
-		https='false'
-	;;
-esac
-
-if [ -f "$CERTFILE" ] && [ -f "$KEYFILE" ] && [ "$https" == "true" ]; then
-    protocol='https://'
-    ssl_installed='true'
-else
-    protocol='http://'
-    ssl_installed='false'
-fi
-
-url="$protocol$hostname"
-
-# Check mysql server version
-mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
-
-# Preparing database user name and password
-database_password=$( date +%s | sha256sum | base64 | head -c 32 )
-db_name=$( echo $hostname | sed 's/\./_/g' )
 
 # Install Adminer
 [ "$conf_install_adminer" = 'true' ] && fn_install_adminer

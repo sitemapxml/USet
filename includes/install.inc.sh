@@ -277,12 +277,12 @@ fn_msg_completed () {
     echo -e "${WHITE}certbot --$web_server${NC}"
   fi
 
-  echo -e "$lang_website_available_at_address ${GREEN}$url${NC}"
+  echo -e "$lang_website_available_at_address ${GREEN}http://$hostname ${NC}"
   echo -e "$lang_chosen_webserver_is ${GREEN}$web_server${NC}"
-  echo -e "$lang_you_can_check_if_php_working ${GREEN}$url/info.php${NC}"
+  echo -e "$lang_you_can_check_if_php_working ${GREEN}http://$hostname/info.php${NC}"
 
   echo
-  echo -e "$lang_webmin_installed_at_address ${GREEN}$url:$conf_webmin_port${NC}"
+  echo -e "$lang_webmin_installed_at_address ${GREEN}https://$hostname:$conf_webmin_port${NC}"
   echo -e "$lang_to_access_webmin_you_can_use_username ${GREEN}$unixuser${NC}"
   echo -e "$lang_and_password_created_during_installation"
   echo
