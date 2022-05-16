@@ -32,11 +32,21 @@ if [ -f "languages/welcome/$conf_language.txt" ]; then
 else
   source 'languages/welcome/en.txt'
 fi
+if [ -f "languages/help/$conf_language.txt" ]; then
+  source "languages/help/$conf_language.txt"
+else
+  source 'languages/help/en.txt'
+fi
 
 # Load functions
 source 'includes/functions.inc.sh'
 source 'includes/input.inc.sh'
 source 'includes/install.inc.sh'
+
+case "$1" in
+  -h) printf "$lang_help" && exit 1 ;;
+  --help) printf "$lang_help" && exit 1 ;;
+esac
 
 # Turn output text coloring On or Off
 if [ "$conf_disable_colors" = "true" ]; then

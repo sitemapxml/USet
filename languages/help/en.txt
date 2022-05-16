@@ -1,1 +1,30 @@
-lang_help=''
+lang_help='USAGE:
+  ./uset --arg1 --arg2
+
+Available arguments:
+  --language                   choose preffered language
+  --disable-colors             enable or disable terminal colors
+  --skip-welcome               skip welcome screen
+
+  --data-folder-name           name of folder to save installation infotmation
+  --sslinfo-file-name          name of ssl-info file
+  --dbinfo-file-name           name of file with database information
+  --install-php-extensions     full list of php extensions
+  --install-programs           full list of programs to install
+  --enable-apt-universe        enable universe repository (Ubuntu only)
+
+  --install-webmin             select if you wish to install webmin
+  --webmin-port                specify webmin port
+  --webmin-ssl                 webmin ssl mode (true/false)
+  --install-imagemagick        select if you want to install Image magick
+
+  --hostname                   specify system hostname
+  --rootpass                   specify root user password
+  --unixuser                   specify name of sudo user
+  --unixpass                   choose password for "unixuser"
+  --mysqlrpass                 set password for mysql root
+  --email                      specify server admin email address
+  --server-type                specify web server type (Apache/Nginx)
+  --ssl-install                install SSL certificate
+  --ssl-install-redirect       set to "true" if you want to redirect to https
+'
