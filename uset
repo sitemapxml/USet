@@ -22,21 +22,9 @@ else
 fi
 
 # Load definied language and if file does not exist revert to en.txt
-if [ -f "languages/$conf_language.txt" ]; then
-  source "languages/$conf_language.txt"
-else
-  source 'languages/en.txt'
-fi
-if [ -f "languages/welcome/$conf_language.txt" ]; then
-  source "languages/welcome/$conf_language.txt"
-else
-  source 'languages/welcome/en.txt'
-fi
-if [ -f "languages/help/$conf_language.txt" ]; then
-  source "languages/help/$conf_language.txt"
-else
-  source 'languages/help/en.txt'
-fi
+[ -f "languages/$conf_language.txt" ] && source "languages/$conf_language.txt" || source 'languages/en.txt'
+[ -f "languages/welcome/$conf_language.txt" ] && source "languages/welcome/$conf_language.txt" || source 'languages/welcome/en.txt'
+[ -f "languages/help/$conf_language.txt" ] && source "languages/help/$conf_language.txt" || source 'languages/help/en.txt'
 
 # Load functions
 source 'includes/functions.inc.sh'
@@ -49,21 +37,13 @@ case "$1" in
 esac
 
 # Turn output text coloring On or Off
-if [ "$conf_disable_colors" = "true" ]; then
-  fn_output_coloring_off
-else
-  fn_output_coloring_on
-fi
+[ "$conf_disable_colors" = "true" ] && fn_output_coloring_off || fn_output_coloring_on
 
 # Gives execute rights to uninstall script
 chmod +x 'tools/uninstall'
 
-if [ "$conf_skip_welcome_screen" = "true" ]; then
-  :
-else
-  # Welcome screen!
-  whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65 || echo "$lang_welcome"
-fi
+# Show welcome screen
+[ ! "$conf_skip_welcome_screen" = "true" ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
 
 # Input data
 [ -n "$hostname" ] && printf "hostname already set to ${YELLOW}$hostname${NC}, skipping user input...\n" || fn_input_hostname
@@ -80,15 +60,11 @@ fn_install
 # Install SSL Certificate
 fn_install_ssl
 
-# Install Adminer
+# Install Adminer, enable UFW and create password backup file
 [ "$conf_install_adminer" = 'true' ] && fn_install_adminer
-# UFW firewall
 [ "$conf_enable_ufw" = 'true' ] && fn_enable_ufw
-# Creating password backup file
 [ "$conf_create_pass_backup" = 'true' ] && fn_create_pass_backup
 
-# Post-installation messages
+# Show post-installation message and delete history
 fn_msg_completed
-
-# Deleting bash and mysql history
 fn_delete_history
