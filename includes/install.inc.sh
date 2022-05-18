@@ -159,7 +159,7 @@ fn_install () {
   echo -e ${GREEN}"$lang_password_is_updated"${NC}
 
   # Setting up password for mysql root
-  mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mysqlrpass';"
+  mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mysqlrpass'; FLUSH PRIVILEGES;"
 
   # Creating directory for saving output files
   mkdir $conf_data_folder_name
