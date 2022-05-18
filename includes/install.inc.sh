@@ -221,7 +221,7 @@ fn_make_db () {
   # Preparing database user name and password
   database_password=$( date +%s | sha256sum | base64 | head -c 32 )
   db_name=$( echo $hostname | sed 's/\./_/g' )
-  
+
   if [ "$mysqld_version" -ge "8" ]; then
     mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON $db_name.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
   else
@@ -297,23 +297,14 @@ fn_msg_completed () {
   echo -e "/var/www/${GREEN}$hostname${NC}/html"
   echo
 
-  case $backup_file_confirm in
-  	[Yy][Ee][Ss]|[Yy])
-      echo -e "$lang_to_see_installation_data_copy_following_command"
-      echo -e ${WHITE}"nano" $conf_data_folder_name"/"$conf_data_file_name${NC}
-      echo
-  	;;
-  	[Nn][Oo]|[Nn])
-  	;;
-  esac
+if [ "$conf_create_pass_backup" = true ]; then
+  echo -e "$lang_to_see_installation_data_copy_following_command"
+  echo -e ${WHITE}"nano" $conf_data_folder_name"/"$conf_data_file_name${NC}
+fi
 
-  case $ssl_install in
-  	[Yy][Ee][Ss]|[Yy])
-      echo -e "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$email${NC}"
-      echo
-  	;;
-  	[Nn][Oo]|[Nn])
-      echo -e "$lang_your_email_address_is ${GREEN}$email${NC}"
-  	;;
-  esac
+if [ "$ssl_install" = true ]; then
+  echo -e "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$email${NC}"
+else
+  echo -e "$lang_your_email_address_is ${GREEN}$email${NC}"
+fi
 }
