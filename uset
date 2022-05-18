@@ -34,6 +34,8 @@ source 'includes/install.inc.sh'
 case "$1" in
   -h) printf "$lang_help" && exit 1 ;;
   --help) printf "$lang_help" && exit 1 ;;
+  -v) printf "USet version 3.0.0\n" && exit 1 ;;
+  --version) printf "USet version 3.0.0\n" && exit 1 ;;
 esac
 
 # Turn output text coloring On or Off
