@@ -6,6 +6,7 @@ conf_data_folder_name='.data'
 conf_data_file_name='data.txt'
 conf_ssl_info_file_name='ssl-info.txt'
 conf_db_info_file_name='db-info.txt'
+conf_logname='installation-completed.txt'
 
 # Apperiance
 conf_disable_colors='false'

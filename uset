@@ -68,5 +68,5 @@ fn_install_ssl
 [ "$conf_create_pass_backup" = 'true' ] && fn_create_pass_backup
 
 # Show post-installation message and delete history
-fn_msg_completed
+fn_msg_completed | fn_write_log $conf_logname
 fn_delete_history

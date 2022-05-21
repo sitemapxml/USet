@@ -23,9 +23,9 @@ fn_output_coloring_on () {
 
 fn_insert_line () { printf '=%.0s' {1..70} && printf '\n'; }
 
-fn_write_log () { tee -a $logname; }
+fn_write_log () { tee -a $1; }
 
 fn_delete_history () {
   cat /dev/null > ~/.mysql_history
-  cat /dev/null > ~/.bash_history && history -c
+  cat /dev/null > ~/.bash_history ; history -c
 }
