@@ -32,10 +32,10 @@ source 'includes/input.inc.sh'
 source 'includes/install.inc.sh'
 
 case "$1" in
-  -h) printf "$lang_help" && exit 1 ;;
-  --help) printf "$lang_help" && exit 1 ;;
-  -v) printf "USet version 3.0.0\n" && exit 1 ;;
-  --version) printf "USet version 3.0.0\n" && exit 1 ;;
+  -h) printf "$lang_help" && exit 0 ;;
+  --help) printf "$lang_help" && exit 0 ;;
+  -v) printf "USet version 3.0.0\n" && exit 0 ;;
+  --version) printf "USet version 3.0.0\n" && exit 0 ;;
 esac
 
 # Turn output text coloring On or Off
@@ -43,6 +43,8 @@ esac
 
 # Gives execute rights to uninstall script
 chmod +x 'tools/uninstall'
+
+[ $UID -ne 0 ] && echo "This script must be run as root." && exit 1
 
 # Show welcome screen
 [ ! "$conf_skip_welcome_screen" = "true" ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
