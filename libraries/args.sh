@@ -1,5 +1,3 @@
-#!/bin/bash
-#
 # Args
 # Simple way for get arguments in your bash script
 # https://github.com/joubertredrat/bash-args
