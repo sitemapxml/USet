@@ -17,7 +17,6 @@ conf_skip_welcome_screen='false'
 # Installation settings
 conf_php_extension_list='php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl'
 conf_helper_program_list='zip unzip tree locate net-tools'
-conf_add_apt_repository_universe='false'
 
 # Webmin settings
 conf_webmin_install='true'

@@ -11,7 +11,6 @@ Available arguments:
   --dbinfo-file-name           name of file with database information
   --install-php-extensions     full list of php extensions
   --install-programs           full list of programs to install
-  --enable-apt-universe        enable universe repository (Ubuntu only)
 
   --install-webmin             select if you wish to install webmin
   --webmin-port                specify webmin port

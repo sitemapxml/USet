@@ -55,7 +55,6 @@ chmod +x 'tools/uninstall'
 
 # Main installation process
 fn_install_continue_msg && fn_update
-[ "$conf_add_apt_repository_universe" = 'yes' ] && fn_enable_universe
 [ "$web_server" = 'apache' ] && fn_install_apache
 [ "$web_server" ! = 'apache' ] && fn_install_nginx
 fn_check_php_version && fn_enable_fpm

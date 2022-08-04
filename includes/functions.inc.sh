@@ -23,6 +23,8 @@ fn_output_coloring_on () {
 
 fn_insert_line () { printf '=%.0s' {1..70} && printf '\n'; }
 
+fn_create_datadir () { mkdir "$conf_data_folder_name"; }
+
 fn_write_log () { tee -a $1; }
 
 fn_delete_history () {

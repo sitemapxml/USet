@@ -11,7 +11,6 @@ conf_db_info_file_name=$(get_value "dbinfo-file-name" "$@")
 
 conf_php_extension_list=$(get_value "install-php-extensions" "$@")
 conf_helper_program_list=$(get_value "install-programs" "$@")
-conf_add_apt_repository_universe=$(get_value "enable-apt-universe" "$@")
 
 conf_webmin_install=$(get_value "install-webmin" "$@")
 conf_webmin_port=$(get_value "webmin-port" "$@")

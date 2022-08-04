@@ -13,20 +13,6 @@ fn_update () {
   apt-get update
 }
 
-# Adding main repository if not added
-fn_enable_main () {
-  echo -e ${YELLOW}"$lang_adding_repositories"${NC}
-  add-apt-repository main
-}
-
-# Adding universe repository - disabled by default
-# Install software-properties-common if not installed
-fn_enable_universe () {
-  apt-get install software-properties-common apt-transport-https -y
-  add-apt-repository universe
-  apt-get update
-}
-
 fn_install_nginx () {
   echo -e ${YELLOW}"$lang_installing_nginx_php_fpm"${NC}
   sleep 0.5s
@@ -170,9 +156,6 @@ fn_set_rootpass () {
 fn_set_mysql_rootpass () {
   mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mysqlrpass'; FLUSH PRIVILEGES;"
 }
-
-# Creating directory for saving output files
-#mkdir $conf_data_folder_name
 
 fn_install_ssl () {
   echo -e ${YELLOW}"$lang_install_step_1"${NC}
