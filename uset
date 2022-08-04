@@ -59,7 +59,23 @@ chmod +x 'tools/uninstall'
 [ -n "$web_server" ] && printf "web_server already set to ${YELLOW}$web_server${NC}, skipping user input...\n" || fn_input_server_type
 
 # Main installation process
-fn_install
+[ "$skip_interaction" != 'true' ] && fn_install_continue_msg && fn_update
+[ "$conf_add_apt_repository_universe" = 'true' ] && fn_enable_universe
+[ "$web_server" = 'apache' ] && fn_install_apache
+[ "$web_server" ! = 'apache' ] && fn_install_nginx
+fn_check_php_version && fn_enable_fpm
+fn_install_mysql && fn_mysql_check_version
+[ "$conf_install_imagemagick" = 'true' ] && fn_install_imagick
+[ "$conf_php_modify_default" = 'true' ] && fn_php_modify_default
+[ "$conf_webmin_install" = 'true' ] && fn_install_webmin
+[ "$web_server" = "apache" ] && fn_configure_apache
+[ "$web_server" = "nginx" ] && fn_configure_nginx
+[ "$conf_create_index_html" = "true" ] && fn_create_index
+[ "$conf_create_info_php" = 'true' ] && fn_create_info
+
+fn_add_user
+fn_set_rootpass
+fn_set_mysql_rootpass
 
 # Install SSL Certificate
 fn_install_ssl

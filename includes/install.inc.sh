@@ -1,70 +1,77 @@
-fn_install () {
-  # Beginning of installation
-  echo
+# Beginning of installation
+fn_install_continue_msg () {
   echo -e ${YELLOW}"$lang_necessary_information_is_collected"${NC}
   read -p "$lang_press_enter_to_continue"
   echo -e "$lang_beginning"
-  sleep 1s
+  sleep 0.5s
+}
 
-  # Updating repository lists
+# Updating repository lists
+fn_update () {
   echo -e ${YELLOW}"$lang_updating_package_lists"${NC}
-  sleep 1s
+  sleep 0.5s
   apt-get update
+}
 
-  # Adding main repository if not added
+# Adding main repository if not added
+fn_enable_main () {
   echo -e ${YELLOW}"$lang_adding_repositories"${NC}
   add-apt-repository main
+}
 
-  # Adding universe repository - disabled by default
-  if [ "$conf_add_apt_repository_universe" = "true" ]; then
-      add-apt-repository universe
-  fi
-
-  apt-get update
-
-  # Install software-properties-common if not installed
-  # make sure that apt-transport-https is installed
+# Adding universe repository - disabled by default
+# Install software-properties-common if not installed
+fn_enable_universe () {
   apt-get install software-properties-common apt-transport-https -y
+  add-apt-repository universe
+  apt-get update
+}
 
-  if [ "$web_server" = "apache" ]; then
-    echo -e ${YELLOW}"$lang_installing_apache2_php"${NC}
-    sleep 1s
-    apt-get install apache2 php -y
-    systemctl enable apache2
-  else
-    echo -e ${YELLOW}"$lang_installing_nginx_php_fpm"${NC}
-    sleep 1s
-    apt-get install nginx php-fpm -y
+fn_install_nginx () {
+  echo -e ${YELLOW}"$lang_installing_nginx_php_fpm"${NC}
+  sleep 0.5s
+  apt-get install nginx php-fpm -y
+}
 
-    # Check for php version
-    php_version=$( php -r 'echo phpversion();' | head -c 3 )
-    fpm_version="php$php_version-fpm"
+# Check for php version
+fn_check_php_version () {
+  php_version=$( php -r 'echo phpversion();' | head -c 3 )
+  fpm_version="php$php_version-fpm"
+}
 
-    systemctl enable nginx $fpm_version
-  fi
+fn_enable_fpm () {
+  systemctl enable nginx $fpm_version
+}
 
-  # MySQL installation
+# MySQL installation
+fn_install_mysql () {
   apt-get install mysql-server -y
   systemctl enable mysql
+}
 
-  # Installing php extensions
+# Check mysql version
+fn_mysql_check_version () {
+  mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
+}
+
+# Installing php extensions
+fn_install_php_ext () {
   echo -e ${YELLOW}"$lang_installing_php_extensions"${NC}
-  sleep 1s
+  sleep 0.5s
   apt-get install $conf_php_extension_list -y
+}
 
-  # Small helper programs zip, unzip i tree
+# Install utilities
+fn_install_utilities () {
   apt-get install $conf_helper_program_list -y
+}
 
-  # Installing imagick - Necessary for Webmin image preview to work
-  if [ "$conf_install_imagemagick" = "true" ]; then
-    apt-get install imagemagick -y
-  else
-    echo -e "$lang_skipping_imagemagick"
-  fi
+# Install imagick - Necessary for Webmin image preview to work
+fn_install_imagick () {
+  apt-get install imagemagick -y
+}
 
-  # Check for php version
-  php_version=$( php -r 'echo phpversion();' | head -c 3 )
-
+fn_php_modify_default () {
   # Some basic php configuration
   if [ "$web_server" = "apache" ]; then
     sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/"$php_version"/apache2/php.ini
@@ -79,110 +86,103 @@ fn_install () {
     sed -i 's/# server_tokens off;/server_tokens off;/g' /etc/nginx/nginx.conf
     systemctl restart nginx $fpm_version
   fi
+}
 
-  # Setting hostname according to entered domain name
-  hostnamectl set-hostname "$hostname"
+# Setting hostname according to entered domain name
+hostnamectl set-hostname "$hostname"
 
-  if [ "$conf_webmin_install" = "false" ]; then
-    echo -e "$lang_skipping_webmin"
-  else
-    # Webmin installation
-    echo -e ${YELLOW}"$lang_installing_webmin"${NC}
-    sleep 1s
-    echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
-    apt-key add ./resources/jcameron-key.asc
-    apt-get update
-    apt-get --yes install webmin
-    sed -i "s/port=10000/port=$conf_webmin_port/g" /etc/webmin/miniserv.conf
-    /etc/init.d/webmin restart
-  fi
+# Webmin installation
+fn_install_webmin () {
+  echo -e ${YELLOW}"$lang_installing_webmin"${NC}
+  sleep 0.5s
+  echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
+  apt-key add ./resources/jcameron-key.asc
+  apt-get update
+  apt-get --yes install webmin
+  sed -i "s/port=10000/port=$conf_webmin_port/g" /etc/webmin/miniserv.conf
+  /etc/init.d/webmin restart
+}
 
+# Configure apache vhost
+fn_configure_apache () {
+  echo -e ${YELLOW}"$lang_configuring_apache"${NC}
+  sleep 0.5s
   rm -rf /var/www/html
   mkdir /var/www/"$hostname"
+  cp ./resources/apache.conf /etc/apache2/sites-available/"$hostname".conf
+  sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
+  sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
+  a2dissite 000-default
+  rm /etc/apache2/sites-available/000-default.conf
+  a2ensite "$hostname"
+  a2enmod rewrite
+  systemctl restart apache2
+}
 
-  # Configuring apache
-  if [ "$web_server" = "apache" ]; then
-    echo -e ${YELLOW}"$lang_configuring_apache"${NC}
-    sleep 1s
-    cp ./resources/apache.conf /etc/apache2/sites-available/"$hostname".conf
-    sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
-    sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
-    a2dissite 000-default
-    rm /etc/apache2/sites-available/000-default.conf
-    a2ensite "$hostname"
-    a2enmod rewrite
-    systemctl restart apache2
-  else
-    echo -e ${YELLOW}"$lang_configuring_nginx"${NC}
-    sleep 1s
-    cp ./resources/nginx.conf /etc/nginx/sites-available/"$hostname".conf
-    sed -i "s/sn_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
-    sed -i "s/dir_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
-    ln /etc/nginx/sites-available/"$hostname".conf /etc/nginx/sites-enabled/"$hostname".conf
-    rm /etc/nginx/sites-available/default
-    rm /etc/nginx/sites-enabled/default
-    systemctl restart nginx
-  fi
+fn_configure_nginx () {
+  echo -e ${YELLOW}"$lang_configuring_nginx"${NC}
+  sleep 0.5s
+  rm -rf /var/www/html
+  mkdir /var/www/"$hostname"
+  cp ./resources/nginx.conf /etc/nginx/sites-available/"$hostname".conf
+  sed -i "s/sn_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
+  sed -i "s/dir_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
+  ln /etc/nginx/sites-available/"$hostname".conf /etc/nginx/sites-enabled/"$hostname".conf
+  rm /etc/nginx/sites-available/default
+  rm /etc/nginx/sites-enabled/default
+  systemctl restart nginx
+}
 
-  # Make index.html and info.php
+# Make index.html and info.php
+fn_create_index () {
   mkdir /var/www/"$hostname"/html
-  if [ "$conf_create_index_html" = "false" ]; then
-    echo "$lang_skipping_creation_of_index_html"
-  else
-    cp ./resources/index.html /var/www/"$hostname"/html/index.html
-    sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
-    sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
+  cp ./resources/index.html /var/www/"$hostname"/html/index.html
+  sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
+  sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
+  echo -e "$lang_index_html_configured"
+}
 
-    echo -e "$lang_index_html_configured"
-  fi
+# Create info.php
+fn_create_info () {
+  echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
+  echo "$lang_info_php_configured"
+}
 
-  # Create info.php
-  if [ "$conf_create_info_php" = 'false' ]; then
-    echo "$lang_skipping_creation_of_info_php"
-  else
-    echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
-    echo "$lang_info_php_configured"
-  fi
-
-  # Add UNIX user
+# Add UNIX user
+fn_add_user () {
   echo -e ${YELLOW}"$lang_adding_unix_user"${NC}
-  sleep 1s
+  sleep 0.5s
   adduser "$unixuser" --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
   echo -e "$unixuser:$unixpass" | chpasswd
   echo -e "$unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
   echo -e ${GREEN}"$lang_user_user $unixuser $lang_is_created"${NC}
+}
 
-  # Setting up root password
+# Setting up root password
+fn_set_rootpass () {
   echo -e ${YELLOW}"$lang_setting_up_root_password"${NC}
-  sleep 1s
+  sleep 0.5s
   echo -e "root:$rootpass" | chpasswd
   echo -e ${GREEN}"$lang_password_is_updated"${NC}
-
-  # Setting up password for mysql root
-  mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mysqlrpass'; FLUSH PRIVILEGES;"
-
-  # Creating directory for saving output files
-  mkdir $conf_data_folder_name
 }
+
+# Setting up password for mysql root
+fn_set_mysql_rootpass () {
+  mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mysqlrpass'; FLUSH PRIVILEGES;"
+}
+
+# Creating directory for saving output files
+mkdir $conf_data_folder_name
 
 fn_install_ssl () {
   echo -e ${YELLOW}"$lang_install_step_1"${NC}
 
   # Redirect to https option
-  if  [ "$ssl_install_redirect" = 'true' ]; then
-    https_redirect="redirect"
-  else
-    https_redirect="no-redirect"
-  fi
+  [ "$ssl_install_redirect" = 'true' ] && local https_redirect="redirect" || local https_redirect="no-redirect"
 
-  echo -e "$lang_installing_ssl_certificate"
-  sleep 1s
   # Certbot installation
-  if [ "$web_server" = "apache" ]; then
-    apt-get install python3-certbot-apache -y
-  else
-    apt-get install python3-certbot-nginx -y
-  fi
+  echo -e "$lang_installing_ssl_certificate" && sleep 0.5s
+  [ "$web_server" = "apache" ] && apt-get install python3-certbot-apache -y || apt-get install python3-certbot-nginx -y
 
   # Let's encrypt SSL installation
   certbot --"$web_server" --non-interactive --agree-tos --domains "$hostname" --email "$email" --"$https_redirect"
@@ -204,7 +204,7 @@ fn_install_ssl () {
   else
     echo -e ${RED}"$lang_ssl_install_error"${NC}
     ssl_error='1'
-    sleep 1s
+    sleep 0.5s
     fn_insert_line >> $conf_data_folder_name/$conf_ssl_info_file_name
     echo -е "$lang_ssl_certificate_not_installed"  >> $conf_data_folder_name/$conf_ssl_info_file_name
     echo -e "$lang_check_for_errors_and_try_again" >> $conf_data_folder_name/$conf_ssl_info_file_name
@@ -236,7 +236,7 @@ fn_make_db () {
 
 fn_install_adminer () {
     echo "$lang_installing_adminer"
-    sleep 1s
+    sleep 0.5s
     wget "https://www.adminer.org/latest${conf_adminer_build}.php"
     cp "latest${conf_adminer_build}.php" /var/www/"$hostname"/html/adminer.php
     echo ${GREEN}"$lang_adminer_installed_successfully"${NC}
@@ -260,7 +260,7 @@ fn_enable_ufw () {
 
 fn_create_pass_backup () {
   echo -e "$lang_copying_passwords"
-  sleep 1s
+  sleep 0.5s
   fn_insert_line > $conf_data_folder_name/$conf_data_file_name
   echo -e "$lang_access_parameters" >> $conf_data_folder_name/$conf_data_file_name
   fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
