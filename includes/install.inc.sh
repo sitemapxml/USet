@@ -89,7 +89,7 @@ fn_php_modify_default () {
 }
 
 # Setting hostname according to entered domain name
-hostnamectl set-hostname "$hostname"
+#hostnamectl set-hostname "$hostname"
 
 # Webmin installation
 fn_install_webmin () {
@@ -172,13 +172,13 @@ fn_set_mysql_rootpass () {
 }
 
 # Creating directory for saving output files
-mkdir $conf_data_folder_name
+#mkdir $conf_data_folder_name
 
 fn_install_ssl () {
   echo -e ${YELLOW}"$lang_install_step_1"${NC}
 
   # Redirect to https option
-  [ "$ssl_install_redirect" = 'true' ] && local https_redirect="redirect" || local https_redirect="no-redirect"
+  [ "$ssl_install_redirect" = 'yes' ] && local https_redirect="redirect" || local https_redirect="no-redirect"
 
   # Certbot installation
   echo -e "$lang_installing_ssl_certificate" && sleep 0.5s
