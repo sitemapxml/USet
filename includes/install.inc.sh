@@ -86,7 +86,7 @@ fn_install_webmin () {
   apt-get update
   apt-get --yes install webmin
   sed -i "s/port=10000/port=$conf_webmin_port/g" /etc/webmin/miniserv.conf
-  /etc/init.d/webmin restart
+  systemctl restart webmin
 }
 
 # Configure apache vhost
@@ -178,7 +178,7 @@ fn_install_ssl () {
     sed -i '/keyfile/d' /etc/webmin/miniserv.conf
     echo -e 'keyfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''privkey.pem' >> /etc/webmin/miniserv.conf
     echo -e 'certfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''fullchain.pem' >> /etc/webmin/miniserv.conf
-    /etc/init.d/webmin restart
+    systemctl restart webmin
 
     # Installed SSL certificate pathes
     echo -e "$lang_ssl_certificate_data" > $conf_data_folder_name/$conf_ssl_info_file_name
