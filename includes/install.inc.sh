@@ -13,31 +13,29 @@ fn_update () {
   apt-get update
 }
 
+fn_install_apache () {
+  echo -e ${YELLOW}"$lang_installing_apache2_php"${NC}
+  sleep 0.5s
+  apt-get install apache2 -y
+}
+
 fn_install_nginx () {
   echo -e ${YELLOW}"$lang_installing_nginx_php_fpm"${NC}
   sleep 0.5s
   apt-get install nginx php-fpm -y
 }
 
-# Check for php version
-fn_check_php_version () {
+fn_enable_fpm () {
   php_version=$( php -r 'echo phpversion();' | head -c 3 )
   fpm_version="php$php_version-fpm"
-}
-
-fn_enable_fpm () {
   systemctl enable nginx $fpm_version
 }
 
-# MySQL installation
+# Install MySQL and set root password
 fn_install_mysql () {
   apt-get install mysql-server -y
   systemctl enable mysql
-}
-
-# Check mysql version
-fn_mysql_check_version () {
-  mysqld_version=$( mysqld -V | awk '{print $3}' | head -c 1 )
+  mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mysqlrpass'; FLUSH PRIVILEGES;"
 }
 
 # Installing php extensions
@@ -93,13 +91,13 @@ fn_install_webmin () {
 fn_configure_apache () {
   echo -e ${YELLOW}"$lang_configuring_apache"${NC}
   sleep 0.5s
-  rm -rf /var/www/html
-  mkdir /var/www/"$hostname"
-  cp ./resources/apache.conf /etc/apache2/sites-available/"$hostname".conf
-  sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
-  sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/"$hostname".conf
+  rm -rf '/var/www/html'
+  mkdir -p "/var/www/$hostname"
+  cp 'resources/apache.conf' "/etc/apache2/sites-available/$hostname.conf"
+  sed -i "s/sn_default/$hostname/g" "/etc/apache2/sites-available/$hostname.conf"
+  sed -i "s/dir_default/$hostname/g" "/etc/apache2/sites-available/$hostname.conf"
   a2dissite 000-default
-  rm /etc/apache2/sites-available/000-default.conf
+  rm '/etc/apache2/sites-available/000-default.conf'
   a2ensite "$hostname"
   a2enmod rewrite
   systemctl restart apache2
@@ -108,29 +106,29 @@ fn_configure_apache () {
 fn_configure_nginx () {
   echo -e ${YELLOW}"$lang_configuring_nginx"${NC}
   sleep 0.5s
-  rm -rf /var/www/html
-  mkdir /var/www/"$hostname"
-  cp ./resources/nginx.conf /etc/nginx/sites-available/"$hostname".conf
-  sed -i "s/sn_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
-  sed -i "s/dir_default/$hostname/g" /etc/nginx/sites-available/"$hostname".conf
-  ln /etc/nginx/sites-available/"$hostname".conf /etc/nginx/sites-enabled/"$hostname".conf
-  rm /etc/nginx/sites-available/default
-  rm /etc/nginx/sites-enabled/default
+  rm -rf '/var/www/html'
+  mkdir -p "/var/www/$hostname"
+  cp 'resources/nginx.conf' "/etc/nginx/sites-available/$hostname.conf"
+  sed -i "s/sn_default/$hostname/g" "/etc/nginx/sites-available/$hostname.conf"
+  sed -i "s/dir_default/$hostname/g" "/etc/nginx/sites-available/$hostname.conf"
+  ln "/etc/nginx/sites-available/$hostname.conf" "/etc/nginx/sites-enabled/$hostname.conf"
+  rm '/etc/nginx/sites-available/default'
+  rm '/etc/nginx/sites-enabled/default'
   systemctl restart nginx
 }
 
 # Make index.html and info.php
 fn_create_index () {
-  mkdir /var/www/"$hostname"/html
-  cp ./resources/index.html /var/www/"$hostname"/html/index.html
-  sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" /var/www/"$hostname"/html/index.html
-  sed -i "s/webmin_hostname/$hostname/g" /var/www/"$hostname"/html/index.html
+  mkdir -p "/var/www/$hostname/html"
+  cp 'resources/index.html' "/var/www/$hostname/html/index.html"
+  sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" "/var/www/$hostname/html/index.html"
+  sed -i "s/webmin_hostname/$hostname/g" "/var/www/$hostname/html/index.html"
   echo -e "$lang_index_html_configured"
 }
 
 # Create info.php
 fn_create_info () {
-  echo "<?php phpinfo(); ?>" > /var/www/"$hostname"/html/info.php
+  echo "<?php phpinfo(); ?>" > "/var/www/$hostname/html/info.php"
   echo "$lang_info_php_configured"
 }
 
@@ -150,11 +148,6 @@ fn_set_rootpass () {
   sleep 0.5s
   echo -e "root:$rootpass" | chpasswd
   echo -e ${GREEN}"$lang_password_is_updated"${NC}
-}
-
-# Setting up password for mysql root
-fn_set_mysql_rootpass () {
-  mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mysqlrpass'; FLUSH PRIVILEGES;"
 }
 
 fn_install_ssl () {

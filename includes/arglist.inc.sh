@@ -12,6 +12,8 @@ conf_db_info_file_name=$(get_value "dbinfo-file-name" "$@")
 conf_php_extension_list=$(get_value "install-php-extensions" "$@")
 conf_helper_program_list=$(get_value "install-programs" "$@")
 
+conf_install_mysql=$(get_value "install-mysql" "$@")
+
 conf_webmin_install=$(get_value "install-webmin" "$@")
 conf_webmin_port=$(get_value "webmin-port" "$@")
 conf_webmin_ssl_mode=$(get_value "webmin-ssl" "$@")
@@ -33,4 +35,4 @@ email=$(get_value "email" "$@")
 web_server=$(get_value "server-type" "$@")
 
 ssl_install=$(get_value "ssl-install" "$@")
-ssl_install_redirect=$(get_value "ssl-install-redirect" "$@")
+ssl_install_redirect=$(get_value "ssl-redirect" "$@")

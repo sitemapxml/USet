@@ -36,13 +36,10 @@ esac
 # Turn output text coloring On or Off
 [ "$conf_disable_colors" = 'yes' ] && fn_output_coloring_off || fn_output_coloring_on
 
-# Gives execute rights to uninstall script
-chmod +x 'tools/uninstall'
-
 [ $UID -ne 0 ] && echo "This script must be run as root." && exit 1
 
 # Show welcome screen
-[ ! "$conf_skip_welcome_screen" = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
+[ "$conf_skip_welcome_screen" ! = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
 
 # Input data
 [ -n "$hostname" ] && printf "hostname already set to ${YELLOW}$hostname${NC}, skipping user input...\n" || fn_input_hostname
@@ -54,25 +51,26 @@ chmod +x 'tools/uninstall'
 [ -n "$web_server" ] && printf "web_server already set to ${YELLOW}$web_server${NC}, skipping user input...\n" || fn_input_server_type
 
 # Main installation process
-fn_install_continue_msg && fn_update
-[ "$web_server" = 'apache' ] && fn_install_apache
-[ "$web_server" = 'nginx' ] && fn_install_nginx
-fn_check_php_version && fn_enable_fpm
-fn_install_mysql && fn_mysql_check_version
+[ "$skip_interaction" ! = 'yes' ] && fn_install_continue_msg
+
+fn_update
+
+[ "$web_server" = 'apache' ] && fn_install_apache && fn_configure_php
+[ "$web_server" = 'nginx' ] && fn_install_nginx && fn_enable_fpm
+[ "$conf_install_mysql" = 'yes' ] && fn_install_mysql
 [ "$conf_install_imagemagick" = 'yes' ] && fn_install_imagick
 [ "$conf_php_modify_default" = 'yes' ] && fn_php_modify_default
 [ "$conf_webmin_install" = 'yes' ] && fn_install_webmin
-[ "$web_server" = "apache" ] && fn_configure_apache
-[ "$web_server" = "nginx" ] && fn_configure_nginx
+[ "$web_server" = 'apache' ] && fn_configure_apache
+[ "$web_server" = 'nginx' ] && fn_configure_nginx
 [ "$conf_create_index_html" = 'yes' ] && fn_create_index
 [ "$conf_create_info_php" = 'yes' ] && fn_create_info
 
 fn_add_user
 fn_set_rootpass
-fn_set_mysql_rootpass
 
 # Install SSL Certificate
-fn_install_ssl
+[ "$ssl_install" = 'yes' ] && fn_install_ssl
 
 # Install Adminer, enable UFW and create password backup file
 [ "$conf_install_adminer" = 'yes' ] && fn_install_adminer
