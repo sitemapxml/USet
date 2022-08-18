@@ -56,7 +56,7 @@ chmod +x 'tools/uninstall'
 # Main installation process
 fn_install_continue_msg && fn_update
 [ "$web_server" = 'apache' ] && fn_install_apache
-[ "$web_server" ! = 'apache' ] && fn_install_nginx
+[ "$web_server" = 'nginx' ] && fn_install_nginx
 fn_check_php_version && fn_enable_fpm
 fn_install_mysql && fn_mysql_check_version
 [ "$conf_install_imagemagick" = 'yes' ] && fn_install_imagick

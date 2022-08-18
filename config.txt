@@ -9,24 +9,24 @@ conf_db_info_file_name='db-info.txt'
 conf_logname='installation-completed.txt'
 
 # Apperiance
-conf_disable_colors='false'
+conf_disable_colors='no'
 
 # Welcome message
-conf_skip_welcome_screen='false'
+conf_skip_welcome_screen='no'
 
 # Installation settings
 conf_php_extension_list='php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl'
 conf_helper_program_list='zip unzip tree locate net-tools'
 
 # Webmin settings
-conf_webmin_install='true'
+conf_webmin_install='yes'
 conf_webmin_port='3000'
-conf_webmin_ssl_mode='true'
-conf_install_imagemagick='true'
+conf_webmin_ssl_mode='yes'
+conf_install_imagemagick='yes'
 
 # Create sample page index.html and info.php
-conf_create_index_html='true'
-conf_create_info_php='true'
+conf_create_index_html='yes'
+conf_create_info_php='yes'
 
 # Adminer build variant
 # Possible values:
