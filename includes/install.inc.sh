@@ -227,7 +227,6 @@ fn_install_adminer () {
 }
 
 fn_enable_ufw () {
-    ufw --force enable
     ufw allow 'OpenSSH'
     ufw allow "$conf_webmin_port/tcp"
 
@@ -237,7 +236,7 @@ fn_enable_ufw () {
       ufw allow 'Nginx Full'
     fi
 
-    ufw reload
+    ufw --force enable && ufw reload
     echo -e ${GREEN}"$lang_port_protection_enabled"${NC}
 }
 
