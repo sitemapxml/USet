@@ -39,7 +39,7 @@ esac
 [ $UID -ne 0 ] && echo "This script must be run as root." && exit 1
 
 # Show welcome screen
-[ "$conf_skip_welcome_screen" ! = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
+[ ! "$conf_skip_welcome_screen" = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
 
 # Input data
 [ -n "$hostname" ] && printf "hostname already set to ${YELLOW}$hostname${NC}, skipping user input...\n" || fn_input_hostname
@@ -51,7 +51,7 @@ esac
 [ -n "$web_server" ] && printf "web_server already set to ${YELLOW}$web_server${NC}, skipping user input...\n" || fn_input_server_type
 
 # Main installation process
-[ "$skip_interaction" ! = 'yes' ] && fn_install_continue_msg
+[ ! "$skip_interaction" = 'yes' ] && fn_install_continue_msg
 
 fn_update
 
