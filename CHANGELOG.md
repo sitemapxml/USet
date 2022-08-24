@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed files
 - main script `USet`
-- `config.txt`: added options `conf_create_index_html` and `conf_create_info_php`
+- `config.txt`: added options `conf_create_index` and `conf_create_phpinfo`
 - language files - added folowing translation strings:
   - lang_index_html_configured
   - lang_skipping_creation_of_index_html

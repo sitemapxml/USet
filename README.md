@@ -57,7 +57,7 @@ If you want to fine-tune installation options, you can edit `config.txt`
 <br>Configuration file must be edited before running the script, otherwise it would not take effect.
 
 If you use this script often, you probably don't want to see welcome screen.
-<br>Welcome screen can be turned off by setting `conf_skip_welcome_screen` to `true` in config file.
+<br>Welcome screen can be turned off by setting `conf_skip_welcome` to `true` in config file.
 
 Individual options will be documented in some of the future releases.
 

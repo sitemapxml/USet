@@ -13,7 +13,7 @@ conf_logname='installation-completed.txt'
 conf_disable_colors='no'
 
 # Welcome message
-conf_skip_welcome_screen='no'
+conf_skip_welcome='no'
 
 # Installation settings
 conf_php_extension_list='php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl'
@@ -30,8 +30,8 @@ conf_php_modify_default='yes'
 ssl_install='yes'
 
 # Create sample page index.html and info.php
-conf_create_index_html='yes'
-conf_create_info_php='yes'
+conf_create_index='yes'
+conf_create_phpinfo='yes'
 
 # Adminer settings
 conf_install_adminer='no'

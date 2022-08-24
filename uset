@@ -39,7 +39,7 @@ esac
 [ $UID -ne 0 ] && echo "This script must be run as root." && exit 1
 
 # Show welcome screen
-[ ! "$conf_skip_welcome_screen" = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
+[ ! "$conf_skip_welcome" = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
 
 # Input data
 [ -n "$hostname" ] && printf "hostname already set to ${YELLOW}$hostname${NC}, skipping user input...\n" || fn_input_hostname
@@ -63,8 +63,8 @@ fn_update
 [ "$conf_webmin_install" = 'yes' ] && fn_install_webmin
 [ "$web_server" = 'apache' ] && fn_configure_apache
 [ "$web_server" = 'nginx' ] && fn_configure_nginx
-[ "$conf_create_index_html" = 'yes' ] && fn_create_index
-[ "$conf_create_info_php" = 'yes' ] && fn_create_info
+[ "$conf_create_index" = 'yes' ] && fn_create_index
+[ "$conf_create_phpinfo" = 'yes' ] && fn_create_info
 
 fn_add_user
 fn_set_rootpass
