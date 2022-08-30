@@ -66,8 +66,7 @@ fn_update
 [ "$conf_create_index" = 'yes' ] && fn_create_index
 [ "$conf_create_phpinfo" = 'yes' ] && fn_create_info
 
-fn_add_user
-fn_set_rootpass
+fn_add_user && fn_set_rootpass
 
 # Install SSL Certificate
 [ "$ssl_install" = 'yes' ] && fn_install_ssl

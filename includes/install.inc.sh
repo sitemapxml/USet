@@ -119,8 +119,8 @@ fn_configure_nginx () {
 
 # Make index.html and info.php
 fn_create_index () {
-  mkdir -p "/var/www/$hostname/html"
-  cp 'resources/index.html' "/var/www/$hostname/html/index.html"
+  mkdir -vp "/var/www/$hostname/html"
+  cp -v 'resources/index.html' "/var/www/$hostname/html/index.html"
   sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" "/var/www/$hostname/html/index.html"
   sed -i "s/webmin_hostname/$hostname/g" "/var/www/$hostname/html/index.html"
   echo -e "$lang_index_html_configured"
