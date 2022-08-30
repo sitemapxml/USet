@@ -1,5 +1,5 @@
 lang_help='USAGE:
-  ./uset --arg1 --arg2
+  ./uset --arg1="value" --arg2 value
 
 Available arguments:
   --language                   choose preffered language

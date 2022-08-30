@@ -72,9 +72,6 @@ fn_php_modify_default () {
   fi
 }
 
-# Setting hostname according to entered domain name
-#hostnamectl set-hostname "$hostname"
-
 # Webmin installation
 fn_install_webmin () {
   echo -e ${YELLOW}"$lang_installing_webmin"${NC}
@@ -132,22 +129,23 @@ fn_create_info () {
   echo "$lang_info_php_configured"
 }
 
-# Add UNIX user
-fn_add_user () {
+fn_configure_system () {
+  # Setting hostname according to entered domain name
+  hostnamectl set-hostname "$hostname"
+
+  # Setting up root password
+  echo -e ${YELLOW}"$lang_setting_up_root_password"${NC}
+  sleep 0.5s
+  echo -e "root:$rootpass" | chpasswd
+  echo -e ${GREEN}"$lang_password_is_updated"${NC}
+
+  # Add UNIX user
   echo -e ${YELLOW}"$lang_adding_unix_user"${NC}
   sleep 0.5s
   adduser "$unixuser" --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
   echo -e "$unixuser:$unixpass" | chpasswd
   echo -e "$unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
   echo -e ${GREEN}"$lang_user_user $unixuser $lang_is_created"${NC}
-}
-
-# Setting up root password
-fn_set_rootpass () {
-  echo -e ${YELLOW}"$lang_setting_up_root_password"${NC}
-  sleep 0.5s
-  echo -e "root:$rootpass" | chpasswd
-  echo -e ${GREEN}"$lang_password_is_updated"${NC}
 }
 
 fn_install_ssl () {
@@ -221,13 +219,10 @@ fn_install_adminer () {
 
 fn_enable_ufw () {
     ufw allow 'OpenSSH'
-    ufw allow "$conf_webmin_port/tcp"
+    ufw allow '80/tcp'
+    ufw allow '443/tcp'
 
-    if [ "$web_server" = "apache" ]; then
-      ufw allow 'Apache Full'
-    else
-      ufw allow 'Nginx Full'
-    fi
+    [ "$conf_webmin_install" = 'yes' ] && ufw allow "$conf_webmin_port/tcp"
 
     ufw --force enable && ufw reload
     echo -e ${GREEN}"$lang_port_protection_enabled"${NC}
