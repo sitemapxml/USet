@@ -33,6 +33,7 @@ unixpass=$(get_value "unixpass" "$@")
 mysqlrpass=$(get_value "mysqlrpass" "$@")
 email=$(get_value "email" "$@")
 web_server=$(get_value "server-type" "$@")
+conf_install_modphp=$(get_value "install-modphp" "$@")
 
 ssl_install=$(get_value "ssl-install" "$@")
 ssl_install_redirect=$(get_value "ssl-redirect" "$@")

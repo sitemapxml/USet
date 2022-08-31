@@ -53,10 +53,10 @@ esac
 # Main installation process
 [ ! "$skip_interaction" = 'yes' ] && fn_install_continue_msg
 
-fn_update
+fn_update && fn_install_utilities
 
-[ "$web_server" = 'apache' ] && fn_install_apache && fn_configure_php
-[ "$web_server" = 'nginx' ] && fn_install_nginx && fn_enable_fpm
+[ "$web_server" = 'apache' ] && fn_install_apache && fn_install_php_apache
+[ "$web_server" = 'nginx' ] && fn_install_nginx && fn_install_php_nginx
 [ "$conf_install_mysql" = 'yes' ] && fn_install_mysql
 [ "$conf_install_imagemagick" = 'yes' ] && fn_install_imagick
 [ "$conf_php_modify_default" = 'yes' ] && fn_php_modify_default

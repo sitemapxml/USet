@@ -49,3 +49,6 @@ conf_enable_ufw='yes'
 
 # Password backup file
 conf_create_pass_backup='no'
+
+# Install mod_php
+conf_install_modphp='no'

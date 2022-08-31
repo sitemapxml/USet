@@ -9,26 +9,45 @@ fn_install_continue_msg () {
 # Updating repository lists
 fn_update () {
   echo -e ${YELLOW}"$lang_updating_package_lists"${NC}
-  sleep 0.5s
   apt-get update
 }
 
 fn_install_apache () {
   echo -e ${YELLOW}"$lang_installing_apache2_php"${NC}
-  sleep 0.5s
   apt-get install apache2 -y
+}
+
+fn_install_php_apache () {
+  if [ "$conf_install_modphp" = 'yes' ]; then
+    apt-get install php
+    php_version=$( php -r 'echo phpversion();' | head -c 3 )
+    a2enmod "php$php_version"
+    systemctl restart apache2
+    systemctl enable apache2
+  else
+    systemctl stop apache2
+    a2dismod mpm_prefork
+    a2enmod mpm_event
+    apt-get install php-fpm libapache2-mod-fcgid
+    php_version=$( php -r 'echo phpversion();' | head -c 3 )
+    a2enconf "php$php_version-fpm"
+    a2enmod proxy
+    a2enmod proxy_fcgi
+    systemctl restart apache2
+    systemctl enable apache2
+  fi
 }
 
 fn_install_nginx () {
   echo -e ${YELLOW}"$lang_installing_nginx_php_fpm"${NC}
-  sleep 0.5s
-  apt-get install nginx php-fpm -y
+  apt-get install nginx -y
+  systemctl enable nginx
 }
 
-fn_enable_fpm () {
+fn_install_php_nginx () {
+  systemctl install php-fpm
   php_version=$( php -r 'echo phpversion();' | head -c 3 )
-  fpm_version="php$php_version-fpm"
-  systemctl enable nginx $fpm_version
+  systemctl enable "php$php_version-fpm"
 }
 
 # Install MySQL and set root password
@@ -41,7 +60,6 @@ fn_install_mysql () {
 # Installing php extensions
 fn_install_php_ext () {
   echo -e ${YELLOW}"$lang_installing_php_extensions"${NC}
-  sleep 0.5s
   apt-get install $conf_php_extension_list -y
 }
 
@@ -75,7 +93,6 @@ fn_php_modify_default () {
 # Webmin installation
 fn_install_webmin () {
   echo -e ${YELLOW}"$lang_installing_webmin"${NC}
-  sleep 0.5s
   echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
   apt-key add ./resources/jcameron-key.asc
   apt-get update
@@ -87,7 +104,6 @@ fn_install_webmin () {
 # Configure apache vhost
 fn_configure_apache () {
   echo -e ${YELLOW}"$lang_configuring_apache"${NC}
-  sleep 0.5s
   rm -rf '/var/www/html'
   mkdir -p "/var/www/$hostname"
   cp 'resources/apache.conf' "/etc/apache2/sites-available/$hostname.conf"
@@ -102,7 +118,6 @@ fn_configure_apache () {
 
 fn_configure_nginx () {
   echo -e ${YELLOW}"$lang_configuring_nginx"${NC}
-  sleep 0.5s
   rm -rf '/var/www/html'
   mkdir -p "/var/www/$hostname"
   cp 'resources/nginx.conf' "/etc/nginx/sites-available/$hostname.conf"
@@ -135,13 +150,11 @@ fn_configure_system () {
 
   # Setting up root password
   echo -e ${YELLOW}"$lang_setting_up_root_password"${NC}
-  sleep 0.5s
   echo -e "root:$rootpass" | chpasswd
   echo -e ${GREEN}"$lang_password_is_updated"${NC}
 
   # Add UNIX user
   echo -e ${YELLOW}"$lang_adding_unix_user"${NC}
-  sleep 0.5s
   adduser "$unixuser" --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
   echo -e "$unixuser:$unixpass" | chpasswd
   echo -e "$unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
@@ -155,7 +168,7 @@ fn_install_ssl () {
   [ "$ssl_install_redirect" = 'yes' ] && local https_redirect="redirect" || local https_redirect="no-redirect"
 
   # Certbot installation
-  echo -e "$lang_installing_ssl_certificate" && sleep 0.5s
+  echo -e "$lang_installing_ssl_certificate"
   [ "$web_server" = "apache" ] && apt-get install python3-certbot-apache -y || apt-get install python3-certbot-nginx -y
 
   # Let's encrypt SSL installation
@@ -178,7 +191,6 @@ fn_install_ssl () {
   else
     echo -e ${RED}"$lang_ssl_install_error"${NC}
     ssl_error='1'
-    sleep 0.5s
     fn_insert_line >> $conf_data_folder_name/$conf_ssl_info_file_name
     echo -е "$lang_ssl_certificate_not_installed"  >> $conf_data_folder_name/$conf_ssl_info_file_name
     echo -e "$lang_check_for_errors_and_try_again" >> $conf_data_folder_name/$conf_ssl_info_file_name
@@ -210,11 +222,9 @@ fn_make_db () {
 
 fn_install_adminer () {
     echo "$lang_installing_adminer"
-    sleep 0.5s
     wget "https://www.adminer.org/latest${conf_adminer_build}.php"
     cp "latest${conf_adminer_build}.php" /var/www/"$hostname"/html/adminer.php
     echo ${GREEN}"$lang_adminer_installed_successfully"${NC}
-    sleep 0.5s
 }
 
 fn_enable_ufw () {
@@ -230,7 +240,6 @@ fn_enable_ufw () {
 
 fn_create_pass_backup () {
   echo -e "$lang_copying_passwords"
-  sleep 0.5s
   fn_insert_line > $conf_data_folder_name/$conf_data_file_name
   echo -e "$lang_access_parameters" >> $conf_data_folder_name/$conf_data_file_name
   fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
