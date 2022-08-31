@@ -6,6 +6,9 @@ Available arguments:
   --disable-colors             enable or disable terminal colors
   --skip-welcome               skip welcome screen
 
+  --disable-preinstall
+  --disable-postinstall
+
   --data-folder-name           name of folder to save installation infotmation
   --sslinfo-file-name          name of ssl-info file
   --dbinfo-file-name           name of file with database information
@@ -15,7 +18,14 @@ Available arguments:
   --install-webmin             select if you wish to install webmin
   --webmin-port                specify webmin port
   --webmin-ssl                 webmin ssl mode (true/false)
-  --install-imagemagick        select if you want to install Image magick
+  --install-imagick            select if you want to install Image magick
+  --install-mysql              select if you want to install MySQL
+
+  --create-phpinfo             create php info file inside webroot
+  --create-index               create start page inside webroot
+  --ufw-enable                 enable UFW firewall
+  --install-adminer            install adminer
+  --adminer-build              adminer build variant
 
   --hostname                   specify system hostname
   --rootpass                   specify root user password
@@ -25,5 +35,5 @@ Available arguments:
   --email                      specify server admin email address
   --server-type                specify web server type (Apache/Nginx)
   --ssl-install                install SSL certificate
-  --ssl-install-redirect       set to "true" if you want to redirect to https
+  --ssl-redirect               set to "true" if you want to redirect to https
 '
