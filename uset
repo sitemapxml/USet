@@ -36,6 +36,9 @@ esac
 # Turn output text coloring On or Off
 [ "$conf_disable_colors" = 'yes' ] && fn_output_coloring_off || fn_output_coloring_on
 
+# Load pre-install script
+[ -f 'user/pre-install.sh' ] && source 'user/pre-install.sh'
+
 [ $UID -ne 0 ] && echo "This script must be run as root." && exit 1
 
 # Show welcome screen
@@ -79,4 +82,8 @@ fn_configure_system
 
 # Show post-installation message and delete history
 fn_msg_completed | fn_write_log $conf_logname
+
+# Load post-install script
+[ -f 'user/post-install.sh' ] && source 'user/post-install.sh'
+
 fn_delete_history
