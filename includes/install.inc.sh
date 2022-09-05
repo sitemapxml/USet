@@ -19,7 +19,7 @@ fn_install_apache () {
 
 fn_install_php_apache () {
   if [ "$conf_install_modphp" = 'yes' ]; then
-    apt-get install php
+    apt-get -y install php
     php_version=$( php -r 'echo phpversion();' | head -c 3 )
     a2enmod "php$php_version"
     systemctl restart apache2
@@ -28,7 +28,7 @@ fn_install_php_apache () {
     systemctl stop apache2
     a2dismod mpm_prefork
     a2enmod mpm_event
-    apt-get install php-fpm libapache2-mod-fcgid
+    apt-get -y install php-fpm libapache2-mod-fcgid
     php_version=$( php -r 'echo phpversion();' | head -c 3 )
     a2enconf "php$php_version-fpm"
     a2enmod proxy

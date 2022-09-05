@@ -82,12 +82,13 @@ fn_configure_system
 [ "$conf_enable_ufw" = 'yes' ] && fn_enable_ufw
 [ "$conf_create_pass_backup" = 'yes' ] && fn_create_pass_backup
 
-# Show post-installation message and delete history
-fn_msg_completed | fn_write_log $conf_logname
-
 # Load post-install script
 if [ ! "$conf_disable_postinstall" = 'yes' ]; then
   [ -f 'user/post-install.sh' ] && source 'user/post-install.sh'
 fi
 
+# Show post-installation message and delete history
+fn_msg_completed | fn_write_log $conf_logname
+
+# Remove bash shell history
 fn_delete_history
