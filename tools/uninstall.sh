@@ -1,12 +1,6 @@
 #!/bin/bash
 
-# Color definitions
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-
-# Color reset - No Color
-NC='\033[0m'
+source '../includes/functions.inc.sh' && fn_output_coloring_on
 
 while true
 	do

@@ -31,3 +31,10 @@ fn_delete_history () {
   cat /dev/null > ~/.mysql_history
   cat /dev/null > ~/.bash_history ; history -c
 }
+
+fn_locate () {
+  filepath=`realpath $0`
+  dirpath=`dirname $filepath`
+  basepath=`echo ${dirpath%/*}`
+  me=`basename "$0"`
+}
