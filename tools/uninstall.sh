@@ -1,6 +1,11 @@
 #!/bin/bash
 
-source '../includes/functions.inc.sh' && fn_output_coloring_on
+filepath=$(realpath $0)
+dirpath=$(dirname $filepath)
+basepath=$(echo ${dirpath%/*})
+me=$(basename "$0")
+
+source "$basepath/includes/functions.inc.sh" && fn_output_coloring_on
 
 while true
 	do

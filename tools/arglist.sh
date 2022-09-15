@@ -3,8 +3,12 @@
 # The USET project - https://github.com/sitemapxml/uset
 # This script is used to generate list available arguments
 
-source '../includes/functions.inc.sh' && fn_locate
-arglist='../includes/arglist.inc.sh'
+filepath=$(realpath $0)
+dirpath=$(dirname $filepath)
+basepath=$(echo ${dirpath%/*})
+me=$(basename "$0")
+
+arglist="$basepath/includes/arglist.inc.sh"
 
 usage() {
 cat << EOT

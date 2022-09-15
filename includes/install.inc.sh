@@ -1,19 +1,19 @@
 # Beginning of installation
 fn_install_continue_msg () {
-  echo -e ${YELLOW}"$lang_necessary_information_is_collected"${NC}
+  printf "${YELLOW}$lang_necessary_information_is_collected${NC}\n"
   read -p "$lang_press_enter_to_continue"
-  echo -e "$lang_beginning"
+  printf "$lang_beginning\n"
   sleep 0.5s
 }
 
 # Updating repository lists
 fn_update () {
-  echo -e ${YELLOW}"$lang_updating_package_lists"${NC}
+  printf "${YELLOW}$lang_updating_package_lists${NC}\n"
   apt-get update
 }
 
 fn_install_apache () {
-  echo -e ${YELLOW}"$lang_installing_apache2_php"${NC}
+  printf "${YELLOW}$lang_installing_apache2_php${NC}\n"
   apt-get install apache2 -y
 }
 
@@ -39,7 +39,7 @@ fn_install_php_apache () {
 }
 
 fn_install_nginx () {
-  echo -e ${YELLOW}"$lang_installing_nginx_php_fpm"${NC}
+  printf "${YELLOW}$lang_installing_nginx_php_fpm${NC}\n"
   apt-get install nginx -y
   systemctl enable nginx
 }
@@ -59,7 +59,7 @@ fn_install_mysql () {
 
 # Installing php extensions
 fn_install_php_ext () {
-  echo -e ${YELLOW}"$lang_installing_php_extensions"${NC}
+  printf "${YELLOW}$lang_installing_php_extensions${NC}\n"
   apt-get install $conf_php_extension_list -y
 }
 
@@ -92,7 +92,7 @@ fn_php_modify_default () {
 
 # Webmin installation
 fn_install_webmin () {
-  echo -e ${YELLOW}"$lang_installing_webmin"${NC}
+  printf "${YELLOW}$lang_installing_webmin${NC}\n"
   echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
   apt-key add ./resources/jcameron-key.asc
   apt-get update
@@ -103,7 +103,7 @@ fn_install_webmin () {
 
 # Configure apache vhost
 fn_configure_apache () {
-  echo -e ${YELLOW}"$lang_configuring_apache"${NC}
+  printf "${YELLOW}$lang_configuring_apache${NC}\n"
   rm -rf '/var/www/html'
   mkdir -p "/var/www/$hostname"
   cp 'resources/apache.conf' "/etc/apache2/sites-available/$hostname.conf"
@@ -117,7 +117,7 @@ fn_configure_apache () {
 }
 
 fn_configure_nginx () {
-  echo -e ${YELLOW}"$lang_configuring_nginx"${NC}
+  printf "${YELLOW}$lang_configuring_nginx${NC}\n"
   rm -rf '/var/www/html'
   mkdir -p "/var/www/$hostname"
   cp 'resources/nginx.conf' "/etc/nginx/sites-available/$hostname.conf"
@@ -135,13 +135,13 @@ fn_create_index () {
   cp -v 'resources/index.html' "/var/www/$hostname/html/index.html"
   sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" "/var/www/$hostname/html/index.html"
   sed -i "s/webmin_hostname/$hostname/g" "/var/www/$hostname/html/index.html"
-  echo -e "$lang_index_html_configured"
+  printf "$lang_index_html_configured\n"
 }
 
 # Create info.php
 fn_create_info () {
   echo "<?php phpinfo(); ?>" > "/var/www/$hostname/html/info.php"
-  echo "$lang_info_php_configured"
+  printf "$lang_info_php_configured"
 }
 
 fn_configure_system () {
@@ -149,26 +149,26 @@ fn_configure_system () {
   hostnamectl set-hostname "$hostname"
 
   # Setting up root password
-  echo -e ${YELLOW}"$lang_setting_up_root_password"${NC}
+  printf "${YELLOW}$lang_setting_up_root_password${NC}\n"
   echo -e "root:$rootpass" | chpasswd
-  echo -e ${GREEN}"$lang_password_is_updated"${NC}
+  printf "${GREEN}$lang_password_is_updated${NC}\n"
 
   # Add UNIX user
-  echo -e ${YELLOW}"$lang_adding_unix_user"${NC}
+  printf "${YELLOW}$lang_adding_unix_user${NC}\n"
   adduser "$unixuser" --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
   echo -e "$unixuser:$unixpass" | chpasswd
   echo -e "$unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
-  echo -e ${GREEN}"$lang_user_user $unixuser $lang_is_created"${NC}
+  printf "${GREEN}$lang_user_user $unixuser $lang_is_created${NC}\n"
 }
 
 fn_install_ssl () {
-  echo -e ${YELLOW}"$lang_install_step_1"${NC}
+  printf "${YELLOW}$lang_install_step_1${NC}\n"
 
   # Redirect to https option
   [ "$ssl_install_redirect" = 'yes' ] && local https_redirect="redirect" || local https_redirect="no-redirect"
 
   # Certbot installation
-  echo -e "$lang_installing_ssl_certificate"
+  printf "$lang_installing_ssl_certificate\n"
   [ "$web_server" = "apache" ] && apt-get install python3-certbot-apache -y || apt-get install python3-certbot-nginx -y
 
   # Let's encrypt SSL installation
@@ -178,23 +178,23 @@ fn_install_ssl () {
   KEYFILE="/etc/letsencrypt/live/$hostname/privkey.pem"
   if [ -f "$CERTFILE" ] && [ -f "$KEYFILE" ]; then
     # Setting up SSL for Webmin
-    echo -e ${YELLOW}"$lang_setting_up_ssl_for_webmin"${NC}
+    printf "${YELLOW}$lang_setting_up_ssl_for_webmin${NC}\n"
     sed -i '/keyfile/d' /etc/webmin/miniserv.conf
     echo -e 'keyfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''privkey.pem' >> /etc/webmin/miniserv.conf
     echo -e 'certfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''fullchain.pem' >> /etc/webmin/miniserv.conf
     systemctl restart webmin
 
     # Installed SSL certificate pathes
-    echo -e "$lang_ssl_certificate_data" > $conf_data_folder_name/$conf_ssl_info_file_name
-    certbot certificates >> $conf_data_folder_name/$conf_ssl_info_file_name
-    echo -e ${GREEN}"$lang_ssl_installed"${NC}
+    printf "$lang_ssl_certificate_data" > "$conf_data_folder_name/$conf_ssl_info_file_name"
+    certbot certificates >> "$conf_data_folder_name/$conf_ssl_info_file_name"
+    printf "${GREEN}$lang_ssl_installed${NC}\n"
   else
-    echo -e ${RED}"$lang_ssl_install_error"${NC}
+    printf "${RED}$lang_ssl_install_error${NC}\n"
     ssl_error='1'
-    fn_insert_line >> $conf_data_folder_name/$conf_ssl_info_file_name
-    echo -е "$lang_ssl_certificate_not_installed"  >> $conf_data_folder_name/$conf_ssl_info_file_name
-    echo -e "$lang_check_for_errors_and_try_again" >> $conf_data_folder_name/$conf_ssl_info_file_name
-    fn_insert_line >> $conf_data_folder_name/$conf_ssl_info_file_name
+    fn_insert_line >> "$conf_data_folder_name/$conf_ssl_info_file_name"
+    printf "$lang_ssl_certificate_not_installed"  >> "$conf_data_folder_name/$conf_ssl_info_file_name"
+    printf "$lang_check_for_errors_and_try_again" >> "$conf_data_folder_name/$conf_ssl_info_file_name"
+    fn_insert_line >> "$conf_data_folder_name/$conf_ssl_info_file_name"
   fi
 }
 
@@ -214,17 +214,17 @@ fn_make_db () {
     mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
   fi
 
-  fn_insert_line > $conf_db_info_file_name
-  echo -e "$lang_database_access_parameters" >> $conf_db_info_file_name
-  fn_insert_line >> $conf_db_info_file_name
+  fn_insert_line > "$conf_db_info_file_name"
+  echo -e "$lang_database_access_parameters" >> "$conf_db_info_file_name"
+  fn_insert_line >> "$conf_db_info_file_name"
   echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
 }
 
 fn_install_adminer () {
-    echo "$lang_installing_adminer"
+    printf "$lang_installing_adminer\n"
     wget "https://www.adminer.org/latest${conf_adminer_build}.php"
     cp "latest${conf_adminer_build}.php" /var/www/"$hostname"/html/adminer.php
-    echo ${GREEN}"$lang_adminer_installed_successfully"${NC}
+    printf "${GREEN}$lang_adminer_installed_successfully${NC}\n"
 }
 
 fn_enable_ufw () {
@@ -235,55 +235,55 @@ fn_enable_ufw () {
     [ "$conf_webmin_install" = 'yes' ] && ufw allow "$conf_webmin_port/tcp"
 
     ufw --force enable && ufw reload
-    echo -e ${GREEN}"$lang_port_protection_enabled"${NC}
+    printf "${GREEN}$lang_port_protection_enabled${NC}\n"
 }
 
 fn_create_pass_backup () {
-  echo -e "$lang_copying_passwords"
-  fn_insert_line > $conf_data_folder_name/$conf_data_file_name
+  printf "$lang_copying_passwords\n"
+  fn_insert_line > "$conf_data_folder_name/$conf_data_file_name"
   echo -e "$lang_access_parameters" >> $conf_data_folder_name/$conf_data_file_name
   fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
 
   echo -e '\n\n'"$lang_hostname""$hostname"'\n'"$lang_root_password""$rootpass"'\n\n'"$lang_unix_user""$unixuser"'\n'"$lang_unix_user_password""$unixpass"'\n' >> $conf_data_folder_name/$conf_data_file_name
   echo -e "$lang_mysql_root_password""$mysqlrpass"'\n\n'"$lang_email""$email"'\n\n' >> $conf_data_folder_name/$conf_data_file_name
 
-  fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
-  echo -e "$lang_password_warning" >> $conf_data_folder_name/$conf_data_file_name
-  fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
-  echo -e ${GREEN}"$lang_password_data_copied"${NC}
+  fn_insert_line >> "$conf_data_folder_name/$conf_data_file_name"
+  echo -e "$lang_password_warning" >> "$conf_data_folder_name/$conf_data_file_name"
+  fn_insert_line >> "$conf_data_folder_name/$conf_data_file_name"
+  printf "${GREEN}$lang_password_data_copied${NC}\n"
 }
 
 fn_msg_completed () {
-  echo -e ${BLACK}${BGREEN}"$lang_installation_is_done"${NC}${BNC}
+  printf "${BLACK}${BGREEN}$lang_installation_is_done${NC}${BNC}\n"
   echo
 
   if [ "$ssl_error" = "1" ]; then
-    echo -e "${RED}$lang_configuring_ssl_failed${NC}"
-    echo -e "$lang_check_dns_settings_and_try_again"
-    echo -e "${WHITE}certbot --$web_server${NC}"
+    printf "${RED}$lang_configuring_ssl_failed${NC}\n"
+    printf "$lang_check_dns_settings_and_try_again\n"
+    printf "${WHITE}certbot --$web_server${NC}\n"
   fi
 
-  echo -e "$lang_website_available_at_address ${GREEN}http://$hostname ${NC}"
-  echo -e "$lang_chosen_webserver_is ${GREEN}$web_server${NC}"
-  echo -e "$lang_you_can_check_if_php_working ${GREEN}http://$hostname/info.php${NC}"
+  printf "$lang_website_available_at_address ${GREEN}http://${hostname}${NC}\n"
+  printf "$lang_chosen_webserver_is ${GREEN}$web_server${NC}\n"
+  printf "$lang_you_can_check_if_php_working ${GREEN}http://$hostname/info.php${NC}\n"
 
   echo
-  echo -e "$lang_webmin_installed_at_address ${GREEN}https://$hostname:$conf_webmin_port${NC}"
-  echo -e "$lang_to_access_webmin_you_can_use_username ${GREEN}$unixuser${NC}"
-  echo -e "$lang_and_password_created_during_installation"
+  printf "$lang_webmin_installed_at_address ${GREEN}https://$hostname:$conf_webmin_port${NC}\n"
+  printf "$lang_to_access_webmin_you_can_use_username ${GREEN}$unixuser${NC}\n"
+  printf "$lang_and_password_created_during_installation\n"
   echo
-  echo -e "$lang_server_webroot_is"
-  echo -e "/var/www/${GREEN}$hostname${NC}/html"
+  printf "$lang_server_webroot_is\n"
+  printf "/var/www/${GREEN}$hostname${NC}/html\n"
   echo
 
 if [ "$conf_create_pass_backup" = true ]; then
-  echo -e "$lang_to_see_installation_data_copy_following_command"
-  echo -e ${WHITE}"nano" $conf_data_folder_name"/"$conf_data_file_name${NC}
+  printf "$lang_to_see_installation_data_copy_following_command\n"
+  printf "${WHITE}nano ${conf_data_folder_name}/${conf_data_file_name}${NC}\n"
 fi
 
 if [ "$ssl_install" = true ]; then
-  echo -e "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$email${NC}"
+  printf "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$email${NC}\n"
 else
-  echo -e "$lang_your_email_address_is ${GREEN}$email${NC}"
+  printf "$lang_your_email_address_is ${GREEN}$email${NC}\n"
 fi
 }
