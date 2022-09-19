@@ -1,40 +1,44 @@
 # Language setting
-conf_language='en'
-skip_interaction='no'
+conf_language=${conf_language:='en'}
+skip_interaction=${skip_interaction:='no'}
 
 # File and folder names
-conf_data_folder_name='.data'
-conf_data_file_name='data.txt'
-conf_ssl_info_file_name='ssl-info.txt'
-conf_db_info_file_name='db-info.txt'
-conf_logname='installation-completed.txt'
+conf_data_folder_name=${conf_data_folder_name:='.data'}
+conf_data_file_name=${conf_data_file_name:='data.txt'}
+conf_ssl_info_file_name=${conf_ssl_info_file_name:='ssl-info.txt'}
+conf_db_info_file_name=${conf_db_info_file_name:='db-info.txt'}
+conf_logname=${conf_logname:='installation-completed.txt'}
 
 # Apperiance
-conf_disable_colors='no'
+conf_disable_colors=${conf_disable_colors:='no'}
 
 # Welcome message
-conf_skip_welcome='no'
+conf_skip_welcome=${conf_skip_welcome:='no'}
 
 # Installation settings
-conf_php_extension_list='php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl'
-conf_helper_program_list='zip unzip tree locate net-tools'
+conf_php_extension_list=${conf_php_extension_list:='php-mysql php-curl php-intl php-gd
+php-dom php-iconv php-xsl php-mbstring php-ctype php-zip php-xml php-bz2 php-calendar
+php-exif php-fileinfo php-json php-posix php-tokenizer php-xmlwriter php-xmlreader
+php-phar php-soap php-gmp php-bcmath php-apcu php-redis php-imagick php-imap php-xdebug'}
+
+conf_helper_program_list=${conf_helper_program_list:='zip unzip tree locate net-tools'}
 
 # Webmin settings
-conf_webmin_install='yes'
-conf_webmin_port='3000'
-conf_webmin_ssl_mode='yes'
-conf_install_imagemagick='yes'
+conf_webmin_install=${conf_webmin_install:='yes'}
+conf_webmin_port=${conf_webmin_port:='3000'}
+conf_webmin_ssl_mode=${conf_webmin_ssl_mode:='yes'}
+conf_install_imagemagick=${conf_install_imagemagick:='yes'}
 
-conf_install_mysql='yes'
-conf_php_modify_default='yes'
-ssl_install='yes'
+conf_install_mysql=${conf_install_mysql:='yes'}
+conf_php_modify_default=${conf_php_modify_default:='yes'}
+ssl_install=${ssl_install:='yes'}
 
 # Create sample page index.html and info.php
-conf_create_index='yes'
-conf_create_phpinfo='yes'
+conf_create_index=${conf_create_index:='yes'}
+conf_create_phpinfo=${conf_create_phpinfo:='yes'}
 
 # Adminer settings
-conf_install_adminer='no'
+conf_install_adminer=${conf_install_adminer:='no'}
 
 # Adminer build variant
 # Possible values:
@@ -42,13 +46,13 @@ conf_install_adminer='no'
 #   -mysql
 #   -mysql-en
 # If no value is set, full version will be installed.
-conf_adminer_build=""
+conf_adminer_build=${conf_adminer_build:=''}
 
 # UFW Settings
-conf_enable_ufw='yes'
+conf_enable_ufw=${conf_enable_ufw:='yes'}
 
 # Password backup file
-conf_create_pass_backup='no'
+conf_create_pass_backup=${conf_create_pass_backup:='no'}
 
 # Install mod_php
-conf_install_modphp='no'
+conf_install_modphp=${conf_install_modphp:='no'}
