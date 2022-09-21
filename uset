@@ -16,7 +16,7 @@ source 'libraries/args.sh'
 source 'includes/arglist.inc.sh'
 
 # Read default configuration
-source 'config.txt'
+source 'default.conf'
 
 # Load definied language and if file does not exist revert to en.txt
 [ -f "languages/$conf_language.txt" ] && source "languages/$conf_language.txt" || source 'languages/en.txt'

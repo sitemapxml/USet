@@ -141,7 +141,7 @@ fn_create_index () {
 # Create info.php
 fn_create_info () {
   echo "<?php phpinfo(); ?>" > "/var/www/$hostname/html/info.php"
-  printf "$lang_info_php_configured"
+  printf "$lang_info_php_configured\n"
 }
 
 fn_configure_system () {
