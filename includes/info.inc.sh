@@ -1,14 +1,13 @@
-show_info () {
+fn_show_info () {
   echo "--skip-interaction skip_interaction: $skip_interaction"
   echo "--language conf_language: $conf_language"
   echo "--disable-colors conf_disable_colors: $conf_disable_colors"
   echo "--skip-welcome conf_skip_welcome: $conf_skip_welcome"
+  echo "--debug-type conf_debug_type: $conf_debug_type"
   echo "--data-folder-name conf_data_folder_name: $conf_data_folder_name"
   echo "--data-file-name conf_data_file_name: $conf_data_file_name"
   echo "--sslinfo-file-name conf_ssl_info_file_name: $conf_ssl_info_file_name"
   echo "--dbinfo-file-name conf_db_info_file_name: $conf_db_info_file_name"
-  echo "--install-php-extensions conf_php_extension_list: $conf_php_extension_list"
-  echo "--install-programs conf_helper_program_list: $conf_helper_program_list"
   echo "--install-mysql conf_install_mysql: $conf_install_mysql"
   echo "--install-webmin conf_webmin_install: $conf_webmin_install"
   echo "--webmin-port conf_webmin_port: $conf_webmin_port"

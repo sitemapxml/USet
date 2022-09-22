@@ -5,6 +5,7 @@ Available arguments:
   --language                   choose preffered language
   --disable-colors             enable or disable terminal colors
   --skip-welcome               skip welcome screen
+  --debug [args, vars, full]   show debug info
 
   --disable-preinstall
   --disable-postinstall

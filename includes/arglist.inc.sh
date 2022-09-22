@@ -4,7 +4,7 @@ conf_language=$(get_value "language" "$@")
 conf_disable_colors=$(get_value "disable-colors" "$@")
 conf_skip_welcome=$(get_value "skip-welcome" "$@")
 
-conf_enable_debug=$( get_value "debug" "$@" )
+conf_debug=$(get_value "debug" "$@")
 
 conf_data_folder_name=$(get_value "data-folder-name" "$@")
 conf_data_file_name=$(get_value "data-file-name" "$@")

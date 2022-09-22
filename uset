@@ -38,7 +38,13 @@ esac
 [ "$conf_disable_colors" = 'yes' ] && fn_output_coloring_off || fn_output_coloring_on
 
 # List all variables with their values
-[ "$conf_enable_debug" = 'yes' ] && show_info
+if [ -n "$conf_debug" ]; then
+  case $conf_debug in
+    args) fn_show_info | awk '{print $1 " " $3}' ;;
+    vars) fn_show_info | awk '{print $2 " " $3}' ;;
+    full) fn_show_info ;;
+  esac
+fi
 
 # Load pre-install script
 if [ ! "$conf_disable_preinstall" = 'yes' ]; then
