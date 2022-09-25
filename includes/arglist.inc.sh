@@ -5,6 +5,8 @@ conf_disable_colors=$(get_value "disable-colors" "$@")
 conf_skip_welcome=$(get_value "skip-welcome" "$@")
 
 conf_debug=$(get_value "debug" "$@")
+conf_ignore_lockfile=$(get_value "ignore-lock" "$@")
+conf_create_lockfile=$(get_value "create-lock" "$@")
 
 conf_data_folder_name=$(get_value "data-folder-name" "$@")
 conf_data_file_name=$(get_value "data-file-name" "$@")

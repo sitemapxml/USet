@@ -16,7 +16,7 @@ source 'libraries/args.sh'
 source 'includes/arglist.inc.sh'
 
 # Read default configuration
-source 'default.conf'
+if [ -f 'default.conf' ]; then source 'default.conf'; else printf "Default configuration file is missing. Exiting…\n" && exit 1 ; fi
 
 # Load definied language and if file does not exist revert to en.txt
 [ -f "languages/$conf_language.txt" ] && source "languages/$conf_language.txt" || source 'languages/en.txt'
@@ -52,6 +52,9 @@ if [ ! "$conf_disable_preinstall" = 'yes' ]; then
 fi
 
 [ $UID -ne 0 ] && echo "This script must be run as root." && exit 0
+
+# Check if system is alerady configured
+[ "$conf_ignore_lockfile" = 'no' ] && fn_check_lockfile
 
 # Show welcome screen
 [ ! "$conf_skip_welcome" = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
@@ -91,6 +94,7 @@ fn_configure_system
 [ "$conf_install_adminer" = 'yes' ] && fn_install_adminer
 [ "$conf_enable_ufw" = 'yes' ] && fn_enable_ufw
 [ "$conf_create_pass_backup" = 'yes' ] && fn_create_pass_backup
+[ "$conf_create_lockfile" = 'yes' ] && fn_create_lockfile
 
 # Load post-install script
 if [ ! "$conf_disable_postinstall" = 'yes' ]; then

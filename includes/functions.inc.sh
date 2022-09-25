@@ -27,6 +27,12 @@ fn_create_datadir () { mkdir "$conf_data_folder_name"; }
 
 fn_write_log () { tee -a $1; }
 
+fn_create_lockfile () { touch /etc/uset.lock; }
+
+fn_check_lockfile () {
+  [ -f '/etc/uset.lock' ] && printf "It seems that system has beed already configured. Exiting...\n" && exit 1
+}
+
 fn_delete_history () {
   cat /dev/null > ~/.mysql_history
   cat /dev/null > ~/.bash_history ; history -c

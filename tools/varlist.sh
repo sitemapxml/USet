@@ -28,7 +28,7 @@ list_all () {
 }
 
 list_config () {
-  cat "$config" | sed '/^[[:space:]]*$/d;/^#/d'
+  cat "$config" | awk -F "{" '{print $2}' | sed 's/://g;s/}//g;/^[[:space:]]*$/d'
 }
 
 while getopts "adch" option; do
