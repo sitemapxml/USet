@@ -54,7 +54,7 @@ fn_install_php_nginx () {
 fn_install_mysql () {
   apt-get install mysql-server -y
   systemctl enable mysql
-  mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$mysqlrpass'; FLUSH PRIVILEGES;"
+  mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$conf_mysqlrpass'; FLUSH PRIVILEGES;"
 }
 
 # Installing php extensions
@@ -75,7 +75,7 @@ fn_install_imagick () {
 
 fn_php_modify_default () {
   # Some basic php configuration
-  if [ "$web_server" = "apache" ]; then
+  if [ "$conf_http_server" = "apache" ]; then
     sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/"$php_version"/apache2/php.ini
     sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/"$php_version"/apache2/php.ini
     sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/"$php_version"/apache2/php.ini
@@ -105,13 +105,13 @@ fn_install_webmin () {
 fn_configure_apache () {
   printf "${YELLOW}$lang_configuring_apache${NC}\n"
   rm -rf '/var/www/html'
-  mkdir -p "/var/www/$hostname"
-  cp 'resources/apache.conf' "/etc/apache2/sites-available/$hostname.conf"
-  sed -i "s/sn_default/$hostname/g" "/etc/apache2/sites-available/$hostname.conf"
-  sed -i "s/dir_default/$hostname/g" "/etc/apache2/sites-available/$hostname.conf"
+  mkdir -p "/var/www/$conf_hostname"
+  cp 'resources/apache.conf' "/etc/apache2/sites-available/$conf_hostname.conf"
+  sed -i "s/sn_default/$conf_hostname/g" "/etc/apache2/sites-available/$conf_hostname.conf"
+  sed -i "s/dir_default/$conf_hostname/g" "/etc/apache2/sites-available/$conf_hostname.conf"
   a2dissite 000-default
   rm '/etc/apache2/sites-available/000-default.conf'
-  a2ensite "$hostname"
+  a2ensite "$conf_hostname"
   a2enmod rewrite
   systemctl restart apache2
 }
@@ -119,11 +119,11 @@ fn_configure_apache () {
 fn_configure_nginx () {
   printf "${YELLOW}$lang_configuring_nginx${NC}\n"
   rm -rf '/var/www/html'
-  mkdir -p "/var/www/$hostname"
-  cp 'resources/nginx.conf' "/etc/nginx/sites-available/$hostname.conf"
-  sed -i "s/sn_default/$hostname/g" "/etc/nginx/sites-available/$hostname.conf"
-  sed -i "s/dir_default/$hostname/g" "/etc/nginx/sites-available/$hostname.conf"
-  ln "/etc/nginx/sites-available/$hostname.conf" "/etc/nginx/sites-enabled/$hostname.conf"
+  mkdir -p "/var/www/$conf_hostname"
+  cp 'resources/nginx.conf' "/etc/nginx/sites-available/$conf_hostname.conf"
+  sed -i "s/sn_default/$conf_hostname/g" "/etc/nginx/sites-available/$conf_hostname.conf"
+  sed -i "s/dir_default/$conf_hostname/g" "/etc/nginx/sites-available/$conf_hostname.conf"
+  ln "/etc/nginx/sites-available/$conf_hostname.conf" "/etc/nginx/sites-enabled/$conf_hostname.conf"
   rm '/etc/nginx/sites-available/default'
   rm '/etc/nginx/sites-enabled/default'
   systemctl restart nginx
@@ -131,34 +131,34 @@ fn_configure_nginx () {
 
 # Make index.html and info.php
 fn_create_index () {
-  mkdir -vp "/var/www/$hostname/html"
-  cp -v 'resources/index.html' "/var/www/$hostname/html/index.html"
-  sed -i "s/s_title/$lang_domain $hostname $lang_is_sucessfuly_configured\!/g" "/var/www/$hostname/html/index.html"
-  sed -i "s/webmin_hostname/$hostname/g" "/var/www/$hostname/html/index.html"
+  mkdir -vp "/var/www/$conf_hostname/html"
+  cp -v 'resources/index.html' "/var/www/$conf_hostname/html/index.html"
+  sed -i "s/s_title/$lang_domain $conf_hostname $lang_is_sucessfuly_configured\!/g" "/var/www/$conf_hostname/html/index.html"
+  sed -i "s/webmin_hostname/$conf_hostname/g" "/var/www/$conf_hostname/html/index.html"
   printf "$lang_index_html_configured\n"
 }
 
 # Create info.php
 fn_create_info () {
-  echo "<?php phpinfo(); ?>" > "/var/www/$hostname/html/info.php"
+  echo "<?php phpinfo(); ?>" > "/var/www/$conf_hostname/html/info.php"
   printf "$lang_info_php_configured\n"
 }
 
 fn_configure_system () {
   # Setting hostname according to entered domain name
-  hostnamectl set-hostname "$hostname"
+  hostnamectl set-hostname "$conf_hostname"
 
   # Setting up root password
   printf "${YELLOW}$lang_setting_up_root_password${NC}\n"
-  echo -e "root:$rootpass" | chpasswd
+  echo -e "root:$conf_rootpass" | chpasswd
   printf "${GREEN}$lang_password_is_updated${NC}\n"
 
   # Add UNIX user
   printf "${YELLOW}$lang_adding_unix_user${NC}\n"
-  adduser "$unixuser" --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
-  echo -e "$unixuser:$unixpass" | chpasswd
-  echo -e "$unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
-  printf "${GREEN}$lang_user_user $unixuser $lang_is_created${NC}\n"
+  adduser "$conf_unixuser" --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
+  echo -e "$conf_unixuser:$conf_unixpass" | chpasswd
+  echo -e "$conf_unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
+  printf "${GREEN}$lang_user_user $conf_unixuser $lang_is_created${NC}\n"
 }
 
 fn_install_ssl () {
@@ -169,19 +169,19 @@ fn_install_ssl () {
 
   # Certbot installation
   printf "$lang_installing_ssl_certificate\n"
-  [ "$web_server" = "apache" ] && apt-get install python3-certbot-apache -y || apt-get install python3-certbot-nginx -y
+  [ "$conf_http_server" = "apache" ] && apt-get install python3-certbot-apache -y || apt-get install python3-certbot-nginx -y
 
   # Let's encrypt SSL installation
-  certbot --"$web_server" --non-interactive --agree-tos --domains "$hostname" --email "$email" --"$https_redirect"
+  certbot --"$conf_http_server" --non-interactive --agree-tos --domains "$conf_hostname" --email "$conf_email" --"$https_redirect"
 
-  CERTFILE="/etc/letsencrypt/live/$hostname/fullchain.pem"
-  KEYFILE="/etc/letsencrypt/live/$hostname/privkey.pem"
+  CERTFILE="/etc/letsencrypt/live/$conf_hostname/fullchain.pem"
+  KEYFILE="/etc/letsencrypt/live/$conf_hostname/privkey.pem"
   if [ -f "$CERTFILE" ] && [ -f "$KEYFILE" ]; then
     # Setting up SSL for Webmin
     printf "${YELLOW}$lang_setting_up_ssl_for_webmin${NC}\n"
     sed -i '/keyfile/d' /etc/webmin/miniserv.conf
-    echo -e 'keyfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''privkey.pem' >> /etc/webmin/miniserv.conf
-    echo -e 'certfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''fullchain.pem' >> /etc/webmin/miniserv.conf
+    echo -e 'keyfile=''/''etc''/''letsencrypt''/''live''/'"$conf_hostname"'/''privkey.pem' >> /etc/webmin/miniserv.conf
+    echo -e 'certfile=''/''etc''/''letsencrypt''/''live''/'"$conf_hostname"'/''fullchain.pem' >> /etc/webmin/miniserv.conf
     systemctl restart webmin
 
     # Installed SSL certificate pathes
@@ -206,24 +206,24 @@ fn_make_db () {
 
   # Preparing database user name and password
   database_password=$( date +%s | sha256sum | base64 | head -c 32 )
-  db_name=$( echo $hostname | sed 's/\./_/g' )
+  db_name=$( echo $conf_hostname | sed 's/\./_/g' )
 
   if [ "$mysqld_version" -ge "8" ]; then
-    mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON $db_name.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+    mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$conf_unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON $db_name.* TO '$conf_unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
   else
-    mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
+    mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$conf_unixuser'@localhost identified by '$database_password'; GRANT ALL ON $db_name.* to '$conf_unixuser'@localhost WITH GRANT OPTION; FLUSH PRIVILEGES;"
   fi
 
   fn_insert_line > "$conf_db_info_file_name"
   echo -e "$lang_database_access_parameters" >> "$conf_db_info_file_name"
   fn_insert_line >> "$conf_db_info_file_name"
-  echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
+  echo -e '\n\n'"$lang_database_name""$db_name""$lang_database_user""$conf_unixuser""$lang_database_user_password"$database_password'\n' >> $conf_db_info_file_name
 }
 
 fn_install_adminer () {
     printf "$lang_installing_adminer\n"
     wget "https://www.adminer.org/latest${conf_adminer_build}.php"
-    cp "latest${conf_adminer_build}.php" /var/www/"$hostname"/html/adminer.php
+    cp "latest${conf_adminer_build}.php" /var/www/"$conf_hostname"/html/adminer.php
     printf "${GREEN}$lang_adminer_installed_successfully${NC}\n"
 }
 
@@ -244,8 +244,8 @@ fn_create_pass_backup () {
   echo -e "$lang_access_parameters" >> $conf_data_folder_name/$conf_data_file_name
   fn_insert_line >> $conf_data_folder_name/$conf_data_file_name
 
-  echo -e '\n\n'"$lang_hostname""$hostname"'\n'"$lang_root_password""$rootpass"'\n\n'"$lang_unix_user""$unixuser"'\n'"$lang_unix_user_password""$unixpass"'\n' >> $conf_data_folder_name/$conf_data_file_name
-  echo -e "$lang_mysql_root_password""$mysqlrpass"'\n\n'"$lang_email""$email"'\n\n' >> $conf_data_folder_name/$conf_data_file_name
+  echo -e '\n\n'"$lang_hostname""$conf_hostname"'\n'"$lang_root_password""$conf_rootpass"'\n\n'"$lang_unix_user""$conf_unixuser"'\n'"$lang_unix_user_password""$conf_unixpass"'\n' >> $conf_data_folder_name/$conf_data_file_name
+  echo -e "$lang_mysql_root_password""$conf_mysqlrpass"'\n\n'"$lang_email""$conf_email"'\n\n' >> $conf_data_folder_name/$conf_data_file_name
 
   fn_insert_line >> "$conf_data_folder_name/$conf_data_file_name"
   echo -e "$lang_password_warning" >> "$conf_data_folder_name/$conf_data_file_name"
@@ -260,20 +260,20 @@ fn_msg_completed () {
   if [ "$ssl_error" = "1" ]; then
     printf "${RED}$lang_configuring_ssl_failed${NC}\n"
     printf "$lang_check_dns_settings_and_try_again\n"
-    printf "${WHITE}certbot --$web_server${NC}\n"
+    printf "${WHITE}certbot --$conf_http_server${NC}\n"
   fi
 
   printf "$lang_website_available_at_address ${GREEN}http://${hostname}${NC}\n"
-  printf "$lang_chosen_webserver_is ${GREEN}$web_server${NC}\n"
-  printf "$lang_you_can_check_if_php_working ${GREEN}http://$hostname/info.php${NC}\n"
+  printf "$lang_chosen_webserver_is ${GREEN}$conf_http_server${NC}\n"
+  printf "$lang_you_can_check_if_php_working ${GREEN}http://$conf_hostname/info.php${NC}\n"
 
   echo
-  printf "$lang_webmin_installed_at_address ${GREEN}https://$hostname:$conf_webmin_port${NC}\n"
-  printf "$lang_to_access_webmin_you_can_use_username ${GREEN}$unixuser${NC}\n"
+  printf "$lang_webmin_installed_at_address ${GREEN}https://$conf_hostname:$conf_webmin_port${NC}\n"
+  printf "$lang_to_access_webmin_you_can_use_username ${GREEN}$conf_unixuser${NC}\n"
   printf "$lang_and_password_created_during_installation\n"
   echo
   printf "$lang_server_webroot_is\n"
-  printf "/var/www/${GREEN}$hostname${NC}/html\n"
+  printf "/var/www/${GREEN}$conf_hostname${NC}/html\n"
   echo
 
 if [ "$conf_create_pass_backup" = true ]; then
@@ -282,8 +282,8 @@ if [ "$conf_create_pass_backup" = true ]; then
 fi
 
 if [ "$ssl_install" = true ]; then
-  printf "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$email${NC}\n"
+  printf "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$conf_email${NC}\n"
 else
-  printf "$lang_your_email_address_is ${GREEN}$email${NC}\n"
+  printf "$lang_your_email_address_is ${GREEN}$conf_email${NC}\n"
 fi
 }

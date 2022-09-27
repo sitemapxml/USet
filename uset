@@ -60,27 +60,27 @@ fi
 [ ! "$conf_skip_welcome" = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
 
 # Input data
-[ -n "$hostname" ] && printf "hostname already set to ${YELLOW}$hostname${NC}, skipping user input...\n" || fn_input_hostname
-[ -n "$rootpass" ] && printf "rootpass already set, skipping user input...\n" || fn_input_rootpass
-[ -n "$unixuser" ] && printf "unixuser already set to ${YELLOW}$unixuser${NC}, skipping user input...\n" || fn_input_unixuser
-[ -n "$unixpass" ] && printf "unixpass already set, skipping user input...\n" || fn_input_unixpass
-[ -n "$mysqlrpass" ] && printf "mysqlrpass already set, skipping user input...\n" || fn_input_mysqlrpass
-[ -n "$email" ] && printf "email already set to ${YELLOW}$email${NC}, skipping user input...\n" || fn_input_email
-[ -n "$web_server" ] && printf "web_server already set to ${YELLOW}$web_server${NC}, skipping user input...\n" || fn_input_server_type
+[ -n "$conf_hostname" ] && printf "hostname already set to ${YELLOW}$conf_hostname${NC}, skipping user input...\n" || fn_input_hostname
+[ -n "$conf_rootpass" ] && printf "rootpass already set, skipping user input...\n" || fn_input_rootpass
+[ -n "$conf_unixuser" ] && printf "unixuser already set to ${YELLOW}$conf_unixuser${NC}, skipping user input...\n" || fn_input_unixuser
+[ -n "$conf_unixpass" ] && printf "unixpass already set, skipping user input...\n" || fn_input_unixpass
+[ -n "$conf_mysqlrpass" ] && printf "mysqlrpass already set, skipping user input...\n" || fn_input_mysqlrpass
+[ -n "$conf_email" ] && printf "email already set to ${YELLOW}$conf_email${NC}, skipping user input...\n" || fn_input_email
+[ -n "$conf_http_server" ] && printf "web_server already set to ${YELLOW}$conf_http_server${NC}, skipping user input...\n" || fn_input_server_type
 
 # Main installation process
 [ ! "$skip_interaction" = 'yes' ] && fn_install_continue_msg
 
 fn_update && fn_install_utilities
 
-[ "$web_server" = 'apache' ] && fn_install_apache && fn_install_php_apache
-[ "$web_server" = 'nginx' ] && fn_install_nginx && fn_install_php_nginx
+[ "$conf_http_server" = 'apache' ] && fn_install_apache && fn_install_php_apache
+[ "$conf_http_server" = 'nginx' ] && fn_install_nginx && fn_install_php_nginx
 [ "$conf_install_mysql" = 'yes' ] && fn_install_mysql
 [ "$conf_install_imagemagick" = 'yes' ] && fn_install_imagick
 [ "$conf_php_modify_default" = 'yes' ] && fn_php_modify_default
 [ "$conf_webmin_install" = 'yes' ] && fn_install_webmin
-[ "$web_server" = 'apache' ] && fn_configure_apache
-[ "$web_server" = 'nginx' ] && fn_configure_nginx
+[ "$conf_http_server" = 'apache' ] && fn_configure_apache
+[ "$conf_http_server" = 'nginx' ] && fn_configure_nginx
 [ "$conf_create_index" = 'yes' ] && fn_create_index
 [ "$conf_create_phpinfo" = 'yes' ] && fn_create_info
 
