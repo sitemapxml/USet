@@ -88,7 +88,7 @@ fn_update && fn_install_utilities
 fn_configure_system
 
 # Install SSL Certificate
-[ "$ssl_install" = 'yes' ] && fn_install_ssl
+[ "$conf_ssl_install" = 'yes' ] && fn_install_ssl
 
 # Install Adminer, enable UFW and create password backup file
 [ "$conf_install_adminer" = 'yes' ] && fn_install_adminer

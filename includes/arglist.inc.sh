@@ -42,5 +42,5 @@ conf_install_modphp=$(get_value "install-modphp" "$@")
 conf_disable_preinstall=$(get_value "disable-preinstall" "$@")
 conf_disable_postinstall=$(get_value "disable-postinstall" "$@")
 
-ssl_install=$(get_value "ssl-install" "$@")
-ssl_install_redirect=$(get_value "ssl-redirect" "$@")
+conf_ssl_install=$(get_value "ssl-install" "$@")
+conf_ssl_redirect=$(get_value "ssl-redirect" "$@")

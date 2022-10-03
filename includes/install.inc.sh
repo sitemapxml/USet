@@ -165,7 +165,7 @@ fn_install_ssl () {
   printf "${YELLOW}$lang_install_step_1${NC}\n"
 
   # Redirect to https option
-  [ "$ssl_install_redirect" = 'yes' ] && local https_redirect="redirect" || local https_redirect="no-redirect"
+  [ "$conf_ssl_redirect" = 'yes' ] && local https_redirect="redirect" || local https_redirect="no-redirect"
 
   # Certbot installation
   printf "$lang_installing_ssl_certificate\n"
@@ -281,7 +281,7 @@ if [ "$conf_create_pass_backup" = true ]; then
   printf "${WHITE}nano ${conf_data_folder_name}/${conf_data_file_name}${NC}\n"
 fi
 
-if [ "$ssl_install" = true ]; then
+if [ "$conf_ssl_install" = true ]; then
   printf "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$conf_email${NC}\n"
 else
   printf "$lang_your_email_address_is ${GREEN}$conf_email${NC}\n"

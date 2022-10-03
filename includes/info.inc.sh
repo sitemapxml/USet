@@ -30,6 +30,6 @@ fn_show_info () {
   echo "--install-modphp conf_install_modphp: $conf_install_modphp"
   echo "--disable-preinstall conf_disable_preinstall: $conf_disable_preinstall"
   echo "--disable-postinstall conf_disable_postinstall: $conf_disable_postinstall"
-  echo "--ssl-install ssl_install: $ssl_install"
-  echo "--ssl-redirect ssl_install_redirect: $ssl_install_redirect"
+  echo "--ssl-install conf_ssl_install: $ssl_install"
+  echo "--ssl-redirect conf_ssl_redirect: $conf_ssl_redirect"
 }
