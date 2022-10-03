@@ -1,5 +1,5 @@
 fn_show_info () {
-  echo "--skip-interaction skip_interaction: $skip_interaction"
+  echo "--skip-interaction conf_skip_confirm: $conf_skip_confirm"
   echo "--language conf_language: $conf_language"
   echo "--disable-colors conf_disable_colors: $conf_disable_colors"
   echo "--skip-welcome conf_skip_welcome: $conf_skip_welcome"

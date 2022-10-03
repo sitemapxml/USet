@@ -69,7 +69,7 @@ fi
 [ -n "$conf_http_server" ] && printf "web_server already set to ${YELLOW}$conf_http_server${NC}, skipping user input...\n" || fn_input_server_type
 
 # Main installation process
-[ ! "$skip_interaction" = 'yes' ] && fn_install_continue_msg
+[ ! "$conf_skip_confirm" = 'yes' ] && fn_install_continue_msg
 
 fn_update && fn_install_utilities
 

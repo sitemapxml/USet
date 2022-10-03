@@ -1,4 +1,4 @@
-skip_interaction=$(get_value "skip-interaction" "$@")
+conf_skip_confirm=$(get_value "skip-confirm" "$@")
 
 conf_language=$(get_value "language" "$@")
 conf_disable_colors=$(get_value "disable-colors" "$@")
