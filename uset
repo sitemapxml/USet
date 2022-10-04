@@ -93,7 +93,7 @@ fn_configure_system
 # Install Adminer, enable UFW and create password backup file
 [ "$conf_install_adminer" = 'yes' ] && fn_install_adminer
 [ "$conf_enable_ufw" = 'yes' ] && fn_enable_ufw
-[ "$conf_create_pass_backup" = 'yes' ] && fn_create_pass_backup
+[ "$conf_password_backup" = 'yes' ] && fn_create_pass_backup
 [ "$conf_create_lockfile" = 'yes' ] && fn_create_lockfile
 
 # Load post-install script

@@ -19,7 +19,7 @@ fn_show_info () {
   echo "--install-adminer conf_install_adminer: $conf_install_adminer"
   echo "--adminer-build conf_adminer_build: $conf_adminer_build"
   echo "--ufw-enable conf_enable_ufw: $conf_enable_ufw"
-  echo "--password-backup conf_create_pass_backup: $conf_create_pass_backup"
+  echo "--password-backup conf_password_backup: $conf_password_backup"
   echo "--hostname conf_hostname: $conf_hostname"
   echo "--rootpass conf_rootpass: $conf_rootpass"
   echo "--unixuser conf_unixuser: $conf_unixuser"

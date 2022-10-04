@@ -276,12 +276,12 @@ fn_msg_completed () {
   printf "/var/www/${GREEN}$conf_hostname${NC}/html\n"
   echo
 
-if [ "$conf_create_pass_backup" = true ]; then
+if [ "$conf_password_backup" = yes ]; then
   printf "$lang_to_see_installation_data_copy_following_command\n"
   printf "${WHITE}nano ${conf_data_folder_name}/${conf_data_file_name}${NC}\n"
 fi
 
-if [ "$conf_ssl_install" = true ]; then
+if [ "$conf_ssl_install" = yes ]; then
   printf "$lang_following_email_will_be_used_for_receiving_ssl_warnings:\n${GREEN}$conf_email${NC}\n"
 else
   printf "$lang_your_email_address_is ${GREEN}$conf_email${NC}\n"
