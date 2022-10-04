@@ -1,7 +1,7 @@
 conf_skip_confirm=$(get_value "skip-confirm" "$@")
 
 conf_language=$(get_value "language" "$@")
-conf_disable_colors=$(get_value "disable-colors" "$@")
+conf_disable_colors=$(get_value "colors" "$@")
 conf_skip_welcome=$(get_value "welcome" "$@")
 
 conf_debug=$(get_value "debug" "$@")
