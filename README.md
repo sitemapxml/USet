@@ -5,7 +5,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/sitemapxml/)
 ![Maintaner](https://img.shields.io/badge/maintainer-sitemapxml-blue)
 [![GitHub issues](https://img.shields.io/github/issues/sitemapxml/USet)](https://github.com/sitemapxml/USet/issues)
-[![GitHub release](https://img.shields.io/github/v/release/sitemapxml/uset?sort=semver)](https://github.com/sitemapxml/uset/releases/tag/2.2.0)
+[![GitHub release](https://img.shields.io/github/v/release/sitemapxml/uset?sort=semver)](https://github.com/sitemapxml/uset/releases/tag/3.0.0)
 ![GitHub commits since tagged version](https://img.shields.io/github/commits-since/sitemapxml/uset/2.4.0/master)
 [![made-with-bash](https://img.shields.io/badge/Made%20with-Bash-1f425f.svg)](https://www.gnu.org/software/bash/)
 [![GitHub license](https://img.shields.io/github/license/sitemapxml/USet)](https://github.com/sitemapxml/uset/blob/master/LICENSE)
@@ -70,7 +70,7 @@ If you don't see your IP, or you get something like this: `Host example.com not 
 It means that DNS propagation is not complete and you probably need to wait until it's done. Configuring the server without domain name is possible, but in that case you won't be able to install `Let's Encrypt` SSL certificate.
 
 ### Configuration options
-If you want to fine-tune installation options, you can edit `default.conf` file, or by passing [apropriate options]().
+If you want to fine-tune installation options, you can edit `default.conf` file inside `config` directory, or by passing [apropriate options]().
 <br>Configuration file must be edited before running the script, otherwise it would not take effect.
 
 If you use this script often, you probably don't want to see welcome screen.

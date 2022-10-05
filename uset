@@ -16,7 +16,8 @@ source 'libraries/args.sh'
 source 'includes/arglist.inc.sh'
 
 # Read default configuration
-if [ -f 'default.conf' ]; then source 'default.conf'; else printf "Default configuration file is missing. Exiting…\n" && exit 1 ; fi
+if [ -f 'config/default.conf' ]; then source 'config/default.conf'; else printf "Default configuration file is missing. Exiting…\n" && exit 1 ; fi
+if [ -f 'config/pkg-list.conf' ]; then source 'config/pkg-list.conf'; else printf "Package list is missing. Exiting…\n" && exit 1 ; fi
 
 # Load definied language and if file does not exist revert to en.txt
 [ -f "languages/$conf_language.txt" ] && source "languages/$conf_language.txt" || source 'languages/en.txt'

@@ -9,7 +9,7 @@ basepath=$(echo ${dirpath%/*})
 me=$(basename "$0")
 
 arglist="$basepath/includes/arglist.inc.sh"
-config="$basepath/default.conf"
+config="$basepath/config/default.conf"
 
 usage() {
 cat << EOT
