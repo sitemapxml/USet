@@ -13,7 +13,7 @@
 # USet
 Server configuration script
 
-> IMPORTANT NOTICE: Version 3.0 is here! :confetti_ball: :confetti_ball: :confetti_ball:
+> IMPORTANT NOTICE: Version 3.0 is here! :tada: :tada: :tada:
 > This is the biggest update from the beginning of this project. There are many improvements in this release, but most notable are full support for command line options, support for configuration files, custom scripts, installation profiles, and completely revised project structure.
 > You can check [Change Log](./CHANGELOG.md) for more details.
 
