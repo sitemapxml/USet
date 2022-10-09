@@ -94,13 +94,8 @@ lang_setting_up_ssl_for_webmin='Подешавање SSL-а за Webmin...'
 lang_ssl_installed='SSL је инсталиран!'
 lang_ssl_install_error='SSL сертификат није исправно инсталиран! Проверите грешке и покушајте поново.'
 
-# Wordpress инсталација
-lang_do_you_want_to_install_wordpress='Да ли желите да инсталирате Wordpress?'
+# Креиранје индекс фајла и базе
 lang_creating_database='Креирање базе података...'
-lang_do_you_want_to_enable_wordpress_multisite='Да ли желите да омогућите Wordpress Multisite?'
-lang_configuring_wp_multisite='Конфигурише се Multisite...'
-lang_multisite_is_configured='Multisite је подешен!'
-lang_wordpress_is_installed='Wordpress је инсталиран!'
 
 lang_domain='Domen'
 lang_is_sucessfuly_configured='је успешно подешен'
@@ -118,7 +113,6 @@ lang_installing_adminer='Инсталира се Админер...'
 lang_adminer_installed_successfully='Админер је успешно инсталиран!'
 lang_skipping_adminer='Прескаче се инсталација Админер-а...'
 
-lang_do_you_want_to_enable_apache_firewall='Да ли желите да омогућите Apache 6G заштитни зид?'
 lang_choose_apache_firewall_version='Коју верзију Apache заштитног зида желите да инсталирате?'
 lang_firewall_enabled='Заштитни зид је омогућен!'
 lang_do_you_want_to_enable_ufw_firewall='Да ли желите да омогућите заштиту портова?'
@@ -136,8 +130,6 @@ lang_check_dns_settings_and_try_again='Проверите DNS подешавањ
 lang_website_available_at_address='Ваш сајт је подешен на адреси:'
 lang_chosen_webserver_is='Инсталирани веб сервер је:'
 
-lang_to_finish_wordpress_installation_visit_your_website='Да довршите инсталацију Wordpress-а посетите почетну страну вашег веб сајта'
-lang_and_copy_messages_from_db_info_to_wordpress='и ископирајте податке из фајла db-info.txt у одговарајућа поља.'
 lang_open_file_with_command='Фајл можете отворити командом:'
 lang_you_can_check_if_php_working='Исправност php-а можете проверити отварањем странице'
 

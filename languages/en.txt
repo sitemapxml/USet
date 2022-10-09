@@ -94,13 +94,8 @@ lang_setting_up_ssl_for_webmin='Configuring SSL-а for Webmin...'
 lang_ssl_installed='SSL is installed!'
 lang_ssl_install_error='SSL certificate not correctly installed! Check for errors and try again.'
 
-# Wordpress installation
-lang_do_you_want_to_install_wordpress='Do you want to install Wordpress?'
+# Create index file and database
 lang_creating_database='Creating database...'
-lang_do_you_want_to_enable_wordpress_multisite='Do you want to enable Wordpress Multisite?'
-lang_configuring_wp_multisite='Configuring Multisite...'
-lang_multisite_is_configured='Wordpress Multisite configured!'
-lang_wordpress_is_installed='Wordpress is installed!'
 
 lang_domain='Domain'
 lang_is_sucessfuly_configured='is successfully configured'
@@ -136,8 +131,6 @@ lang_check_dns_settings_and_try_again='Check your DNS settings and run following
 lang_website_available_at_address='Your website is available at address:'
 lang_chosen_webserver_is='Installed web server:'
 
-lang_to_finish_wordpress_installation_visit_your_website='To complete Wordpress installation visit your website homepage'
-lang_and_copy_messages_from_db_info_to_wordpress='and copy data from db-info.txt to corresponding fields.'
 lang_open_file_with_command='To open file you can copy following command:'
 lang_you_can_check_if_php_working='You can check if php is installed correctly by visiting following page:'
 
