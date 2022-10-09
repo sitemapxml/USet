@@ -5,8 +5,8 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/sitemapxml/)
 ![Maintaner](https://img.shields.io/badge/maintainer-sitemapxml-blue)
 [![GitHub issues](https://img.shields.io/github/issues/sitemapxml/USet)](https://github.com/sitemapxml/USet/issues)
-[![GitHub release](https://img.shields.io/github/v/release/sitemapxml/uset?sort=semver)](https://github.com/sitemapxml/uset/releases/tag/3.0.0)
-![GitHub commits since tagged version](https://img.shields.io/github/commits-since/sitemapxml/uset/2.4.0/master)
+[![GitHub release](https://img.shields.io/github/v/release/sitemapxml/uset?sort=semver)](https://github.com/sitemapxml/uset/releases/tag/3.0)
+![GitHub commits since tagged version](https://img.shields.io/github/commits-since/sitemapxml/uset/3.0/master)
 [![made-with-bash](https://img.shields.io/badge/Made%20with-Bash-1f425f.svg)](https://www.gnu.org/software/bash/)
 [![GitHub license](https://img.shields.io/github/license/sitemapxml/USet)](https://github.com/sitemapxml/uset/blob/master/LICENSE)
 
@@ -15,7 +15,7 @@ Server configuration script
 
 > IMPORTANT NOTICE: Version 3.0 is here! :tada: :tada: :tada:
 > This is the biggest update from the beginning of this project. There are many improvements in this release, but most notable are full support for command line options, support for configuration files, custom scripts, installation profiles, and completely revised project structure.
-> You can check [Change Log](./CHANGELOG.md) for more details.
+> You can check the [Change Log](./CHANGELOG.md#30---2022-october-9) for more details.
 
 Supported systems:
 
