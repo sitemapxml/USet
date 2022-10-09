@@ -15,7 +15,7 @@ Server configuration script
 
 > IMPORTANT NOTICE: Version 3.0 is here! :tada: :tada: :tada:
 > This is the biggest update from the beginning of this project. There are many improvements in this release, but most notable are full support for command line options, support for configuration files, custom scripts, installation profiles, and completely revised project structure.
-> You can check [Change Log](./CHANGELOG.md) for more details.
+> You can check the [Change Log](./CHANGELOG.md#30---2022-october-9) for more details.
 
 Supported systems:
 
