@@ -1,8 +1,8 @@
 fn_show_info () {
-  echo "--skip-interaction conf_skip_confirm: $conf_skip_confirm"
+  echo "--confirm conf_confirm: $conf_confirm"
   echo "--language conf_language: $conf_language"
   echo "--disable-colors conf_disable_colors: $conf_disable_colors"
-  echo "--skip-welcome conf_skip_welcome: $conf_skip_welcome"
+  echo "--welcome conf_welcome: $conf_welcome"
   echo "--debug conf_debug: $conf_debug"
   echo "--create-lock conf_create_lockfile: $conf_create_lockfile"
   echo "--data-folder-name conf_data_folder_name: $conf_data_folder_name"

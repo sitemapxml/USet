@@ -58,7 +58,7 @@ fi
 [ "$conf_ignore_lockfile" = 'no' ] && fn_check_lockfile
 
 # Show welcome screen
-[ ! "$conf_skip_welcome" = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
+[ "$conf_welcome" = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
 
 # Input data
 [ -n "$conf_hostname" ] && printf "hostname already set to ${YELLOW}$conf_hostname${NC}, skipping user input...\n" || fn_input_hostname
@@ -70,7 +70,7 @@ fi
 [ -n "$conf_http_server" ] && printf "web_server already set to ${YELLOW}$conf_http_server${NC}, skipping user input...\n" || fn_input_server_type
 
 # Main installation process
-[ ! "$conf_skip_confirm" = 'yes' ] && fn_install_continue_msg
+[ "$conf_confirm" = 'yes' ] && fn_install_continue_msg
 
 fn_update && fn_install_utilities
 
