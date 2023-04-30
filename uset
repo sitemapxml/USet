@@ -9,7 +9,7 @@
 # Version: 3.0.0                            #
 #############################################
 
-USET_VERSION='3.0.0'
+USET_VERSION='3.1.0'
 
 # Load arguments
 source 'libraries/args.sh'
@@ -33,10 +33,12 @@ source 'includes/install.inc.sh'
 case "$1" in
   -h|--help) printf "$lang_help" && exit 0 ;;
   -v|--version) printf "USet version $USET_VERSION\n" && exit 0 ;;
+  -i|--interactive) interactive='yes' ;;
+  -f|--fallback) conf_fallback='yes' ;;
 esac
 
 # Turn output text coloring On or Off
-[ "$conf_disable_colors" = 'yes' ] && fn_output_coloring_off || fn_output_coloring_on
+[ "$conf_colors" = 'no' ] && fn_output_coloring_off || fn_output_coloring_on
 
 # List all variables with their values
 if [ -n "$conf_debug" ]; then
@@ -57,20 +59,19 @@ fi
 # Check if system is alerady configured
 [ "$conf_ignore_lockfile" = 'no' ] && fn_check_lockfile
 
-# Show welcome screen
-[ "$conf_welcome" = 'yes' ] && whiptail --title "USet" --scrolltext --msgbox "$lang_welcome" 20 65
 
-# Input data
-[ -n "$conf_hostname" ] && printf "hostname already set to ${YELLOW}$conf_hostname${NC}, skipping user input...\n" || fn_input_hostname
-[ -n "$conf_rootpass" ] && printf "rootpass already set, skipping user input...\n" || fn_input_rootpass
-[ -n "$conf_unixuser" ] && printf "unixuser already set to ${YELLOW}$conf_unixuser${NC}, skipping user input...\n" || fn_input_unixuser
-[ -n "$conf_unixpass" ] && printf "unixpass already set, skipping user input...\n" || fn_input_unixpass
-[ -n "$conf_mysqlrpass" ] && printf "mysqlrpass already set, skipping user input...\n" || fn_input_mysqlrpass
-[ -n "$conf_email" ] && printf "email already set to ${YELLOW}$conf_email${NC}, skipping user input...\n" || fn_input_email
-[ -n "$conf_http_server" ] && printf "web_server already set to ${YELLOW}$conf_http_server${NC}, skipping user input...\n" || fn_input_server_type
+if [ "$conf_fallback" = 'yes' ]; then
+  fn_fallback
+else
+  if [ "$interactive" = 'yes' ]; then
+    fn_wizard ; while [ $? -eq 1 ]; do fn_wizard; done
+  elif [ $# -eq 0 ]; then
+    printf "$lang_help" && exit 0
+  fi
+fi
 
-# Main installation process
-[ "$conf_confirm" = 'yes' ] && fn_install_continue_msg
+# Confirm
+[ "$conf_confirm" = 'yes' ] && fn_continue
 
 fn_update && fn_install_utilities
 

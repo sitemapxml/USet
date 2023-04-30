@@ -1,5 +1,5 @@
 # Beginning of installation
-fn_install_continue_msg () {
+fn_continue () {
   printf "${YELLOW}$lang_necessary_information_is_collected${NC}\n"
   read -p "$lang_press_enter_to_continue"
   printf "$lang_beginning\n"
