@@ -7,6 +7,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 Please take a look at `Ideas` and `Todo` sections on [the project page](https://github.com/users/sitemapxml/projects/1/views/1).
 
 ---
+## [3.1] - 2023. April, 30.
+This update adds a visual installation wizard, based on whiptail dialog boxes! <br>
+To use it, pass -i (or --interactive) parameter, like this: `./uset -i` <br>
+To use old installation wizard, you can use -f (or --fallback) option, like this: `./uset -f` <br><br>
+
+In fallback mode, you can combine another options with installation wizard, like this: `./uset -f --hostname example.com` <br>
+If you use it like this, you would not be prompted to enter options that are already set by using command line parameters. This is currently not supported in interactive (visual) mode, but it can be in the future.
+
+
+### Added
+ - Installation Wizard based on whiptail dialog boxes; to run wizard, the -i (--interactive) flag should be passed <br>
+
+### Modified
+ - Old installation wizard based on `read` input prompts has been moved as a fallback option; to run installation wizard in fallback mode, the -f (--fallback) option should be passed <br>
+ - confirmation prompt has been moved right before the beginning of installation process, and turned on by default. To disable confirmation prompt, the `--confirm no` option should be passed. <br>
+
+### Fixed
+ - output colors can be turned off with `--colors no` option; the initial option was `--disable-colors`, so after it has been renamed to `--colors`, the value remained `yes`, which was incorrect. <br>
+
+---
 ## [3.0] - 2022. October, 9.
 This is the biggest update from the beginning of this project, and I'm happy to share details with you.
 
