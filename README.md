@@ -13,9 +13,9 @@
 # USet
 Server configuration script
 
-> IMPORTANT NOTICE: Version 3.0 is here! :tada: :tada: :tada:
-> This is the biggest update from the beginning of this project. There are many improvements in this release, but most notable are full support for command line options, support for configuration files, custom scripts, installation profiles, and completely revised project structure.
-> You can check the [Change Log](./CHANGELOG.md#30---2022-october-9) for more details.
+> IMPORTANT NOTICE: Version 3 is here! :tada: :tada: :tada:
+> This is the biggest update from the beginning of this project. There are many improvements in this release, but most notable are full support for command line options, visual installation wizard, support for configuration files, custom scripts, installation profiles, and completely revised project structure.
+> You can check the [Change Log](./CHANGELOG.md#31---2023-april-30) for more details.
 
 Supported systems:
 
@@ -41,7 +41,7 @@ Supported systems:
 
 ```
 git clone https://github.com/sitemapxml/uset.git && cd uset && chmod +x uset
-./uset
+./uset -i
 ```
 After running the script, you should see welcome screen like this:
 <p align="center">
